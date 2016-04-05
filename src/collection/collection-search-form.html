@@ -1,0 +1,45 @@
+<script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
+<script src="./../behaviours/input-behaviours.js"></script>
+
+<template id="collection-search-form-template">
+    <form>
+    </form>
+</template>
+
+<script>
+(function(window, document) {
+    var thatDoc = document;
+    var thisDoc = document._currentScript.ownerDocument;
+    var template = thisDoc.querySelector('#collection-search-form-template').content;
+    var element = {
+        lifecycle: {
+            created: function() {
+                this.innerContent = this.innerHTML;
+                this.innerHTML = '';
+                var clone = thatDoc.importNode(template, true);
+                this._getRenderingRoot().appendChild(clone);
+                this.form = this._selectInRenderingRoot('form');
+                this.render();
+            }
+
+        },
+        methods: {
+            render: function ()
+            {
+                this.form.innerHTML = this.innerContent;
+            }          
+        },
+        events: {
+            submit: function (e) {
+                e.preventDefault();
+                var isFormValid = this.validate();
+                if (isFormValid) {
+                    //var formData = this.getData();
+                    //alert(JSON.stringify(formData));
+                }
+            }
+        }
+    };
+    xtag.register('collection-search-form', xtag.merge(FormBehaviours.formElementBase, element));
+})(window, document);
+</script>

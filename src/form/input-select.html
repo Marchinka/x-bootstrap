@@ -1,0 +1,173 @@
+<script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
+<script src="./../behaviours/input-behaviours.js"></script>
+
+<template id="input-select-template">
+    <div class="form-group">
+        <div class="dropdown">
+            <label for="subTitle"></label>
+            <button class="btn btn-default form-control" type="button">
+                <span class="pull-left"></span>
+                <span class="pull-right">
+                    <span class="caret"></span>
+                </span>
+            </button>
+            <ul class="dropdown-menu" style="width: 100%"></ul>
+        </div>
+        <span class="help-block"></span>
+    </div>
+</template>
+
+<script>
+(function(window, document) {
+    var thatDoc = document;
+    var thisDoc = document._currentScript.ownerDocument;
+    var template = thisDoc.querySelector('#input-select-template').content;
+    var inputTextElement = {
+        accessors: {
+            placeholder: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('placeholder') || '';
+                },
+                set: function(value) {
+                    this.xtag.data.placeholder = value;
+                }
+            },
+            selectedValue: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('selected-value') || '';
+                },
+                set: function(value) {
+                    this.xtag.data.selectedValue = value;
+                }
+            },
+            required: {
+                attribute: { boolean: true },
+                get: function() {
+                    return this.hasAttribute('required');
+                },
+                set: function(data) {
+                    this.xtag.data.required = data;
+                }
+            },         
+            requirednessMessage: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('requiredness-message') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.requirednessMessage = data;
+                }
+            }         
+        },
+        lifecycle: {
+            created: function() {
+                this.innerContent = this.innerHTML;
+                this.innerHTML = '';
+                var clone = thatDoc.importNode(template, true);
+                this._getRenderingRoot().appendChild(clone);
+                this.containerDiv = this._selectInRenderingRoot('.form-group');
+                this.labelTag = this._selectInRenderingRoot('label');
+                this.button = this._selectInRenderingRoot('button');
+                this.buttonSpan = this._selectInRenderingRoot('.pull-left');
+                this.errorSpan = this._selectInRenderingRoot('.help-block');
+                this.dropdown = this._selectInRenderingRoot('.dropdown');
+                this.dropdownMenu = this._selectInRenderingRoot('.dropdown-menu');
+                this.render();
+            },
+            inserted: function() {
+                this._fetchData();                
+            },
+            attributeChanged: function(attributeName) {
+                if (attributeName === "value") {
+                    this.selectedValue = "";
+                }
+                this.render();
+            }
+        },
+        methods: {
+            render: function() {
+                this._renderLabelTag();
+                this._renderButton();
+                this._renderMenu();
+                this._renderErrorTag();
+            },
+            validate: function () {
+                if (!this.required) {
+                    this.error = '';
+                    return true;
+                }
+                if (!this.value) {
+                    this.error = this.requirednessMessage;
+                    return false;
+                }
+                if (!this.value.trim()) {
+                    this.error = this.requirednessMessage;
+                    return false;
+                }
+                this.error = ''
+                return true;
+            },   
+            _fetchData: function () {
+                var self = this;
+                if (!self.url) {
+                    return;
+                }
+
+                if (!window.restService) {
+                    throw new Error("'restService' must be assigned to main window for <input-select/> to work correctly");   
+                }
+
+                window.restService.ajax({
+                    url: self.url,
+                    method: "GET",
+                    success: function (result) {
+                        self.renderData(result);
+                    }
+                });
+            },      
+            _renderLabelTag: function () {
+                this.labelTag.htmlFor = this.field;
+                this.labelTag.textContent = this.label;
+            },
+            _renderButton: function () {
+                this.button.id = this.field;
+                this.buttonSpan.textContent = this.selectedValue || this.value || this.placeholder;
+            },
+            _renderMenu: function () {
+                this.dropdownMenu.innerHTML = this.innerContent;
+            },
+            _renderErrorTag: function () {
+                if (this.error) {
+                    this.errorSpan.textContent = this.error;
+                    this.containerDiv.className = "form-group has-error";
+                } else {
+                    this.errorSpan.textContent = undefined;
+                    this.containerDiv.className = "form-group";
+                }
+            },
+            _selectOption: function (dropdownOption) {
+                if (!dropdownOption) {
+                    throw new Error("Not valid option for selection.");
+                }
+
+                this.value = dropdownOption.key || dropdownOption.value;
+                this.selectedValue = dropdownOption.value;
+                this.validate();
+            }
+        },
+        events: {
+            focus: function () {
+                this._showMenu();
+            },
+            blur: function () {
+                this._hideMenu();
+            }            
+        }
+    };
+    xtag.register('input-select', xtag.merge(FormBehaviours.dropdownInputElementBase, inputTextElement));
+})(window, document);
+</script>
+
+<link rel="import" href="./dropdown-option.html">

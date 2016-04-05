@@ -1,0 +1,85 @@
+<script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
+<script src="./../behaviours/input-behaviours.js"></script>
+
+<template id="input-checkbox-template">
+    <div class="form-group checkbox">
+        <label><input type="checkbox"/><span class="label-text"></span></label>            
+        <span class="help-block"></span>
+    </div>
+</template>
+
+<script>
+(function(window, document) {
+    var thatDoc = document;
+    var thisDoc = document._currentScript.ownerDocument;
+    var template = thisDoc.querySelector('#input-checkbox-template').content;
+    var inputTextElement = {
+        accessors: {
+            checked: {
+                attribute: { boolean: true },
+                get: function() {
+                    return this.input.checked;
+                },
+                set: function(data) {
+                    this.input.checked = data;
+                }
+            }
+        },
+        lifecycle: {
+            created: function() {
+                this.innerHTML = '';
+                var clone = thatDoc.importNode(template, true);
+                this._getRenderingRoot().appendChild(clone);
+                this.containerDiv = this._selectInRenderingRoot('.form-group');
+                this.labelTag = this._selectInRenderingRoot('label');
+                this.labelSpan = this._selectInRenderingRoot('.label-text');
+                this.input = this._selectInRenderingRoot('input');
+                this.errorSpan = this._selectInRenderingRoot('.help-block');
+                this.render();
+            },
+            attributeChanged: function(attributeName) {
+                this.render();
+            }
+        },
+        methods: {
+            render: function() {
+                this._renderLabelTag();
+                this._renderInputTag();
+                this._renderErrorTag();
+            },
+            validate: function () {
+                this.error = '';
+                return true;
+            },
+            getData: function () {
+                if (!this.field) {
+                    throw new Error("Attribute 'field' must be defined");
+                }
+                var data = {};
+                data[this.field] = this.checked;
+                return data;
+            },            
+            _renderLabelTag: function () {
+                this.labelTag.htmlFor = this.field;
+                this.labelSpan.textContent = this.label;
+            },
+            _renderInputTag: function () {
+                this.input.placeholder = this.placeholder;
+                this.input.id = this.field;
+                this.input.name = this.field;
+                this.input.checked = this.checked;
+            },
+            _renderErrorTag: function () {
+                if (this.error) {
+                    this.errorSpan.textContent = this.error;
+                    this.containerDiv.className = "form-group checkbox has-error";
+                } else {
+                    this.errorSpan.textContent = undefined;
+                    this.containerDiv.className = "form-group checkbox";
+                }
+            }
+        }
+    };
+    xtag.register('input-checkbox', xtag.merge(FormBehaviours.inputElementBase, inputTextElement));
+})(window, document);
+</script>

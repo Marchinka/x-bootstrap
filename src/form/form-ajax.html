@@ -1,0 +1,81 @@
+<script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
+<script src="./../behaviours/input-behaviours.js"></script>
+
+<template id="form-ajax-template">
+    <form>
+    </form>
+</template>
+
+<script>
+(function(window, document) {
+    var thatDoc = document;
+    var thisDoc = document._currentScript.ownerDocument;
+    var template = thisDoc.querySelector('#form-ajax-template').content;
+    var element = {
+        accessors: {
+            postUrl: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('post-url') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.postUrl = data;
+                }
+            },            
+            redirectUrl: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('redirect-url') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.redirectUrl = data;
+                }
+            }                  
+        },
+        lifecycle: {
+            created: function() {
+                this.innerContent = this.innerHTML;
+                this.innerHTML = '';
+                var clone = thatDoc.importNode(template, true);
+                this._getRenderingRoot().appendChild(clone);
+                this.form = this._selectInRenderingRoot('form');
+                this.render();
+            }
+
+        },
+        methods: {
+            render: function ()
+            {
+                this.form.innerHTML = this.innerContent;
+            },
+            _submitForm: function () {
+                var self = this;
+
+                if (!self.postUrl) {
+                    throw new Error("Post url is not defined");
+                }
+
+                var formData = self.getData();
+                window.restService.ajax({
+                    url: self.postUrl,
+                    method: "POST",
+                    data: formData,
+                    success: function (result) {
+                        
+                    }
+                });                
+            }
+        },
+        events: {
+            submit: function (e) {
+                e.preventDefault();
+                var isFormValid = this.validate();
+                if (isFormValid) {
+                    this._submitForm();
+                }
+            }
+        }
+    };
+    xtag.register('form-ajax', xtag.merge(FormBehaviours.formElementBase, element));
+})(window, document);
+</script>

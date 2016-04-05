@@ -1,0 +1,151 @@
+<div id="withField">
+	<input-checkbox field="fieldName"></input-checkbox>
+</div>
+
+<div id="withError">
+	<input-checkbox error="Some validation error"></input-checkbox>
+</div>
+
+<div id="withoutError">
+	<input-checkbox></input-checkbox>
+</div>
+
+<div id="withEmptyError">
+	<input-checkbox error=""></input-checkbox>
+</div>
+
+<div id="withLabel">
+	<input-checkbox label="field description"></input-checkbox>
+</div>
+
+<div id="get data test elements">
+	<div id="withoutField">
+		<input-checkbox checked></input-checkbox>
+	</div>
+
+	<div id="withFieldAndChecked">
+		<input-checkbox field="fieldName" checked></input-checkbox>
+	</div>	
+
+	<div id="withFieldAndUnchecked">
+		<input-checkbox field="fieldName"></input-checkbox>
+	</div>	
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var tagSutName = "input-checkbox";
+
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector(tagSutName);
+		return sut._getRenderingRoot();
+	};
+
+	describe("<input-checkbox/>", function() {
+	    describe("with 'field' attribute", function() {
+	        it("is rendered with inner <select/> with 'name' attribute equal to parent's 'field' attribute", function() {
+				var inputCheckbox = getTestElement("#withField");
+				var expectedInput = inputCheckbox.querySelector("input");
+				expect(expectedInput.name).to.equal(inputCheckbox.field);
+	        });
+
+	        it("is rendered with inner <select/> with 'id' attribute equal to parent's 'field' attribute", function() {
+				var inputCheckbox = getTestElement("#withField");
+				var expectedInput = inputCheckbox.querySelector("input");
+				expect(expectedInput.id).to.equal(inputCheckbox.field);
+	        });
+
+	        it("is rendered with inner <label/> with 'for' attribute equal to parent's 'field' attribute", function () {
+				var inputCheckbox = getTestElement("#withField");
+				var expectedLabel = inputCheckbox.querySelector("label");
+				expect(expectedLabel.htmlFor).to.equal(inputCheckbox.field);
+		    });
+
+			describe("and with checked property", function () {
+		    	describe("getData method", function () {
+			   	    it("return result with boolean false", function () {
+						var inputCheckbox = getTestElement("#withFieldAndChecked");
+						var result = inputCheckbox.getData();
+						expect(result[inputCheckbox.field]).to.be.true;		
+				    });	    
+		    	});
+			});
+
+			describe("and without checked property", function () {
+		    	describe("getData method", function () {
+			   	    it("return result with boolean false", function () {
+						var inputCheckbox = getTestElement("#withFieldAndUnchecked");
+						var result = inputCheckbox.getData();
+						expect(result[inputCheckbox.field]).to.be.false;		
+				    });	    
+		    	});
+			});
+	    });
+
+	    describe("with 'error' attribute", function () {
+		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {
+				var inputCheckbox = getTestElement("#withError");
+				var expectedSpan = inputCheckbox.querySelector(".help-block");
+				expect(expectedSpan.innerHTML).to.equal(inputCheckbox.error);
+		    });
+
+		    it("is rendered with 'has-error' and 'form-group' class on input group", function () {
+				var inputCheckbox = getTestElement("#withError");
+				var expectedContainer = inputCheckbox.querySelector(".has-error");
+				expect(expectedContainer).not.to.be.null;
+		    });
+	    });
+
+	    describe("without 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var inputCheckbox = getTestElement("#withoutError");
+				var unexpectedContainer = inputCheckbox.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });
+
+	    describe("with string empty 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var inputCheckbox = getTestElement("#withEmptyError");
+				var unexpectedContainer = inputCheckbox.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });
+
+	    describe("with 'label' attribute", function() {
+	        it("is rendered with inner <label/> with text content equal to parent's 'label' attribute", function() {
+				var inputCheckbox = getTestElement("#withLabel");
+				var expectedLabel = inputCheckbox.querySelector("label");
+				expect(expectedLabel.textContent).to.equal(inputCheckbox.label);
+	        });
+	    });
+
+		describe("with no 'field' property", function () {
+	    	describe("getData method", function () {
+		   	    it("throws error", function () {
+					var inputCheckbox = getTestElement("#withoutField");
+					var errorMessage = "Attribute 'field' must be defined";
+					expect(inputCheckbox.getData).to.throw(errorMessage);
+			    });	    
+	    	});
+		});
+
+		describe("with 'checked' property", function () {
+	   	    it("is rendered with inner checked <select/> checked", function () {
+				var inputCheckbox = getTestElement("#withFieldAndChecked");
+				var innerInput = inputCheckbox.querySelector("input");
+				expect(innerInput.checked).to.be.true;
+		    });	       
+		});
+
+		describe("without 'checked' property", function () {
+	   	    it("is rendered with inner checked <select/> checked", function () {
+				var inputCheckbox = getTestElement("#withFieldAndUnchecked");
+				var innerInput = inputCheckbox.querySelector("input");
+				expect(innerInput.checked).to.be.false;
+		    });	    
+		});	
+	});
+})(document._currentScript.ownerDocument);
+</script>

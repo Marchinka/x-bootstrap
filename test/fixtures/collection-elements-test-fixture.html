@@ -1,0 +1,243 @@
+<div id="base">
+	<collection-elements></collection-elements>
+</div>
+
+<div id="with-type-property">
+	<collection-elements type="test-element"></collection-elements>
+</div>
+
+<div id="with-inner-element">
+	<collection-elements>
+		<test-element other="otherValue"></test-element>
+	</collection-elements>
+</div>
+
+<div id="with-inner-element-with-property">
+	<collection-elements>
+		<input-text placeholder="plc"></input-text>
+	</collection-elements>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector("collection-elements");
+		return sut._getRenderingRoot();
+	};
+
+	beforeEach(function() {
+		var testElement = getTestElement("#with-type-property");
+		testElement._getRenderingRoot().innerHTML = '';
+		var testElement = getTestElement("#with-inner-element");
+		testElement._getRenderingRoot().innerHTML = '';
+	});
+
+	describe("<collection-elements/>", function() {
+		describe("with 'type' property", function() {
+			describe("'renderData' method", function() {
+				it("renders data in tags of type 'type'", function() {
+					var data = [ { } ];
+					var testElement = getTestElement("#with-type-property");
+					testElement.renderData(data);
+					var innerElement = testElement.querySelector("test-element");
+					expect(innerElement.nodeName).to.equal("TEST-ELEMENT");
+				});
+
+				it("renders elements equal in number to data length'", function() {
+					var data = [ { }, { }, { } ];
+					var testElement = getTestElement("#with-type-property");
+					testElement.renderData(data);
+					var innerElements = testElement.querySelectorAll("test-element");
+					expect(innerElements.length).to.equal(3);
+				});	
+
+				it("renders element with all properties of data'", function() {
+					var data = [ { field1: "Hello", field2: "World"} ];
+					var testElement = getTestElement("#with-type-property");
+					testElement.renderData(data);
+					var innerElement = testElement.querySelector("test-element");
+					expect(innerElement.field1).to.equal(data[0].field1);
+					expect(innerElement.field2).to.equal(data[0].field2);
+				});							
+			});
+
+			describe("'appendData' method", function() {
+				it("renders data in tags of type 'type'", function() {
+					var data = [ { } ];
+					var testElement = getTestElement("#with-type-property");
+					testElement.appendData(data);
+					var innerElement = testElement.querySelector("test-element");
+					expect(innerElement.nodeName).to.equal("TEST-ELEMENT");
+				});
+
+				it("renders elements equal in number to data length'", function() {
+					var data = [ {} ];
+					var testElement = getTestElement("#with-type-property");
+					testElement.appendData(data);
+					testElement.appendData(data);
+					var innerElements = testElement.querySelectorAll("test-element");
+					expect(innerElements.length).to.equal(2);
+				});	
+
+				it("renders elements equal in number to data length'", function() {
+					var data = [ { }, { }, { } ];
+					var testElement = getTestElement("#with-type-property");
+					testElement.appendData(data);
+					var innerElements = testElement.querySelectorAll("test-element");
+					expect(innerElements.length).to.equal(3);
+				});	
+
+				it("renders element with all properties of data'", function() {
+					var data = [ { field1: "Hello", field2: "World"} ];
+					var testElement = getTestElement("#with-type-property");
+					testElement.appendData(data);
+					var innerElement = testElement.querySelector("test-element");
+					expect(innerElement.field1).to.equal(data[0].field1);
+					expect(innerElement.field2).to.equal(data[0].field2);
+				});							
+			});
+		}); 
+
+		describe("with inner element", function() {
+			describe("'renderData' method", function() {
+				it("renders data in tags of type 'type'", function() {
+					var data = [ { } ];
+					var testElement = getTestElement("#with-inner-element");
+					testElement.renderData(data);
+					var innerElement = testElement.querySelector("test-element");
+					expect(innerElement.nodeName).to.equal("TEST-ELEMENT");
+				});
+
+				it("renders elements equal in number to data length'", function() {
+					var data = [ { }, { }, { } ];
+					var testElement = getTestElement("#with-inner-element");
+					testElement.renderData(data);
+					var innerElements = testElement.querySelectorAll("test-element");
+					expect(innerElements.length).to.equal(3);
+				});	
+
+				it("renders element with all properties of data'", function() {
+					var data = [ { field1: "Hello", field2: "World"} ];
+					var testElement = getTestElement("#with-inner-element");
+					testElement.renderData(data);
+					var innerElement = testElement.querySelector("test-element");
+					expect(innerElement.field1).to.equal(data[0].field1);
+					expect(innerElement.field2).to.equal(data[0].field2);
+				});							
+			});
+
+			describe("'appendData' method", function() {
+				it("renders data in tags of type 'type'", function() {
+					var data = [ { } ];
+					var testElement = getTestElement("#with-inner-element");
+					testElement.appendData(data);
+					var innerElement = testElement.querySelector("test-element");
+					expect(innerElement.nodeName).to.equal("TEST-ELEMENT");
+				});
+
+				it("renders elements equal in number to data length'", function() {
+					var data = [ {} ];
+					var testElement = getTestElement("#with-inner-element");
+					testElement.appendData(data);
+					testElement.appendData(data);
+					var innerElements = testElement.querySelectorAll("test-element");
+					expect(innerElements.length).to.equal(2);
+				});	
+
+				it("renders elements equal in number to data length'", function() {
+					var data = [ { }, { }, { } ];
+					var testElement = getTestElement("#with-inner-element");
+					testElement.appendData(data);
+					var innerElements = testElement.querySelectorAll("test-element");
+					expect(innerElements.length).to.equal(3);
+				});	
+
+				it("renders element with all properties of data'", function() {
+					var data = [ { field1: "Hello", field2: "World"} ];
+					var testElement = getTestElement("#with-inner-element");
+					testElement.appendData(data);
+					var innerElement = testElement.querySelector("test-element");
+					expect(innerElement.field1).to.equal(data[0].field1);
+					expect(innerElement.field2).to.equal(data[0].field2);
+				});							
+
+				it("renders element with the old properties of inner element'", function() {
+					var data = [ { field1: "Hello", field2: "World"} ];
+					var testElement = getTestElement("#with-inner-element-with-property");
+					testElement.appendData(data);
+					var innerElement = testElement.querySelector("input-text");
+					expect(innerElement.placeholder).to.equal("plc");
+				});					
+			});
+		}); 
+
+		describe("'renderData' method", function() {
+			describe("with undefined input", function() {
+			    it("throws error", function() {
+			    	var testElement = getTestElement("#base");
+			    	var expectedError = "Data not defined.";
+			    	var errorThrower = function () {
+			    		testElement.renderData(undefined);
+			    	};
+					expect(errorThrower).to.throw(expectedError);
+			    }); 
+		    }); 
+
+			describe("with non collection input", function() {
+			    it("throws error", function() {
+			    	var testElement = getTestElement("#base");
+			    	var expectedError = "Data must be a collection.";
+			    	var errorThrower = function () {
+			    		testElement.renderData({});
+			    	};
+					expect(errorThrower).to.throw(expectedError);
+			    }); 
+		    }); 	    
+	    }); 
+
+		describe("'appendData' method", function() {
+			describe("with undefined input", function() {
+			    it("throws error", function() {
+			    	var testElement = getTestElement("#base");
+			    	var expectedError = "Data not defined.";
+			    	var errorThrower = function () {
+			    		testElement.appendData(undefined);
+			    	};
+					expect(errorThrower).to.throw(expectedError);
+			    }); 
+		    }); 
+
+			describe("with non collection input", function() {
+			    it("throws error", function() {
+			    	var testElement = getTestElement("#base");
+			    	var expectedError = "Data must be a collection.";
+			    	var errorThrower = function () {
+			    		testElement.appendData({});
+			    	};
+					expect(errorThrower).to.throw(expectedError);
+			    }); 
+		    }); 	    
+	    }); 	
+
+		describe("with neither 'type' property nor inner element", function() {
+			describe("'renderData' method", function() {
+				describe("with valid input", function() {
+				    it("throws error", function() {
+				    	var testElement = getTestElement("#base");
+				    	var expectedError = "Neither 'type' property nor inner element defined in <collection-elements/>.";
+				    	var errorThrower = function () {
+				    		testElement.renderData([ {}, {}, {}]);
+				    	};
+						expect(errorThrower).to.throw(expectedError);
+				    }); 
+				});
+			});
+		});	        
+	});
+})(document._currentScript.ownerDocument);
+
+
+
+</script>
+

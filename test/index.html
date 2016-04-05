@@ -1,0 +1,39 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>X-Bootstrap Tests</title>
+  <link rel="stylesheet" href="./../node_modules/mocha/mocha.css" />
+</head>
+<body>
+  <div id="mocha"></div>
+  <script src="./../node_modules/mocha/mocha.js"></script>
+  <script src="./../node_modules/chai/chai.js"></script>
+  <script src="./../node_modules/chai-spies/chai-spies.js"></script>
+
+  <script>
+    mocha.setup('bdd')
+    mocha.reporter('html');
+    var expect = chai.expect;
+  </script>
+
+  <script src="./ajaxMockService.js"></script>
+  <link rel="import" href="./../src/elements.html">
+  <link rel="import" href="./fixtures/collection-elements-test-fixture.html">
+  <link rel="import" href="./fixtures/input-text-test-fixture.html">
+  <link rel="import" href="./fixtures/input-checkbox-test-fixture.html">
+  <link rel="import" href="./fixtures/dropdown-option-test-fixture.html">
+  <link rel="import" href="./fixtures/input-select-test-fixture.html">
+  <link rel="import" href="./fixtures/input-autocomplete-test-fixture.html">
+  <link rel="import" href="./fixtures/form-ajax-test-fixture.html">
+  <link rel="import" href="./fixtures/additional-info-test-fixture.html">
+  <link rel="import" href="./fixtures/collection-search-form-test-fixture.html">
+  <link rel="import" href="./fixtures/collection-container-test-fixture.html">
+
+  <script>
+    // Only tests run in real browser, injected script run if options.run == true
+    if (navigator.userAgent.indexOf('PhantomJS') < 0) {
+      mocha.run();
+    }
+  </script>
+</body>
+</html>

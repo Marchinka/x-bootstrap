@@ -1,0 +1,290 @@
+<div id="with-empty-content">
+	<collection-search-form></collection-search-form>
+</div>
+
+<div id="with-some-content">
+	<collection-search-form>
+		<div id="test-contet"></div>
+	</collection-search-form>
+</div>
+
+<div id="with-invalid-input-text">
+	<collection-search-form>
+		<input-text field="fieldName" value="" required></input-text>
+	</collection-search-form>
+</div>
+
+<div id="with-input-text">
+	<collection-search-form>
+		<input-text field="fieldName" value="fieldValue"></input-text>
+	</collection-search-form>
+</div>
+
+<div id="with-input-select">
+	<collection-search-form>
+		<input-select field="fieldName" value="fieldValue"></input-select>
+	</collection-search-form>
+</div>
+
+<div id="with-invalid-input-select">
+	<collection-search-form>
+		<input-select field="fieldName" required></input-select>
+	</collection-search-form>
+</div>
+
+<div id="with-input-autocomplete">
+	<collection-search-form>
+		<input-autocomplete field="fieldName" value="fieldValue"></input-autocomplete>
+	</collection-search-form>
+</div>
+
+<div id="with-invalid-input-autocomplete">
+	<collection-search-form>
+		<input-autocomplete field="fieldName" value="" required></input-autocomplete>
+	</collection-search-form>
+</div>
+
+<div id="with-checked-input-checkbox">
+	<collection-search-form>
+		<input-checkbox field="fieldName" checked></input-checkbox>
+	</collection-search-form>
+</div>
+
+<div id="with-unchecked-input-checkbox">
+	<collection-search-form>
+		<input-checkbox field="fieldName"></input-checkbox>
+	</collection-search-form>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var tagSutName = "collection-search-form";
+
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector(tagSutName);
+		return sut._getRenderingRoot();
+	};
+
+	describe("<collection-search-form/>", function() {
+	    it("is rendered with an inner <form/>", function() {
+			var testElement = getTestElement("#with-empty-content");
+			var innerForm = testElement.querySelector("form");
+			//alert(testElement.innerHTML);
+			expect(innerForm).not.to.be.null;
+	    }); 
+
+	    it("is rendered with tag content inside its inner <form/>", function() {
+			var testElement = getTestElement("#with-some-content");
+			var innerForm = testElement.querySelector("form").querySelector("#test-contet");
+			//alert(testElement.innerHTML);
+			expect(innerForm).not.to.be.null;
+	    });     
+
+	    describe("with no inner content", function() {
+	    	describe("'getData' method", function() {
+			    it("returns null", function() {
+					var testElement = getTestElement("#with-empty-content");
+					var result = testElement.getData();
+					expect(result).to.be.null;
+			    }); 	    
+			});
+
+	    	describe("'validate' method", function() {
+			    it("returns true", function() {
+					var testElement = getTestElement("#with-empty-content");
+					var result = testElement.validate();
+					expect(result).to.be.true;
+			    }); 	    
+			});			
+	    });
+
+	    describe("with inner <input-text/>", function() {
+			describe("with not valid data", function() {
+		    	describe("'validate' method", function() {
+				    it("returns false", function() {
+						var testElement = getTestElement("#with-invalid-input-text");
+						var innerInput = testElement.querySelector("input-text");
+						var result = testElement.validate();
+						expect(result).to.be.false;
+				    }); 	    
+				});
+			});
+
+			describe("with valid data", function() {
+		    	describe("'getData' method", function() {
+				    it("returns object with property equal to input's field and value equal to input's value", function() {
+						var testElement = getTestElement("#with-input-text");
+						var innerInput = testElement.querySelector("input-text");
+						var result = testElement.getData();
+						expect(result[innerInput.field]).to.be.equal(innerInput.value);
+				    }); 	    
+				});
+
+		    	describe("'setData' method", function() {
+				    it("sets input's value with object property's value", function() {
+						var testElement = getTestElement("#with-input-text");
+						var innerInput = testElement.querySelector("input-text");
+						var object = {
+							fieldName : "test"
+						};
+						testElement.setData(object);
+						expect(innerInput.value).to.be.equal(object.fieldName);
+				    }); 	    
+				});
+
+		    	describe("'validate' method", function() {
+				    it("returns true", function() {
+						var testElement = getTestElement("#with-input-text");
+						var result = testElement.validate();
+						expect(result).to.be.true;
+				    }); 	    
+				});			
+			});			
+	    });
+
+	    describe("with inner <input-select/>", function() {
+			describe("with not valid data", function() {
+		    	describe("'validate' method", function() {
+				    it("returns false", function() {
+						var testElement = getTestElement("#with-invalid-input-select");
+						var result = testElement.validate();
+						expect(result).to.be.false;
+				    }); 	    
+				});
+			});
+
+	    	describe("with valid data", function() {
+		    	describe("'getData' method", function() {
+				    it("returns object with property equal to input's field and value equal to input's value", function() {
+						var testElement = getTestElement("#with-input-select");
+						var innerInput = testElement.querySelector("input-select");
+						var result = testElement.getData();
+						expect(result[innerInput.field]).to.be.equal(innerInput.value);
+				    }); 	    
+				});
+
+		    	describe("'setData' method", function() {
+				    it("sets input's value with object property's value", function() {
+						var testElement = getTestElement("#with-input-select");
+						var innerInput = testElement.querySelector("input-select");
+						var object = {
+							fieldName : "test"
+						};
+						testElement.setData(object);
+						expect(innerInput.value).to.be.equal(object.fieldName);
+				    }); 	    
+				});
+
+		    	describe("'validate' method", function() {
+				    it("returns true", function() {
+						var testElement = getTestElement("#with-input-select");
+						var result = testElement.validate();
+						expect(result).to.be.true;
+				    }); 	    
+				});				
+			});		
+	    });
+
+	    describe("with inner <input-autocomplete/>", function() {
+			describe("with not valid data", function() {
+		    	describe("'validate' method", function() {
+				    it("returns false", function() {
+						var testElement = getTestElement("#with-invalid-input-autocomplete");
+						var result = testElement.validate();
+						expect(result).to.be.false;
+				    }); 	    
+				});
+			});
+
+	    	describe("with valid data", function() {
+		    	describe("'getData' method", function() {
+				    it("returns object with property equal to input's field and value equal to input's value", function() {
+						var testElement = getTestElement("#with-input-autocomplete");
+						var innerInput = testElement.querySelector("input-autocomplete");
+						var result = testElement.getData();
+						expect(result[innerInput.field]).to.be.equal(innerInput.value);
+				    }); 	    
+				});
+
+		    	describe("'setData' method", function() {
+				    it("sets input's value with object property's value", function() {
+						var testElement = getTestElement("#with-input-autocomplete");
+						var innerInput = testElement.querySelector("input-autocomplete");
+						var object = {
+							fieldName : "test"
+						};
+						testElement.setData(object);
+						expect(innerInput.value).to.be.equal(object.fieldName);
+				    }); 	    
+				});
+
+		    	describe("'validate' method", function() {
+				    it("returns true", function() {
+						var testElement = getTestElement("#with-input-autocomplete");
+						var result = testElement.validate();
+						expect(result).to.be.true;
+				    }); 	    
+				});				
+			});
+	    });
+
+	    describe("with inner <input-checkbox/>", function() {
+	    	describe("checked", function() {
+		    	describe("'getData' method", function() {
+				    it("returns object with property equal to input's field and value equal true", function() {
+						var testElement = getTestElement("#with-checked-input-checkbox");
+						var innerInput = testElement.querySelector("input-checkbox");
+						var result = testElement.getData();
+						expect(result[innerInput.field]).to.be.true;
+				    }); 	    
+				});
+			});		
+
+	    	describe("unchecked", function() {
+		    	describe("'getData' method", function() {
+				    it("returns object with property equal to input's field and value equal false", function() {
+						var testElement = getTestElement("#with-unchecked-input-checkbox");
+						var innerInput = testElement.querySelector("input-checkbox");
+						var result = testElement.getData();
+						expect(result[innerInput.field]).to.be.false;
+				    }); 	    
+				});
+			});	
+
+	    	describe("'setData' method", function() {
+			    it("sets input's value with object property's value if it's true", function() {
+					var testElement = getTestElement("#with-unchecked-input-checkbox");
+					var innerInput = testElement.querySelector("input-checkbox");
+					var object = {
+						fieldName : true
+					};
+					testElement.setData(object);
+					expect(innerInput.checked).to.be.equal(true);
+			    }); 
+
+			    it("sets input's value to false if object property's value it's text", function() {
+					var testElement = getTestElement("#with-unchecked-input-checkbox");
+					var innerInput = testElement.querySelector("input-checkbox");
+					var object = {
+						fieldName : "test of true value"
+					};
+					testElement.setData(object);
+					expect(innerInput.checked).to.be.equal(false);
+			    }); 
+
+			    it("sets input's value with object property's value if it's false", function() {
+					var testElement = getTestElement("#with-unchecked-input-checkbox");
+					var innerInput = testElement.querySelector("input-checkbox");
+					var object = {
+						fieldName : false
+					};
+					testElement.setData(object);
+					expect(innerInput.checked).to.be.equal(false);
+			    });
+			});
+	    });
+	});
+})(document._currentScript.ownerDocument);
+</script>
+

@@ -1,0 +1,185 @@
+<div id="with-inner-content">
+	<collection-container>
+		<div id="test-content"></div>
+	</collection-container>
+</div>
+
+<div id="with-elements-tag">
+	<collection-container url="api/path/to/controller" elements-per-page="12" current-page="13">
+		<collection-elements type="test-element"></collection-elements>
+	</collection-container>
+</div>
+
+<div id="with-elements-tag-and-search-form">
+	<collection-container url="api/path/to/controller" elements-per-page="12" current-page="13">
+		<collection-search-form>
+			<input-text field="fieldName" value="fieldValue"><input-text/>
+		</collection-search-form>
+		<collection-elements type="test-element">
+		</collection-elements>
+	</collection-container>
+</div>
+
+<div id="with-no-content">
+	<collection-container url="some-url"></collection-container>
+</div>
+
+<div id="with-no-url">
+	<collection-container>
+		<collection-elements type="test-element">
+		</collection-elements>	
+	</collection-container>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector("collection-container");
+		return sut._getRenderingRoot();
+	};
+
+	describe("<collection-container/>", function() {
+		describe("with inner content", function() {
+			it("is rendered with its inner content", function() {
+				var testElement = getTestElement("#with-inner-content");
+				var innerElement = testElement.querySelector("#test-content");
+				expect(innerElement).not.to.be.null;
+			});  
+		});
+
+		describe("with no inner <collection-elements/>", function() {
+			describe("'_fetchData' method", function() {
+				it("throws error", function() {
+					var testElement = getTestElement("#with-no-content");
+					var errorMessage = "No <collection-elements/> found as inner contet of <collection-container/>.";
+					var errorThrower = function () {
+						testElement._fetchData();
+					};
+					expect(errorThrower).to.throw(errorMessage);
+				}); 
+			});  
+		});		
+
+		describe("without 'url' property", function() {
+		    describe("'submitForm' method", function() {
+		    	it("throws error", function() {
+					var testElement = getTestElement("#with-no-url");
+					var errorMessage = "Url is not defined";
+					var errorThrower = function () {
+						testElement._fetchData();
+					};
+					expect(errorThrower).to.throw(errorMessage);
+				});
+			});
+		});	
+
+		describe("with 'url' property", function() {
+			describe("with inner <collection-elements/>", function() {
+				describe("and no inner <collection-search-form/>", function() {
+					describe("'_fetchData' method", function() {
+						it("execute ajax call to element url", function() {
+							var testElement = getTestElement("#with-elements-tag");
+							var mock = {
+								method: "GET",
+								url: testElement.url,
+								result: [],
+								callbackType: "success"
+							};
+							window.restService.addMockedAjax(mock);
+							testElement._fetchData();
+							expect(mock.called).to.be.true;
+						}); 
+
+						it("execute ajax call with element chunck size", function() {
+							var testElement = getTestElement("#with-elements-tag");
+							var mock = {
+								method: "GET",
+								url: testElement.url,
+								result: [],
+								callbackType: "success"
+							};
+							window.restService.addMockedAjax(mock);
+							testElement._fetchData();
+							expect(mock.data.chenckSize).to.be.equal(testElement.chenckSize);
+						}); 					
+
+						it("execute ajax call with element current page", function() {
+							var testElement = getTestElement("#with-elements-tag");
+							var mock = {
+								method: "GET",
+								url: testElement.url,
+								result: [],
+								callbackType: "success"
+							};
+							window.restService.addMockedAjax(mock);
+							testElement._fetchData();
+							expect(mock.data.page).to.be.equal(testElement.currentPage);
+						}); 					
+					});  
+				});
+
+				describe("and inner <collection-search-form/>", function() {
+					describe("'_fetchData' method", function() {
+						it("execute ajax call to element url", function() {
+							var testElement = getTestElement("#with-elements-tag");
+							var mock = {
+								method: "GET",
+								url: testElement.url,
+								result: [ ],
+								callbackType: "success"
+							};
+							window.restService.addMockedAjax(mock);
+							testElement._fetchData();
+							expect(mock.called).to.be.true;
+						}); 
+
+						it("execute ajax call with element chunck size", function() {
+							var testElement = getTestElement("#with-elements-tag-and-search-form");
+							var mock = {
+								method: "GET",
+								url: testElement.url,
+								result: [],
+								callbackType: "success"
+							};
+							window.restService.addMockedAjax(mock);
+							testElement._fetchData();
+							expect(mock.data.elementsPerPage).to.be.equal(testElement.elementsPerPage);
+						}); 					
+
+						it("execute ajax call with element current page", function() {
+							var testElement = getTestElement("#with-elements-tag");
+							var mock = {
+								method: "GET",
+								url: testElement.url,
+								result: [],
+								callbackType: "success"
+							};
+							window.restService.addMockedAjax(mock);
+							testElement._fetchData();
+							expect(mock.data.page).to.be.equal(testElement.currentPage);
+						}); 					
+
+						it("execute ajax call with form data", function() {
+							var testElement = getTestElement("#with-elements-tag-and-search-form");
+							var mock = {
+								method: "GET",
+								url: testElement.url,
+								result: [],
+								callbackType: "success"
+							};
+							window.restService.addMockedAjax(mock);
+							testElement._fetchData();
+							expect(mock.data.fieldName).to.be.equal("fieldValue");
+						}); 						
+					});  
+				});
+			});			
+		});
+	});
+})(document._currentScript.ownerDocument);
+
+
+
+</script>
+

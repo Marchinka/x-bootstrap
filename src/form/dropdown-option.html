@@ -1,0 +1,78 @@
+<script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
+<script src="./../behaviours/input-behaviours.js"></script>
+
+<template id="dropdown-option-template">
+    <style>
+        .selectable {
+            cursor: pointer;
+        }
+        li > a {
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.42857143;
+            color: #333;
+            white-space: nowrap;
+        }
+        li > a:hover,
+        li > a:focus {
+            color: #262626;
+            text-decoration: none;
+            background-color: #f5f5f5;
+        }
+    </style>  
+    <li><a class="selectable"></a></li>
+</template>
+
+<script>
+(function(window, document) {
+    var thatDoc = document;
+    var thisDoc = document._currentScript.ownerDocument;
+    var template = thisDoc.querySelector('#dropdown-option-template').content;
+    var element = {
+        accessors: {
+            key: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('key') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.key = data;
+                }
+            },
+            value: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('value') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.value = data;
+                }
+            }
+        },
+        lifecycle: {
+            created: function() {
+                this.innerHTML = '';
+                var clone = thatDoc.importNode(template, true);
+                this._getRenderingRoot().appendChild(clone);
+                this.li = this._getRenderingRoot().querySelector("a");
+                this.render();
+            },
+            attributeChanged: function(attributeName) {
+                this.render();
+            }
+        },
+        methods: {
+            _getRenderingRoot: function () {
+                // Could be used for shadow dom
+                return this;
+            },
+            render: function () {
+                this.li.textContent = this.value;
+            }
+        }
+    };
+    xtag.register('dropdown-option', element);
+})(window, document);
+</script>

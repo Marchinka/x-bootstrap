@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <title>X-Bootstrap Demo</title>
+    <script type='text/javascript' src="../node_modules/webcomponents.js/webcomponents.js"></script>
+    <link rel="stylesheet" type="text/css" href="./../node_modules/bootstrap/dist/css/bootstrap.css">
+  </head>
+  <body>
+    <div class="container">
+
+      <h1>
+        Some form-idable form
+      </h1>
+      <p>
+        <small>Mocked ajax responses can be found in 'dummy-ajax-service.js'</small>
+      </p>
+      
+      <form-ajax post-url="/path/to/something">
+        
+        <input-text value="Wrong value" 
+                    field="denomination" 
+                    label="Denominazione" 
+                    placeholder="Type something here" 
+                    error="Some validation error from the server.">
+        </input-text>
+
+        <input-text field="address" 
+                    label="Address" 
+                    placeholder="Type string empty to see error pop out" 
+                    required
+                    requiredness-message="Required field: this awesome field must be empty.">
+        </input-text>
+
+        <input-checkbox field="firstCondition" 
+                        label="Uncheck me!" 
+                        checked
+                        error="This checkbox shouldn't really be checked. Submit to see error disappear.">                          
+        </input-checkbox>
+
+        <input-checkbox field="secondCondition" label="Check me!"></input-checkbox>                
+
+        <input-select field="city" 
+                      label="City"
+                      placeholder="Select your favorite city"
+                      required
+                      requiredness-message="Required field: you really shouldn't left this option unselected.">
+          <dropdown-option key="1" value="Milan"></dropdown-option>
+          <dropdown-option key="2" value="Rome"></dropdown-option>
+          <dropdown-option key="3" value="Paris"></dropdown-option>
+          <dropdown-option key="4" value="London"></dropdown-option>
+          <dropdown-option key="5" value="Bergeggi"></dropdown-option>
+        </input-select>
+
+        <input-autocomplete field="favoriteSuperHero" 
+                            label="Your Favorite Super Hero" 
+                            url="/SuperHeroes/"
+                            placeholder="What is your favorite superhero?" 
+                            required
+                            requiredness-message="Required field: come on! Type something! You will see awesome superhero names coming out!">
+        </input-autocomplete>
+
+        <!-- these informations will be included when this form is submitted -->
+        <additional-info field="firstId" value="34567"></additional-info>
+
+        <additional-info field="secondId" value-of="getCallId"></additional-info>
+        <script type="text/javascript">
+          function getCallId() {
+            return "We wern't boooooorn to follooooow!";
+          };
+        </script>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form-ajax>
+
+    </div>
+
+    <script type="text/javascript" src="./../node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="./dummy-ajax-service.js"></script>
+    <script type="text/javascript" src="./../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="import" href="./../src/elements.html">
+    </body>
+</html>

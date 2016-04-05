@@ -1,0 +1,111 @@
+<script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
+<script src="./../behaviours/input-behaviours.js"></script>
+
+<template id="input-autocomplete-template">
+    <div class="form-group">
+        <div class="dropdown">
+            <label></label>
+            <input type="text" class="form-control"/>
+            <ul class="dropdown-menu" style="width: 100%"></ul>
+        </div>
+        <span class="help-block"></span>
+    </div>
+</template>
+
+<script>
+(function(window, document) {
+    var thatDoc = document;
+    var thisDoc = document._currentScript.ownerDocument;
+    var template = thisDoc.querySelector('#input-autocomplete-template').content;
+
+    var inputTextElement = {
+        lifecycle: {
+            created: function() {
+                this.innerHTML = '';
+                var clone = thatDoc.importNode(template, true);
+                this._getRenderingRoot().appendChild(clone);
+                this.containerDiv = this._selectInRenderingRoot('.form-group');
+                this.labelTag = this._selectInRenderingRoot('label');
+                this.input = this._selectInRenderingRoot('input');
+                this.errorSpan = this._selectInRenderingRoot('span');
+                this.dropdown = this._selectInRenderingRoot('.dropdown');
+                this.dropdownMenu = this._selectInRenderingRoot('.dropdown-menu');                
+                this.render();
+            },
+            inserted: function() {
+                this._fetchData();                
+            },            
+            attributeChanged: function(attributeName) {
+                this.render();
+            }
+        },
+        methods: {
+            render: function() {
+                this._renderLabelTag();
+                this._renderInputTag();
+                this._renderErrorTag();
+            }, 
+            _fetchData: function () {
+                var self = this;
+                if (!self.url) {
+                    return;
+                }
+
+                if (!window.restService) {
+                    throw new Error("'restService' must be assigned to main window for <input-autocomplete/> to work correctly");   
+                }
+
+                window.restService.ajax({
+                    url: self.url,
+                    method: "GET",
+                    data: { search: this.value },
+                    success: function (result) {
+                        self.dropdownMenu.innerHTML = '';
+                        self.renderData(result);
+                    }
+                });
+            },                     
+            _renderLabelTag: function () {
+                this.labelTag.htmlFor = this.field;
+                this.labelTag.textContent = this.label;
+            },
+            _renderInputTag: function () {
+                this.input.placeholder = this.placeholder;
+                this.input.id = this.field;
+                this.input.name = this.field;
+                this.input.value = this.input.value || this.value;
+            },
+            _renderErrorTag: function () {
+                if (this.error) {
+                    this.errorSpan.textContent = this.error;
+                    this.containerDiv.className = "form-group has-error";
+                } else {
+                    this.errorSpan.textContent = undefined;
+                    this.containerDiv.className = "form-group";
+                }
+            },
+            _selectOption: function (dropdownOption) {
+                if (!dropdownOption) {
+                    throw new Error("Not valid option for selection.");
+                }
+
+                this.value = dropdownOption.value;
+                this.input.value = this.value;
+                this.validate();
+            }                        
+        },
+        events: {
+            keyup: function () {
+                this.value = this.input.value;
+                this._fetchData();
+            }
+        }
+    };
+
+    var inheritedBahaviour = xtag.merge(FormBehaviours.dropdownTextInputElementBase, inputTextElement);
+
+    xtag.register('input-autocomplete', inheritedBahaviour);
+})(window, document);
+</script>
+
+<link rel="import" href="./dropdown-option.html">

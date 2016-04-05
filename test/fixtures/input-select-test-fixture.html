@@ -1,0 +1,388 @@
+<div id="withField">
+	<input-select field="fieldName"></input-select>
+</div>
+
+<div id="withError">
+	<input-select error="Some validation error"></input-select>
+</div>
+
+<div id="withoutError">
+	<input-select></input-select>
+</div>
+
+<div id="withEmptyError">
+	<input-select error=""></input-select>
+</div>
+
+<div id="withLabel">
+	<input-select label="field description"></input-select>
+</div>
+
+<div id="withPlaceholderAndNoValue">
+	<input-select placeholder="chose something"></input-select>
+</div>	
+
+<div id="withInnerDropdownOptions">
+	<input-select>
+		<dropdown-option value="value1"></dropdown-option>
+		<dropdown-option value="value2"></dropdown-option>
+	</input-select>
+</div>	
+
+<div id="get data test elements">
+	<div id="withoutField">
+		<input-select checked></input-select>
+	</div>
+
+	<div id="withFieldAndValue">
+		<input-select field="fieldName" value="some Value"></input-select>
+	</div>	
+</div>
+
+<div id="not required test elements">
+	<div id="withValueAndNotRequired">
+		<input-select value="something"></input-select>
+	</div>
+
+	<div id="withoutValueAndNotRequired">
+		<input-select></input-select>
+	</div>
+
+	<div id="withEmptyValueAndNotRequired">
+		<input-select value=""></input-select>
+	</div>
+
+	<div id="withWhitespaceValueAndNotRequired">
+		<input-select value="       "></input-select>
+	</div>	
+</div>
+
+<div id="required test elements">
+	<div id="withValueAndRequired">
+		<input-select required 
+					requiredness-message="Fill this input" 
+					value="something">
+		</input-select>
+	</div>
+
+	<div id="withoutValueAndRequired">
+		<input-select required 
+					requiredness-message="Fill this input">
+		</input-select>
+	</div>
+
+	<div id="withEmptyValueAndRequired">
+		<input-select required 
+					requiredness-message="Fill this input" 
+					value="">
+		</input-select>
+	</div>
+
+	<div id="withWhitespaceValueAndRequired">
+		<input-select required 
+					requiredness-message="Fill this input" 
+					value="        ">
+		</input-select>
+	</div>	
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var tagSutName = "input-select";
+
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector(tagSutName);
+		return sut._getRenderingRoot();
+	};
+
+	describe("<input-select/>", function() {
+	    describe("with 'field' attribute", function() {
+	        it("is rendered with inner <button/>", function() {
+				var inputSelect = getTestElement("#withField");
+				var button = inputSelect.querySelector("button");
+				expect(button).not.to.be.null;
+	        });
+
+	        it("is rendered with inner <button/> with 'id' equal to 'field' attribute", function() {
+				var inputSelect = getTestElement("#withField");
+				var button = inputSelect.querySelector("button");
+				expect(button.id).to.be.equal(inputSelect.field);
+	        });
+
+			describe("and with 'value' property", function () {
+		        it("is rendered with inner <button/> text content with 'value'", function() {
+					var inputSelect = getTestElement("#withFieldAndValue");
+					var button = inputSelect.querySelector("button");
+					expect(button.innerHTML).to.have.string(inputSelect.value);
+		        });
+
+		    	describe("getData method", function () {
+			   	    it("return result with value", function () {
+						var inputSelect = getTestElement("#withFieldAndValue");
+						var result = inputSelect.getData();
+						expect(result[inputSelect.field]).to.be.equal(inputSelect.value);		
+				    });	    
+		    	});
+			});
+	    });
+
+		describe("with 'placeholder' property and without 'value' property", function () {
+			it("is rendered with inner <button/> text content with 'placeholder'", function() {
+				var inputSelect = getTestElement("#withPlaceholderAndNoValue");
+				var button = inputSelect.querySelector("button");
+				expect(button.innerHTML).to.have.string(inputSelect.placeholder);
+			});
+		});
+
+	    describe("with 'error' attribute", function () {
+		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {
+				var inputSelect = getTestElement("#withError");
+				var expectedSpan = inputSelect.querySelector(".help-block");
+				expect(expectedSpan.innerHTML).to.equal(inputSelect.error);
+		    });
+
+		    it("is rendered with 'has-error' and 'form-group' class on input group", function () {
+				var inputSelect = getTestElement("#withError");
+				var expectedContainer = inputSelect.querySelector(".has-error");
+				expect(expectedContainer).not.to.be.null;
+		    });
+	    });
+
+	    describe("without 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var inputSelect = getTestElement("#withoutError");
+				var unexpectedContainer = inputSelect.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });
+
+	    describe("with string empty 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var inputSelect = getTestElement("#withEmptyError");
+				var unexpectedContainer = inputSelect.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });
+
+	    describe("with 'label' attribute", function() {
+	        it("is rendered with inner <label/> with text content equal to parent's 'label' attribute", function() {
+				var inputSelect = getTestElement("#withLabel");
+				var expectedLabel = inputSelect.querySelector("label");
+				expect(expectedLabel.textContent).to.equal(inputSelect.label);
+	        });
+	    });
+
+		describe("with no 'field' property", function () {
+	    	describe("getData method", function () {
+		   	    it("throws error", function () {
+					var inputSelect = getTestElement("#withoutField");
+					var errorMessage = "Attribute 'field' must be defined";
+					expect(inputSelect.getData).to.throw(errorMessage);
+			    });	    
+	    	});
+		});
+
+		describe("with 'field' and 'value' properties", function () {
+	    	describe("getData method", function () {
+		   	    it("returns result with input value", function () {
+					var inputSelect = getTestElement("#withFieldAndValue");
+					var result = inputSelect.getData();
+					expect(result[inputSelect.field]).to.equal(inputSelect.value);
+			    });	    
+	    	});
+		});
+
+		describe("with inner <dropdown-option/>", function () {
+	   	    it("is renderd with options inside the dropdown menu", function () {
+				var inputSelect = getTestElement("#withInnerDropdownOptions");
+				var options = inputSelect.querySelector(".dropdown-menu")
+							.querySelectorAll("dropdown-option");
+				expect(options.length).to.equal(2);
+	    	});
+		});
+
+		describe("'renderData' method", function () {
+			describe("with undefined input", function () {
+		   	    it("throws error", function () {
+					var inputSelect = getTestElement("#withField");
+					var expectedError = "Data not defined."
+					var exceptionThrower = function () {
+						inputSelect.renderData(undefined);
+					};
+					expect(exceptionThrower).to.throw(expectedError);
+		    	});
+		    });
+
+			describe("with input not being a collection", function () {
+		   	    it("throws error", function () {
+					var inputSelect = getTestElement("#withField");
+					var expectedError = "Data must be a collection."
+					var exceptionThrower = function () {
+						inputSelect.renderData({});
+					};
+					expect(exceptionThrower).to.throw(expectedError);
+		    	});
+		    });	  
+
+			describe("with valid input", function () {
+		   	    it("renders two <dropdown-option/>", function () {
+					var data = [
+						{ key: "key1", value: "value1"},
+						{ key: "key2", value: "value2"}
+					];
+					var inputSelect = getTestElement("#withField");
+					inputSelect.renderData(data);
+					var options = inputSelect.querySelector(".dropdown-menu")
+								.querySelectorAll("dropdown-option");
+					expect(options.length).to.equal(2);
+		    	});
+		    });  
+		});
+
+		describe("'_selectOption' method", function () {
+			describe("with undefined input", function () {
+		   	    it("throws error", function () {
+					var inputSelect = getTestElement("#withField");
+					var expectedError = "Not valid option for selection."
+					var exceptionThrower = function () {
+						inputSelect._selectOption(undefined);
+					};
+					expect(exceptionThrower).to.throw(expectedError);
+		    	});
+		    });
+
+			describe("with option with key", function () {
+		   	    it("sets value as option key", function () {
+					var inputSelect = getTestElement("#withField");
+					var button = inputSelect.querySelector("button");
+	                var dropdownOption = document.createElement("dropdown-option");
+	                dropdownOption.key = "key1";
+	                dropdownOption.value = "value1"
+	                inputSelect._selectOption(dropdownOption);
+	                expect(inputSelect.value).to.equal(dropdownOption.key);
+					expect(button.innerHTML).to.have.string(dropdownOption.value);
+		    	});
+		    });  
+
+			describe("with option without key", function () {
+		   	    it("sets value as option value", function () {
+					var inputSelect = getTestElement("#withField");
+					var button = inputSelect.querySelector("button");
+	                var dropdownOption = document.createElement("dropdown-option");
+	                dropdownOption.value = "value1"
+	                inputSelect._selectOption(dropdownOption);
+	                expect(inputSelect.value).to.equal(dropdownOption.value);
+					expect(button.innerHTML).to.have.string(dropdownOption.value);
+		    	});
+		    });  
+		});
+
+		describe("without 'required' attribute", function () {
+	    	describe("validate method", function () {
+		   	    it("returns true in if 'value' is populated", function () {
+					var inputSelect = getTestElement("#withValueAndNotRequired");
+					var result = inputSelect.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is undefined", function () {
+					var inputSelect = getTestElement("#withoutValueAndNotRequired");
+					var result = inputSelect.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is string empty", function () {
+					var inputSelect = getTestElement("#withEmptyValueAndNotRequired");
+					var result = inputSelect.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is string whitespace", function () {
+					var inputSelect = getTestElement("#withWhitespaceValueAndNotRequired");
+					var result = inputSelect.validate();
+					expect(result).to.be.true;
+			    });
+	    	});
+		});
+
+		describe("with 'required' and 'requiredness-message' attribute", function () {
+	    	describe("validate method", function () {
+		   	    it("returns true in if 'value' is populated", function () {
+					var inputSelect = getTestElement("#withValueAndRequired");
+					var result = inputSelect.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns false if 'value' is undefined", function () {
+					var inputSelect = getTestElement("#withoutValueAndRequired");
+					var result = inputSelect.validate();
+					expect(result).to.be.false;
+			    });
+
+			    it("returns false if 'value' is string empty", function () {
+					var inputSelect = getTestElement("#withEmptyValueAndRequired");
+					var result = inputSelect.validate();
+					expect(result).to.be.false;
+			    });
+
+			    it("returns false if 'value' is string whitespace", function () {
+					var inputSelect = getTestElement("#withWhitespaceValueAndRequired");
+					var result = inputSelect.validate();
+					expect(result).to.be.false;
+			    });
+	    	});
+		});
+
+		describe("with 'url' attribute", function () {
+	   	    it("calls url via ajax get in '_fetchData' method", function () {
+				// SETUP
+				var restUrl = "api/path/to/empty/options";
+				var mock = {
+					method: "GET",
+					url: restUrl,
+					result: {}
+				};
+				window.restService.addMockedAjax(mock);
+				var newElement = document.createElement("input-select");
+				newElement.url = restUrl;			
+				currentDocument.body.appendChild(newElement);
+
+				// EXERCISE
+				newElement._fetchData();
+
+				// ASSERT
+				expect(mock.called).to.be.true;
+		    });
+
+	   	    it("calls url via ajax get in '_fetchData' method and renders option from fetched data", function () {
+				// SETUP
+				var data = [
+					{ key: "key1", value: "value1"},
+					{ key: "key2", value: "value2"}
+				];
+				var restUrl = "api/path/to/options";
+				var mock = {
+					method: "GET",
+					url: restUrl,
+					result: data,
+					callbackType: "success"
+				};
+				window.restService.addMockedAjax(mock);
+				var newElement = document.createElement("input-select");
+				newElement.url = restUrl;			
+				currentDocument.body.appendChild(newElement);
+
+				// EXERCISE
+				newElement._fetchData();
+
+				// ASSERT
+				var options = newElement
+								.querySelector(".dropdown-menu")
+								.querySelectorAll("dropdown-option");
+				expect(options.length).to.equal(2);
+		    });	   
+		});
+	});
+})(document._currentScript.ownerDocument);
+</script>
