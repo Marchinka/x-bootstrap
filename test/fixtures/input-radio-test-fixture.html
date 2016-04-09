@@ -10,6 +10,10 @@
 	<input-radio field="fieldName" value="fieldValue" label="fieldLabel" checked></input-radio>
 </div>
 
+<div id="withDisabled">
+	<input-radio disabled></input-radio>
+</div>
+
 <script type="text/javascript">
 (function(currentDocument) {
 	var tagSutName = "input-radio";
@@ -37,6 +41,14 @@
 			var testElement = getTestElement("#withAllAttributes");
 			var innerInput = testElement.querySelector("input");
 			expect(innerInput.type).to.equal("radio");
+		});
+
+		describe("with 'disabled' attribute", function () {
+	    	it("is renderd with disabled input", function () {
+				var testElement = getTestElement("#withDisabled");
+				var input = testElement.querySelector("input");
+				expect(input.disabled).to.be.true;
+	    	});
 		});
 
 		describe("with field attribute", function() {

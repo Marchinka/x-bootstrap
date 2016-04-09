@@ -49,6 +49,15 @@
                 set: function(data) {
                     this.xtag.data.value = data;
                 }
+            },
+            disabled: {
+                attribute: {},
+                get: function() {
+                    return this.hasAttribute('disabled');
+                },
+                set: function(data) {
+                    this.xtag.data.disabled = data;
+                }
             }
         },
         methods: {
@@ -153,7 +162,11 @@
                 return dropdownOption;
             },
             _showMenu: function () {
-                this.dropdown.className = "dropdown open";
+                if (this.disabled) {
+                    this._hideMenu();
+                } else {
+                    this.dropdown.className = "dropdown open";
+                }
             },
             _hideMenu: function () {
                 this.dropdown.className = "dropdown";
@@ -180,7 +193,7 @@
             getData: function () {
                 var inputElements = this._getRenderingRoot()
                     .querySelector("form")
-                    .querySelectorAll("input-text,input-select,input-autocomplete,input-checkbox,input-datetime,additional-info");
+                    .querySelectorAll("input-text,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
 
                 if (inputElements.length === 0) {
                     return null;
@@ -213,7 +226,7 @@
             validate: function () {
                 var inputElements = this._getRenderingRoot()
                     .querySelector("form")
-                    .querySelectorAll("input-text,input-select,input-autocomplete,input-checkbox,input-datetime");
+                    .querySelectorAll("input-text,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group");
 
                 var isFormValid = true;
                 for (var i = 0; i < inputElements.length; i++) {

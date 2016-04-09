@@ -134,6 +134,11 @@
             _renderButton: function () {
                 this.button.id = this.field;
                 this.buttonSpan.textContent = this.selectedValue || this.value || this.placeholder;
+                if (this.disabled) {
+                    this.button.className = "btn btn-default form-control disabled";
+                } else {
+                    this.button.className = "btn btn-default form-control";
+                }
             },
             _renderMenu: function () {
                 this.dropdownMenu.innerHTML = this.innerContent;

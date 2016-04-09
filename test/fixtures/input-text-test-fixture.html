@@ -18,6 +18,14 @@
 	<input-text placeholder="input placeholder"></input-text>
 </div>
 
+<div id="withDisabled">
+	<input-text disabled></input-text>
+</div>
+
+<div id="withPlaceholder">
+	<input-text placeholder="input placeholder"></input-text>
+</div>
+
 <div id="withValue">
 	<input-text value="input text value"></input-text>
 </div>
@@ -175,6 +183,14 @@
 					var errorMessage = "Attribute 'field' must be defined";
 					expect(inputText.getData).to.throw(errorMessage);
 			    });	    
+	    	});
+		});
+
+		describe("with 'disabled' attribute", function () {
+	    	it("is renderd with disabled input", function () {
+				var testElement = getTestElement("#withDisabled");
+				var input = testElement.querySelector("input");
+				expect(input.disabled).to.be.true;
 	    	});
 		});
 

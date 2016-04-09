@@ -26,6 +26,10 @@
 	<input-autocomplete label="field description"></input-autocomplete>
 </div>
 
+<div id="withDisabled">
+	<input-autocomplete disabled></input-autocomplete>
+</div>
+
 <div id="get data test elements">
 	<div id="withoutField">
 		<input-autocomplete value="something"></input-autocomplete>
@@ -113,6 +117,14 @@
 				expect(expectedLabel.htmlFor).to.equal(inputAutocomplete.field);
 		    });
 	    });
+
+		describe("with 'disabled' attribute", function () {
+	    	it("is renderd with disabled input", function () {
+				var testElement = getTestElement("#withDisabled");
+				var input = testElement.querySelector("input");
+				expect(input.disabled).to.be.true;
+	    	});
+		});
 
 	    describe("with 'error' attribute", function () {
 		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {

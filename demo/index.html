@@ -17,7 +17,7 @@
       
       <form-ajax post-url="/path/to/something">
         
-        <input-text value="Wrong value" 
+        <input-text value="Wrong value"
                     field="denomination" 
                     label="Denominazione" 
                     placeholder="Type something here" 
@@ -39,7 +39,7 @@
 
         <input-checkbox field="secondCondition" label="Check me!"></input-checkbox>                
 
-        <input-select field="city" 
+        <input-select field="city" disabled
                       label="City"
                       placeholder="Select your favorite city"
                       required
@@ -59,10 +59,15 @@
                             requiredness-message="Required field: come on! Type something! You will see awesome superhero names coming out!">
         </input-autocomplete>
 
-        <input-radio-group field="choice">
+        <input-radio-group field="choice" label="Select an option" error="You should select the second option">
           <input-radio value="firstValue" label="The first choice" checked></input-radio>
           <input-radio value="secondValue" label="The second choice (the right one)"></input-radio>
           <input-radio value="thirdValue" label="The third choice"></input-radio>
+        </input-radio-group>
+
+        <input-radio-group field="judgement" label="How do you judge this framework?" required requiredness-message="Required field: select an option.">
+          <input-radio value="awesome" label="Awesome"></input-radio>
+          <input-radio value="super-awesome" label="Super Awesome"></input-radio>
         </input-radio-group>
 
         <!-- these informations will be included when this form is submitted -->

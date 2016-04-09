@@ -44,6 +44,24 @@
 	</collection-search-form>
 </div>
 
+<div id="with-input-radio-group">
+	<collection-search-form>
+		<input-radio-group required field="fieldName">
+			<input-radio value="first" label="First" checked></input-radio>
+			<input-radio value="second" label="Second"></input-radio>
+		</input-radio-group>
+	</collection-search-form>		
+</div>
+
+<div id="with-invalid-input-radio-group">
+	<collection-search-form>
+		<input-radio-group required field="fieldName">
+			<input-radio value="first" label="First"></input-radio>
+			<input-radio value="second" label="Second"></input-radio>
+		</input-radio-group>
+	</collection-search-form>		
+</div>
+
 <div id="with-checked-input-checkbox">
 	<collection-search-form>
 		<input-checkbox field="fieldName" checked></input-checkbox>
@@ -140,6 +158,42 @@
 						expect(result).to.be.true;
 				    }); 	    
 				});			
+			});			
+	    });
+
+	    describe("with inner <input-radio-group/>", function() {
+			describe("with not valid data", function() {
+		    	describe("'validate' method", function() {
+				    it("returns false", function() {
+						var testElement = getTestElement("#with-invalid-input-radio-group");
+						var innerInput = testElement.querySelector("input-radio-group");
+						var result = testElement.validate();
+						expect(result).to.be.false;
+				    }); 	    
+				});
+			});
+
+			describe("with valid data", function() {
+		    	describe("'getData' method", function() {
+				    it("returns object with property equal to input's field and value equal to input's value", function() {
+						var testElement = getTestElement("#with-input-radio-group");
+						var innerInput = testElement.querySelector("input-radio-group");
+						var result = testElement.getData();
+						expect(result[innerInput.field]).to.be.equal("first");
+				    }); 	    
+				});
+
+		    	describe("'setData' method", function() {
+				    it("sets input's value with object property's value", function() {
+						var testElement = getTestElement("#with-input-radio-group");
+						var innerInput = testElement.querySelector("input-radio-group");
+						var object = {
+							fieldName : "test"
+						};
+						testElement.setData(object);
+						expect(innerInput.value).to.be.equal(object.fieldName);
+				    }); 	    
+				});		
 			});			
 	    });
 

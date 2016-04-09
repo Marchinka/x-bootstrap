@@ -4,6 +4,10 @@
 	</input-radio-group>
 </div>
 
+<div id="withError">
+	<input-radio-group error="Erro Message"></input-radio-group>
+</div>
+
 <div id="withoutError">
 	<input-radio-group></input-radio-group>
 </div>
@@ -20,8 +24,48 @@
 	<input-radio-group></input-radio-group>
 </div>
 
+<div id="withoutRequiredAttribute">
+	<div id="withValueAndNotRequired">
+		<input-radio-group field="fieldName">
+			<input-radio value="first" checked></input-radio>
+			<input-radio value="second"></input-radio>
+		</input-radio-group>
+	</div>
+
+	<div id="withoutValueAndNotRequired">
+		<input-radio-group field="fieldName">
+			<input-radio value="first"></input-radio>
+			<input-radio value="second"></input-radio>
+		</input-radio-group>
+	</div>		
+</div>
+
+<div id="withRequiredAttribute">
+	<div id="withValueAndRequired">
+		<input-radio-group required field="fieldName">
+			<input-radio value="first" checked></input-radio>
+			<input-radio value="second"></input-radio>
+		</input-radio-group>
+	</div>
+
+	<div id="withoutValueAndRequired">
+		<input-radio-group required field="fieldName">
+			<input-radio value="first"></input-radio>
+			<input-radio value="second"></input-radio>
+		</input-radio-group>
+	</div>	
+</div>
+
 <div id="withFieldAndInnerRadios">
 	<input-radio-group field="fieldValue">
+		<input-radio value="firstValue"></input-radio>
+		<input-radio value="secondValue"></input-radio>
+		<input-radio value="thirdValue"></input-radio>
+	</input-radio-group>
+</div>
+
+<div id="withDisabledAndInnerRadios">
+	<input-radio-group field="fieldValue" disabled>
 		<input-radio value="firstValue"></input-radio>
 		<input-radio value="secondValue"></input-radio>
 		<input-radio value="thirdValue"></input-radio>
@@ -93,17 +137,76 @@
 				var unexpectedContainer = inputSelect.querySelector(".has-error");
 				expect(unexpectedContainer).to.be.null;
 		    });
-	    });	    
+	    });
 
-		describe("with inner radios and field 'attribute'", function() {
-		    it("its inner radios are render with 'field' attribute equals to its 'field' attribute", function() {
-				var testElement = getTestElement("#withFieldAndInnerRadios");
-				var innerRadios = testElement.querySelectorAll("input-radio");
-				for (var i = 0; i < innerRadios.length; i++) {
-					var radioButton = innerRadios[i];
-					expect(radioButton.field).to.equal(testElement.field);		
-				}
+	    describe("with 'error' attribute", function () {
+		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {
+				var testElement = getTestElement("#withError");
+				var expectedSpan = testElement.querySelector(".help-block");
+				expect(expectedSpan.innerHTML).to.equal(testElement.error);
 		    });
+
+		    it("is rendered with 'has-error' and 'form-group' class on input group", function () {
+				var testElement = getTestElement("#withError");
+				var expectedContainer = testElement.querySelector(".has-error");
+				expect(expectedContainer).not.to.be.null;
+		    });
+	    });
+
+		describe("without 'required' attribute", function () {
+	    	describe("validate method", function () {
+		   	    it("returns true in if 'value' is populated", function () {
+					var testElement = getTestElement("#withValueAndNotRequired");
+					var result = testElement.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is undefined", function () {
+					var testElement = getTestElement("#withoutValueAndNotRequired");
+					var result = testElement.validate();
+					expect(result).to.be.true;
+			    });
+	    	});
+		});
+
+		describe("with 'required' attribute", function () {
+	    	describe("validate method", function () {
+		   	    it("returns true in if 'value' is populated", function () {
+					var testElement = getTestElement("#withValueAndRequired");
+					var result = testElement.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns false if 'value' is undefined", function () {
+					var testElement = getTestElement("#withoutValueAndRequired");
+					var result = testElement.validate();
+					expect(result).to.be.false;
+			    });
+	    	});
+		});
+	
+		describe("with inner radios'", function() {
+			describe("and field 'attribute'", function() {
+			    it("its inner radios are render with 'field' attribute equals to its 'field' attribute", function() {
+					var testElement = getTestElement("#withFieldAndInnerRadios");
+					var innerRadios = testElement.querySelectorAll("input-radio");
+					for (var i = 0; i < innerRadios.length; i++) {
+						var radioButton = innerRadios[i];
+						expect(radioButton.field).to.equal(testElement.field);		
+					}
+			    });
+		    });
+
+			describe("and field 'attribute'", function() {
+			    it("its inner radios are render with 'field' attribute equals to its 'field' attribute", function() {
+					var testElement = getTestElement("#withDisabledAndInnerRadios");
+					var innerRadios = testElement.querySelectorAll("input-radio");
+					for (var i = 0; i < innerRadios.length; i++) {
+						var radioButton = innerRadios[i];
+						expect(radioButton.disabled).to.be.true;
+					}
+			    });
+		    });		    
 		});
 
 		describe("with inner radios, one of which checked'", function() {

@@ -22,6 +22,13 @@
 	<input-select placeholder="chose something"></input-select>
 </div>	
 
+<div id="withDisabled">
+	<input-select disabled>
+		<dropdown-option value="value1"></dropdown-option>
+		<dropdown-option value="value2"></dropdown-option>
+	</input-select>
+</div>	
+
 <div id="withInnerDropdownOptions">
 	<input-select>
 		<dropdown-option value="value1"></dropdown-option>
@@ -103,6 +110,14 @@
 				var button = inputSelect.querySelector("button");
 				expect(button).not.to.be.null;
 	        });
+
+			describe("with 'disabled' attribute", function () {
+		    	it("is renderd with disabled input", function () {
+					var testElement = getTestElement("#withDisabled");
+					var input = testElement.querySelector("button");
+					expect(input.className).to.contain("disabled");
+		    	});
+			});
 
 	        it("is rendered with inner <button/> with 'id' equal to 'field' attribute", function() {
 				var inputSelect = getTestElement("#withField");

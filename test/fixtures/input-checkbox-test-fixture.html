@@ -18,6 +18,10 @@
 	<input-checkbox label="field description"></input-checkbox>
 </div>
 
+<div id="withDisabled">
+	<input-checkbox disabled></input-checkbox>
+</div>
+
 <div id="get data test elements">
 	<div id="withoutField">
 		<input-checkbox checked></input-checkbox>
@@ -82,6 +86,14 @@
 		    	});
 			});
 	    });
+
+		describe("with 'disabled' attribute", function () {
+	    	it("is renderd with disabled input", function () {
+				var testElement = getTestElement("#withDisabled");
+				var input = testElement.querySelector("input");
+				expect(input.disabled).to.be.true;
+	    	});
+		});
 
 	    describe("with 'error' attribute", function () {
 		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {

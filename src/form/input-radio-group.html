@@ -17,33 +17,24 @@
     var template = thisDoc.querySelector('#input-radio-group-template').content;
     var element = {
         accessors: {
-            field: {
-                attribute: {},
+            required: {
+                attribute: { boolean: true },
                 get: function() {
-                    return this.getAttribute('field');
-                },
-                set: function(value) {
-                    this.xtag.data.field = value;
-                }
-            },
-            value: {
-                attribute: {},
-                get: function() {
-                    return this.getAttribute('value');
+                    return this.hasAttribute('required');
                 },
                 set: function(data) {
-                    this.xtag.data.value = data;
+                    this.xtag.data.required = data;
                 }
-            },
-            label: {
+            },         
+            requirednessMessage: {
                 attribute: {},
                 get: function() {
-                    return this.getAttribute('label');
+                    return this.getAttribute('requiredness-message') || '';
                 },
                 set: function(data) {
-                    this.xtag.data.label = data;
+                    this.xtag.data.requirednessMessage = data;
                 }
-            }
+            }            
         },
         lifecycle: {
             created: function() {
@@ -54,7 +45,9 @@
                 this.innerContentTag = this._selectInRenderingRoot(".inner-content");
                 this.innerContentTag.innerHTML = innerContent;
                 this.innerRadios = this._getRenderingRoot().querySelectorAll("input-radio");
-                this.labelTag = this._getRenderingRoot().querySelector("label");
+                this.labelTag = this._selectInRenderingRoot("label");
+                this.formGroup = this._selectInRenderingRoot(".form-group");
+                this.errorSpan = this._selectInRenderingRoot(".help-block");
                 this.render();
             },
             attributeChanged: function(attributeName) {
@@ -64,14 +57,16 @@
         methods: {
             render: function () {
                 this.labelTag.textContent = this.label;
-                this.assignFieldToRadios();
+                this.assignFieldAndDisabledToRadios();
                 this.checkRadioValue(this.value);
                 this.fixMultipleChecks();
+                this.renderErrorTag();
             },
-            assignFieldToRadios: function () {
+            assignFieldAndDisabledToRadios: function () {
                 for (var i = 0; i < this.innerRadios.length; i++) {
                     var radioButton = this.innerRadios[i];
                     radioButton.field = this.field;
+                    radioButton.disabled = this.disabled;
                 }
             },
             fixMultipleChecks: function () {
@@ -100,6 +95,28 @@
                     radioButton.checked = radioButton.value == radioValue;
                 }
             },
+            renderErrorTag: function () {
+                if (this.error) {
+                    this.errorSpan.textContent = this.error;
+                    this.formGroup.className = "form-group has-error";
+                } else {
+                    this.errorSpan.textContent = undefined;
+                    this.formGroup.className = "form-group";
+                }
+            },   
+            validate: function () {
+                if (!this.required) {
+                    this.error = '';
+                    return true;
+                }
+                var data = this.getData();
+                if (!data[this.field]) {
+                    this.error = this.requirednessMessage;
+                    return false;
+                }
+                this.error = ''
+                return true;
+            },
             getData: function () {
                 if (!this.field) {
                     throw new Error("Attribute 'field' must be defined");
@@ -118,8 +135,18 @@
                 
                 return data;
             }
-         }
+        },
+        events: {
+            tap: function (e) {
+                if (e.target.nodeName === "INPUT-RADIO" ||
+                    e.target.nodeName === "INPUT" || 
+                    e.target.className === "radio-label") {
+                    this.error = '';
+                    this.renderErrorTag();  
+                }
+            }
+        }        
     };
-    xtag.register('input-radio-group', xtag.merge(FormBehaviours.elementBase, element));
+    xtag.register('input-radio-group', xtag.merge(FormBehaviours.inputElementBase, element));
 })(window, document);
 </script>

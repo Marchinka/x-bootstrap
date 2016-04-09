@@ -49,6 +49,15 @@
                 set: function(data) {
                     this.xtag.data.checked = data === true;
                 }
+            },
+            disabled: {
+                attribute: { boolean: true },
+                get: function() {
+                    return this.hasAttribute('disabled');
+                },
+                set: function(data) {
+                    this.xtag.data.disabled = data === true;
+                }
             }
         },
         lifecycle: {
@@ -66,6 +75,7 @@
         },
         methods: {
             render: function () {
+                this.input.disabled = this.disabled;
                 this.input.name = this.field;
                 this.input.id = this.field;
                 this.input.checked = this.checked;
