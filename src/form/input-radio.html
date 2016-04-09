@@ -1,0 +1,78 @@
+<script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
+<script src="./../behaviours/input-behaviours.js"></script>
+
+<template id="input-radio-template">
+    <div class="radio">
+      <label><input type="radio"/><span class="radio-label"></span></label>
+    </div>    
+</template>
+
+<script>
+(function(window, document) {
+    var thatDoc = document;
+    var thisDoc = document._currentScript.ownerDocument;
+    var template = thisDoc.querySelector('#input-radio-template').content;
+    var element = {
+        accessors: {
+            field: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('field');
+                },
+                set: function(value) {
+                    this.xtag.data.field = value;
+                }
+            },
+            value: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('value');
+                },
+                set: function(data) {
+                    this.xtag.data.value = data;
+                }
+            },
+            label: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('label');
+                },
+                set: function(data) {
+                    this.xtag.data.label = data;
+                }
+            },
+            checked: {
+                attribute: { boolean: true },
+                get: function() {
+                    return this.hasAttribute('checked');
+                },
+                set: function(data) {
+                    this.xtag.data.checked = data;
+                }
+            }
+        },
+        lifecycle: {
+            created: function() {
+                this.innerHTML = '';
+                var clone = thatDoc.importNode(template, true);
+                this._getRenderingRoot().appendChild(clone);
+                this.input = this._selectInRenderingRoot("input");
+                this.radioLabel = this._selectInRenderingRoot(".radio-label");
+                this.render();
+            },
+            attributeChanged: function(attributeName) {
+                this.render();
+            }
+        },
+        methods: {
+            render: function () {
+                this.input.name = this.field;
+                this.input.id = this.field;
+                this.input.checked = this.checked;
+                this.radioLabel.textContent = this.label;
+            }
+        }
+    };
+    xtag.register('input-radio', xtag.merge(FormBehaviours.elementBase, element));
+})(window, document);
+</script>

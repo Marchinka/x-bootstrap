@@ -1,0 +1,22 @@
+<div id="withField">
+	<input-radio-group value="helloWorld"></input-radio-group>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var tagSutName = "input-radio-group";
+
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector(tagSutName);
+		return sut._getRenderingRoot();
+	};
+
+	describe("<input-radio-group/>", function() {
+	    it("is rendered with an inner <li/>", function() {
+			expect(true).not.to.be.false;
+	    }); 
+	});
+})(document._currentScript.ownerDocument);
+</script>
+

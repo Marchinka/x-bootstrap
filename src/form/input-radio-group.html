@@ -1,0 +1,26 @@
+<script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
+<script src="./../behaviours/input-behaviours.js"></script>
+
+<script>
+(function(window, document) {
+    var thatDoc = document;
+    var thisDoc = document._currentScript.ownerDocument;
+    var element = {
+        accessors: {
+
+        },
+        lifecycle: {
+            created: function() {
+
+            },
+            attributeChanged: function(attributeName) {
+                //this.render();
+            }
+        },
+        methods: {
+
+        }
+    };
+    xtag.register('input-radio-group', xtag.merge(FormBehaviours.elementBase, element));
+})(window, document);
+</script>
