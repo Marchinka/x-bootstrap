@@ -65,30 +65,46 @@
 <div id="required test elements">
 	<div id="withValueAndRequired">
 		<input-text required 
-					requiredness-message="Fill this input" 
+					required-message="Fill this input" 
 					value="something">
 		</input-text>
 	</div>
 
 	<div id="withoutValueAndRequired">
 		<input-text required 
-					requiredness-message="Fill this input">
+					required-message="Fill this input">
 		</input-text>
 	</div>
 
 	<div id="withEmptyValueAndRequired">
 		<input-text required 
-					requiredness-message="Fill this input" 
+					required-message="Fill this input" 
 					value="">
 		</input-text>
 	</div>
 
 	<div id="withWhitespaceValueAndRequired">
 		<input-text required 
-					requiredness-message="Fill this input" 
+					required-message="Fill this input" 
 					value="        ">
 		</input-text>
 	</div>	
+</div>
+
+<div id="withRegex">
+	<div id="withRegexAndMatchingValue">
+		<input-text regex="^[0-9]*$" 
+					regex-message="This field is numeric" 
+					value="5544545">
+		</input-text>
+	</div>
+
+	<div id="withRegexAndNotMatchingValue">
+		<input-text regex="^[0-9]*$" 
+					regex-message="This field is numeric" 
+					value="554ffff4545">
+		</input-text>		
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -158,6 +174,28 @@
 				var expectedInput = inputText.querySelector("input");
 				expect(expectedInput.placeholder).to.equal(inputText.placeholder);
 	        });
+	    });
+
+	    describe("with 'regex' attribute", function() {
+	    	describe("and matching value", function() {
+	    		describe("'validate' method", function() {
+			        it("returns true", function() {
+						var inputText = getTestElement("#withRegexAndMatchingValue");
+						var result = inputText.validate();
+						expect(result).to.be.true;
+			        });
+			    });
+		    });
+
+	    	describe("and not matching value", function() {
+	    		describe("'validate' method", function() {
+			        it("returns false", function() {
+						var inputText = getTestElement("#withRegexAndNotMatchingValue");
+						var result = inputText.validate();
+						expect(result).to.be.false;
+			        });
+			    });
+		    });		    
 	    });
 
 	    describe("with 'value' attribute", function() {
@@ -232,7 +270,7 @@
 	    	});
 		});
 
-		describe("with 'required' and 'requiredness-message' attribute", function () {
+		describe("with 'required' and 'required-message' attribute", function () {
 	    	describe("validate method", function () {
 		   	    it("returns true in if 'value' is populated", function () {
 					var inputText = getTestElement("#withValueAndRequired");

@@ -26,13 +26,13 @@
                     this.xtag.data.required = data;
                 }
             },         
-            requirednessMessage: {
+            requiredMessage: {
                 attribute: {},
                 get: function() {
-                    return this.getAttribute('requiredness-message') || '';
+                    return this.getAttribute('required-message') || '';
                 },
                 set: function(data) {
-                    this.xtag.data.requirednessMessage = data;
+                    this.xtag.data.requiredMessage = data;
                 }
             }            
         },
@@ -66,7 +66,7 @@
                 for (var i = 0; i < this.innerRadios.length; i++) {
                     var radioButton = this.innerRadios[i];
                     radioButton.field = this.field;
-                    radioButton.disabled = this.disabled;
+                    radioButton.disabled = radioButton.disabled || this.disabled;
                 }
             },
             fixMultipleChecks: function () {
@@ -78,7 +78,7 @@
                 for (var i = 0; i < checkedRadios.length - 1; i++) {
                     var radio = checkedRadios[i];
                     radio.checked = false;
-                };
+                }
             },
             uncheckAllRadios: function () {
                 for (var i = 0; i < this.innerRadios.length; i++) {
@@ -111,7 +111,7 @@
                 }
                 var data = this.getData();
                 if (!data[this.field]) {
-                    this.error = this.requirednessMessage;
+                    this.error = this.requiredMessage;
                     return false;
                 }
                 this.error = ''

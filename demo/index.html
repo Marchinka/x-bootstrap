@@ -17,18 +17,25 @@
       
       <form-ajax post-url="/path/to/something">
         
-        <input-text value="Wrong value"
+        <input-text value="Wrong value" 
                     field="denomination" 
                     label="Denominazione" 
                     placeholder="Type something here" 
                     error="Some validation error from the server.">
         </input-text>
 
-        <input-text field="address" 
-                    label="Address" 
-                    placeholder="Type string empty to see error pop out" 
+        <input-text value="This field is readonly" 
+                    field="fixedField" 
+                    label="Fixed Field" disabled>
+        </input-text>
+
+        <input-text field="random number" 
+                    label="A random number" 
+                    placeholder="Type whatever number you want" 
                     required
-                    requiredness-message="Required field: this awesome field must be empty.">
+                    required-message="Required field: this awesome field must be empty."
+                    regex="^[0-9]*$" 
+                    regex-message="Validation error: this field must be a number">
         </input-text>
 
         <input-checkbox field="firstCondition" 
@@ -43,7 +50,7 @@
                       label="City"
                       placeholder="Select your favorite city"
                       required
-                      requiredness-message="Required field: you really shouldn't left this option unselected.">
+                      required-message="Required field: you really shouldn't left this option unselected.">
           <dropdown-option key="1" value="Milan"></dropdown-option>
           <dropdown-option key="2" value="Rome"></dropdown-option>
           <dropdown-option key="3" value="Paris"></dropdown-option>
@@ -56,25 +63,24 @@
                             url="/SuperHeroes/"
                             placeholder="What is your favorite superhero?" 
                             required
-                            requiredness-message="Required field: come on! Type something! You will see awesome superhero names coming out!">
+                            required-message="Required field: come on! Type something! You will see awesome superhero names coming out!">
         </input-autocomplete>
 
-        <input-radio-group field="choice" label="Select an option" error="You should select the second option">
-          <input-radio value="firstValue" label="The first choice" checked></input-radio>
-          <input-radio value="secondValue" label="The second choice (the right one)"></input-radio>
-          <input-radio value="thirdValue" label="The third choice"></input-radio>
-        </input-radio-group>
-
-        <input-radio-group field="judgement" label="How do you judge this framework?" required requiredness-message="Required field: select an option.">
-          <input-radio value="awesome" label="Awesome"></input-radio>
-          <input-radio value="super-awesome" label="Super Awesome"></input-radio>
+        <input-radio-group field="judjement" 
+                          label="What do you think about x-bootstrap?"
+                          required
+                          required-message="Required field: what do you thing about these tags?">
+          <input-radio value="Awesome" label="Awesome"></input-radio>
+          <input-radio value="SuperAwesome" label="Super Awesome"></input-radio>
+          <input-radio value="Awful" label="Awful" disabled></input-radio>
         </input-radio-group>
 
         <!-- these informations will be included when this form is submitted -->
         <additional-info field="firstId" value="34567"></additional-info>
 
         <additional-info field="secondId" value-of="getCallId"></additional-info>
-        <script type="text/javascript">
+
+        <script>
           function getCallId() {
             return "We wern't boooooorn to follooooow!";
           };

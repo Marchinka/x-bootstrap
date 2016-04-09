@@ -15,6 +15,26 @@
     var thisDoc = document._currentScript.ownerDocument;
     var template = thisDoc.querySelector('#input-text-template').content;
     var inputTextElement = {
+        accessors: {
+            regex: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('regex') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.regex = data;
+                }
+            },         
+            regexMessage: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('regex-message') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.regexMessage = data;
+                }
+            }            
+        },        
         lifecycle: {
             created: function() {
                 this.innerHTML = '';
@@ -35,6 +55,32 @@
                 this._renderLabelTag();
                 this._renderInputTag();
                 this._renderErrorTag();
+            },
+            validate: function () {
+                if (this.regex) {
+                    var regularExpression = new RegExp(this.regex);
+                    var isMatching = this.value.match(regularExpression);
+                    if (!isMatching) {
+                        this.error = this.regexMessage;
+                        return false;
+                    }
+                }
+
+                if (!this.required) {
+                    this.error = '';
+                    return true;
+                }
+                if (!this.input.value) {
+                    this.error = this.requiredMessage;
+                    return false;
+                }
+                if (!this.input.value.trim()) {
+                    this.error = this.requiredMessage;
+                    return false;
+                }
+
+                this.error = ''
+                return true;
             },
             _renderLabelTag: function () {
                 this.labelTag.htmlFor = this.field;

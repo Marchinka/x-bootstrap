@@ -92,13 +92,13 @@
                     this.xtag.data.required = data;
                 }
             },
-            requirednessMessage: {
+            requiredMessage: {
                 attribute: {},
                 get: function() {
-                    return this.getAttribute('requiredness-message') || '';
+                    return this.getAttribute('required-message') || '';
                 },
                 set: function(data) {
-                    this.xtag.data.requirednessMessage = data;
+                    this.xtag.data.requiredMessage = data;
                 }
             }
         },
@@ -109,11 +109,11 @@
                     return true;
                 }
                 if (!this.input.value) {
-                    this.error = this.requirednessMessage;
+                    this.error = this.requiredMessage;
                     return false;
                 }
                 if (!this.input.value.trim()) {
-                    this.error = this.requirednessMessage;
+                    this.error = this.requiredMessage;
                     return false;
                 }
                 this.error = ''

@@ -61,27 +61,27 @@
 <div id="required test elements">
 	<div id="withValueAndRequired">
 		<input-autocomplete required 
-					requiredness-message="Fill this input" 
+					required-message="Fill this input" 
 					value="something">
 		</input-autocomplete>
 	</div>
 
 	<div id="withoutValueAndRequired">
 		<input-autocomplete required 
-					requiredness-message="Fill this input">
+					required-message="Fill this input">
 		</input-autocomplete>
 	</div>
 
 	<div id="withEmptyValueAndRequired">
 		<input-autocomplete required 
-					requiredness-message="Fill this input" 
+					required-message="Fill this input" 
 					value="">
 		</input-autocomplete>
 	</div>
 
 	<div id="withWhitespaceValueAndRequired">
 		<input-autocomplete required 
-					requiredness-message="Fill this input" 
+					required-message="Fill this input" 
 					value="        ">
 		</input-autocomplete>
 	</div>	
@@ -228,7 +228,7 @@
 	    	});
 		});
 
-		describe("with 'required' and 'requiredness-message' attribute", function () {
+		describe("with 'required' and 'required-message' attribute", function () {
 	    	describe("validate method", function () {
 		   	    it("returns true in if 'value' is populated", function () {
 					var inputAutocomplete = getTestElement("#withValueAndRequired");
