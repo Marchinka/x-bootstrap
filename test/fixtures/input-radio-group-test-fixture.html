@@ -1,5 +1,55 @@
-<div id="withField">
-	<input-radio-group value="helloWorld"></input-radio-group>
+<div id="withInnerContent">
+	<input-radio-group>
+		<div id="inner-content"></div>
+	</input-radio-group>
+</div>
+
+<div id="withoutError">
+	<input-radio-group></input-radio-group>
+</div>
+
+<div id="withEmptyError">
+	<input-radio-group error=""></input-radio-group>
+</div>
+
+<div id="withLabel">
+	<input-radio-group label="textLabel"></input-radio-group>
+</div>
+
+<div id="withoutField">
+	<input-radio-group></input-radio-group>
+</div>
+
+<div id="withFieldAndInnerRadios">
+	<input-radio-group field="fieldValue">
+		<input-radio value="firstValue"></input-radio>
+		<input-radio value="secondValue"></input-radio>
+		<input-radio value="thirdValue"></input-radio>
+	</input-radio-group>
+</div>
+
+<div id="withCheckedRadio">
+	<input-radio-group field="fieldValue">
+		<input-radio value="firstValue"></input-radio>
+		<input-radio value="secondValue" checked></input-radio>
+		<input-radio value="thirdValue"></input-radio>
+	</input-radio-group>
+</div>
+
+<div id="withTwoSelectedElement">
+	<input-radio-group field="fieldValue">
+		<input-radio value="firstValue" checked></input-radio>
+		<input-radio value="secondValue" checked></input-radio>
+		<input-radio value="thirdValue"></input-radio>
+	</input-radio-group>
+</div>
+
+<div id="withOneSelectedElement">
+	<input-radio-group field="fieldValue">
+		<input-radio value="firstValue"></input-radio>
+		<input-radio value="secondValue" checked></input-radio>
+		<input-radio value="thirdValue"></input-radio>
+	</input-radio-group>
 </div>
 
 <script type="text/javascript">
@@ -13,9 +63,132 @@
 	};
 
 	describe("<input-radio-group/>", function() {
-	    it("is rendered with an inner <li/>", function() {
-			expect(true).not.to.be.false;
+	    it("its inner content inside its 'inner-content' div", function() {
+			var testElement = getTestElement("#withInnerContent");
+			var innerContent = testElement
+				.querySelector(".inner-content")
+				.querySelector("#inner-content");
+			expect(innerContent).not.to.be.null;
 	    }); 
+
+		describe("with 'label' attribute'", function() {
+		    it("its inner <label /> content equal to 'label' attribute value", function() {
+				var testElement = getTestElement("#withLabel");
+				var innerLabel = testElement.querySelector("label");
+				expect(innerLabel.textContent).to.equal(testElement.label);		
+		    });
+		});
+
+	    describe("without 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var inputSelect = getTestElement("#withoutError");
+				var unexpectedContainer = inputSelect.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });
+
+	    describe("with string empty 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var inputSelect = getTestElement("#withEmptyError");
+				var unexpectedContainer = inputSelect.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });	    
+
+		describe("with inner radios and field 'attribute'", function() {
+		    it("its inner radios are render with 'field' attribute equals to its 'field' attribute", function() {
+				var testElement = getTestElement("#withFieldAndInnerRadios");
+				var innerRadios = testElement.querySelectorAll("input-radio");
+				for (var i = 0; i < innerRadios.length; i++) {
+					var radioButton = innerRadios[i];
+					expect(radioButton.field).to.equal(testElement.field);		
+				}
+		    });
+		});
+
+		describe("with inner radios, one of which checked'", function() {
+			describe("'uncheckAllRadios' method", function() {
+			    it("unckecks all radios", function() {
+					var testElement = getTestElement("#withCheckedRadio");
+					testElement.uncheckAllRadios();
+					var innerRadios = testElement.querySelectorAll("input-radio");
+					for (var i = 0; i < innerRadios.length; i++) {
+						var radioButton = innerRadios[i];
+						expect(radioButton.checked).to.be.false;
+					}
+			    });
+		    });
+		});
+
+		describe("with inner radios, one of which checked'", function() {
+			describe("with 'field' property", function () {
+		    	describe("getData method", function () {
+			   	    it("return correct data collection", function () {
+						var element = getTestElement("#withOneSelectedElement");
+						var result = element.getData();
+						expect(result[element.field]).to.equal("secondValue");
+				    });	    
+		    	});
+		    });
+
+			describe("'checkRadioValue' method", function() {
+			    it("checks the correct radio button", function() {
+					var testElement = getTestElement("#withCheckedRadio");
+					var radioValue = "thirdValue";
+					testElement.checkRadioValue(radioValue);
+					var innerRadio = testElement.querySelector("input-radio[value=thirdValue]");
+					expect(innerRadio.checked).to.be.true;
+			    });
+
+			    it("unchecks the other radio buttons", function() {
+					var testElement = getTestElement("#withCheckedRadio");
+					var radioValue = "thirdValue";
+					testElement.checkRadioValue(radioValue);
+					var innerRadios = testElement.querySelectorAll("input-radio");
+					for (var i = 0; i < innerRadios.length; i++) {
+						var radioButton = innerRadios[i];
+						if (radioButton.value === radioValue)
+						{
+							expect(radioButton.checked).to.be.true;
+						} else {
+							expect(radioButton.checked).to.be.false;
+						}
+					}
+			    });
+		    });
+
+			describe("with no 'field' property", function () {
+		    	describe("getData method", function () {
+			   	    it("throws error", function () {
+						var element = getTestElement("#withoutField");
+						var errorMessage = "Attribute 'field' must be defined";
+						expect(element.getData).to.throw(errorMessage);
+				    });	    
+		    	});
+		    });
+
+			describe("with no 'value' property", function () {
+		    	describe("checked radio is rendered as checked", function () {
+			   	    it("return correct data collection", function () {
+						var element = getTestElement("#withOneSelectedElement");
+						var checkedRadio = element.querySelector("input-radio[checked]");
+						expect(checkedRadio.value).to.equal("secondValue");
+				    });	    
+		    	});
+		    });
+
+			describe("with no 'value' property", function () {
+				describe("and two cchecked radios", function () {
+			    	describe("only last checked radio is rendered as checked", function () {
+				   	    it("return correct data collection", function () {
+							var element = getTestElement("#withTwoSelectedElement");
+							var checkedRadio = element.querySelector("input-radio[checked]");
+							expect(checkedRadio.value).to.equal("secondValue");
+					    });	    
+			    	});
+			    });
+		    });
+		});
 	});
 })(document._currentScript.ownerDocument);
 </script>

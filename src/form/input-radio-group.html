@@ -1,25 +1,124 @@
 <script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
 <script src="./../behaviours/input-behaviours.js"></script>
 
+<template id="input-radio-group-template">
+    <div class="form-group">
+        <label></label>
+        <div class="inner-content"></div>
+        <span class="help-block"></span>
+    </div>    
+    
+</template>
+
 <script>
 (function(window, document) {
     var thatDoc = document;
     var thisDoc = document._currentScript.ownerDocument;
+    var template = thisDoc.querySelector('#input-radio-group-template').content;
     var element = {
         accessors: {
-
+            field: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('field');
+                },
+                set: function(value) {
+                    this.xtag.data.field = value;
+                }
+            },
+            value: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('value');
+                },
+                set: function(data) {
+                    this.xtag.data.value = data;
+                }
+            },
+            label: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('label');
+                },
+                set: function(data) {
+                    this.xtag.data.label = data;
+                }
+            }
         },
         lifecycle: {
             created: function() {
-
+                var innerContent = this.innerHTML;
+                this.innerHTML = '';
+                var clone = thatDoc.importNode(template, true);
+                this._getRenderingRoot().appendChild(clone);
+                this.innerContentTag = this._selectInRenderingRoot(".inner-content");
+                this.innerContentTag.innerHTML = innerContent;
+                this.innerRadios = this._getRenderingRoot().querySelectorAll("input-radio");
+                this.labelTag = this._getRenderingRoot().querySelector("label");
+                this.render();
             },
             attributeChanged: function(attributeName) {
-                //this.render();
+                this.render();
             }
         },
         methods: {
+            render: function () {
+                this.labelTag.textContent = this.label;
+                this.assignFieldToRadios();
+                this.checkRadioValue(this.value);
+                this.fixMultipleChecks();
+            },
+            assignFieldToRadios: function () {
+                for (var i = 0; i < this.innerRadios.length; i++) {
+                    var radioButton = this.innerRadios[i];
+                    radioButton.field = this.field;
+                }
+            },
+            fixMultipleChecks: function () {
+                var checkedRadios = this._getRenderingRoot().querySelectorAll("input-radio[checked]");
+                if (checkedRadios.length < 2) {
+                    return;
+                }
 
-        }
+                for (var i = 0; i < checkedRadios.length - 1; i++) {
+                    var radio = checkedRadios[i];
+                    radio.checked = false;
+                };
+            },
+            uncheckAllRadios: function () {
+                for (var i = 0; i < this.innerRadios.length; i++) {
+                    var radioButton = this.innerRadios[i];
+                    radioButton.checked = false;
+                }
+            },
+            checkRadioValue: function (radioValue) {
+                if (!radioValue) {
+                    return;
+                }
+                for (var i = 0; i < this.innerRadios.length; i++) {
+                    var radioButton = this.innerRadios[i];
+                    radioButton.checked = radioButton.value == radioValue;
+                }
+            },
+            getData: function () {
+                if (!this.field) {
+                    throw new Error("Attribute 'field' must be defined");
+                }
+
+                var data = {};
+                for (var i = 0; i < this.innerRadios.length; i++) {
+                    var radio = this.innerRadios[i];
+                    if (radio.isChecked()) {
+                        radio.checked = true;
+                        data[this.field] = radio.value;
+                    } else {
+                        radio.checked = false;
+                    }
+                }
+                
+                return data;
+            }
+         }
     };
     xtag.register('input-radio-group', xtag.merge(FormBehaviours.elementBase, element));
 })(window, document);
