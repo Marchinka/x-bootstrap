@@ -370,7 +370,8 @@
 					var mock = {
 						method: "POST",
 						url: testElement.postUrl,
-						callbackType: "success"
+						callbackType: "success",
+						result: { validationResult: { isValid: true} }
 					};
 					window.restService.addMockedAjax(mock);			
 					testElement._submitForm();
@@ -382,7 +383,8 @@
 					var mock = {
 						method: "POST",
 						url: testElement.postUrl,
-						callbackType: "success"
+						callbackType: "success",
+						result: { validationResult: { isValid: true} }
 					};
 					window.restService.addMockedAjax(mock);			
 					testElement._submitForm();

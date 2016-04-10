@@ -2,6 +2,16 @@
 	<input-text field="fieldName"></input-text>
 </div>
 
+<div id="without-content">
+	<input-text></input-text>
+</div>
+
+<div id="with-content">
+	<input-text>
+		<span class="glyphicon glyphicon-calendar"></span>
+	</input-text>
+</div>
+
 <div id="withError">
 	<input-text error="Some validation error"></input-text>
 </div>
@@ -152,6 +162,42 @@
 				var expectedLabel = inputText.querySelector("label");
 				expect(expectedLabel.htmlFor).to.equal(inputText.field);
 		    });
+	    });
+
+	    describe("without inner content", function() {
+	        it("is rendered without 'input-group' container", function() {
+				var inputText = getTestElement("#without-content");
+				var innerElement = inputText.querySelector("div.input-group");
+				expect(innerElement).to.be.null;
+	        });
+
+	        it("is rendered without 'input-group-addon' container", function() {
+				var inputText = getTestElement("#without-content");
+				var innerElement = inputText.querySelector("span.input-group-addon");
+				expect(innerElement).to.be.null;
+	        });
+	    });
+
+	    describe("with inner content", function() {
+	        it("is rendered with 'input-group' container", function() {
+				var inputText = getTestElement("#with-content");
+				var innerElement = inputText.querySelector("div.input-group");
+				expect(innerElement).not.to.be.null;
+	        });
+
+	        it("is rendered with 'input-group-addon' container", function() {
+				var inputText = getTestElement("#with-content");
+				var innerElement = inputText.querySelector("span.input-group-addon");
+				expect(innerElement).not.to.be.null;
+	        });
+
+	        it("is rendered with inner content inside 'input-group-addon' container", function() {
+				var inputText = getTestElement("#with-content");
+				var innerElement = inputText
+					.querySelector("span.input-group-addon")
+					.querySelector("span.glyphicon-calendar")
+				expect(innerElement).not.to.be.null;
+	        });	        
 	    });
 
 	    describe("with 'error' attribute", function () {

@@ -19,12 +19,12 @@ var superheroList = [
 var Error = function (field, error) {
 	this.field = field;
 	this.error = error;
-}
+};
 
 var ValidationResult = function (isValid) {
 	this.isValid = isValid;
 	this.errors = [];
-}
+};
 
 window.restService = {
 	ajax: function (options) {

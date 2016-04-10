@@ -119,8 +119,12 @@
                     method: "POST",
                     data: formData,
                     success: function (result) {
-                         self.clearingProcedure(self);
-                         self.redirectProcedure(self);
+                        if (result.validationResult.isValid) {
+                            self.clearingProcedure(self);
+                            self.redirectProcedure(self);
+                        } else {
+
+                        }
                     }
                 });                
             },

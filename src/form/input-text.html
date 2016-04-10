@@ -3,8 +3,19 @@
 
 <template id="input-text-template">
     <div class="form-group">
-        <label for="subTitle"></label>
-        <input type="text" class="form-control"/>
+        <label></label>
+        <input type="text" class="form-control"/>      
+        <span class="help-block"></span>
+    </div>
+</template>
+
+<template id="input-text-template-with-addon">
+    <div class="form-group">
+        <label></label>
+        <div class='input-group'>
+            <input type="text" class="form-control"/>
+            <span class="input-group-addon"></span>
+        </div>
         <span class="help-block"></span>
     </div>
 </template>
@@ -13,7 +24,8 @@
 (function(window, document) {
     var thatDoc = document;
     var thisDoc = document._currentScript.ownerDocument;
-    var template = thisDoc.querySelector('#input-text-template').content;
+    var templateWithoutAddOn = thisDoc.querySelector('#input-text-template').content;
+    var templateWithAddOn = thisDoc.querySelector('#input-text-template-with-addon').content;
     var inputTextElement = {
         accessors: {
             jquery: {
@@ -73,13 +85,21 @@
         },        
         lifecycle: {
             created: function() {
+                var innerContent = this.innerHTML;
+                var clone;
+                if (innerContent.trim() === "") {
+                    var clone = thatDoc.importNode(templateWithoutAddOn, true);
+                } else {
+                    var clone = thatDoc.importNode(templateWithAddOn, true);
+                    var inputGroupAddon = clone.querySelector(".input-group-addon");
+                    inputGroupAddon.innerHTML = innerContent;
+                }
                 this.innerHTML = '';
-                var clone = thatDoc.importNode(template, true);
                 this._getRenderingRoot().appendChild(clone);
                 this.containerDiv = this._selectInRenderingRoot('.form-group');
                 this.labelTag = this._selectInRenderingRoot('label');
                 this.input = this._selectInRenderingRoot('input');
-                this.errorSpan = this._selectInRenderingRoot('span');
+                this.errorSpan = this._selectInRenderingRoot('.help-block');
                 this.render();
             },
             attributeChanged: function(attributeName) {

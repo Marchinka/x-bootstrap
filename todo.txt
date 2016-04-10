@@ -1,3 +1,2 @@
-- Input add-on
 - Validation result handling
 - Syncronize with url in search-form
