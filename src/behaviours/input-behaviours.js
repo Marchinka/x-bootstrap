@@ -193,7 +193,7 @@
             getData: function () {
                 var inputElements = this._getRenderingRoot()
                     .querySelector("form")
-                    .querySelectorAll("input-text,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
+                    .querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
 
                 if (inputElements.length === 0) {
                     return null;
@@ -226,7 +226,7 @@
             validate: function () {
                 var inputElements = this._getRenderingRoot()
                     .querySelector("form")
-                    .querySelectorAll("input-text,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group");
+                    .querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group");
 
                 var isFormValid = true;
                 for (var i = 0; i < inputElements.length; i++) {

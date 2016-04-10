@@ -9,7 +9,7 @@
     <div class="container">
 
       <h1>
-        Some form-idable form
+        One form-idable form
       </h1>
       <p>
         <small>Mocked ajax responses can be found in 'dummy-ajax-service.js'</small>
@@ -20,7 +20,9 @@
         <input-text value="Wrong value" 
                     field="denomination" 
                     label="Denominazione" 
-                    placeholder="Type something here" 
+                    placeholder="Type something here"
+                    max-length="4" 
+                    max-length-message="This field must have at most 4 chars."
                     error="Some validation error from the server.">
         </input-text>
 
@@ -34,9 +36,15 @@
                     placeholder="Type whatever number you want" 
                     required
                     required-message="Required field: this awesome field must be empty."
-                    regex="^[0-9]*$" 
+                    regex="^[0-9]*$"
                     regex-message="Validation error: this field must be a number">
         </input-text>
+
+        <input-textarea field="longText" 
+                        label="Long Text" 
+                        placeholder="A pretty long text"
+                        rows="6">
+        </input-textarea>
 
         <input-checkbox field="firstCondition" 
                         label="Uncheck me!" 

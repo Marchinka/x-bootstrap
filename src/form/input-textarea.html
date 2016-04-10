@@ -1,10 +1,10 @@
 <script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
 <script src="./../behaviours/input-behaviours.js"></script>
 
-<template id="input-text-template">
+<template id="input-textarea-template">
     <div class="form-group">
         <label for="subTitle"></label>
-        <input type="text" class="form-control"/>
+        <textarea class="form-control"></textarea>
         <span class="help-block"></span>
     </div>
 </template>
@@ -13,45 +13,18 @@
 (function(window, document) {
     var thatDoc = document;
     var thisDoc = document._currentScript.ownerDocument;
-    var template = thisDoc.querySelector('#input-text-template').content;
+    var template = thisDoc.querySelector('#input-textarea-template').content;
     var inputTextElement = {
-        accessors: {
-            jquery: {
+        accessors: {               
+            rows: {
                 attribute: {},
                 get: function() {
-                    return this.getAttribute('jquery') || '';
+                    return this.getAttribute('rows');
                 },
                 set: function(data) {
-                    this.xtag.data.jquery = data;
+                    this.xtag.data.rows = data;
                 }
-            },            
-            dateFormat: {
-                attribute: {},
-                get: function() {
-                    return this.getAttribute('date-format') || '';
-                },
-                set: function(data) {
-                    this.xtag.data.dateFormat = data;
-                }
-            },
-            regex: {
-                attribute: {},
-                get: function() {
-                    return this.getAttribute('regex') || '';
-                },
-                set: function(data) {
-                    this.xtag.data.regex = data;
-                }
-            },
-            regexMessage: {
-                attribute: {},
-                get: function() {
-                    return this.getAttribute('regex-message') || '';
-                },
-                set: function(data) {
-                    this.xtag.data.regexMessage = data;
-                }
-            },            
+            }, 
             maxLength: {
                 attribute: {},
                 get: function() {
@@ -78,7 +51,7 @@
                 this._getRenderingRoot().appendChild(clone);
                 this.containerDiv = this._selectInRenderingRoot('.form-group');
                 this.labelTag = this._selectInRenderingRoot('label');
-                this.input = this._selectInRenderingRoot('input');
+                this.textarea = this._selectInRenderingRoot('textarea');
                 this.errorSpan = this._selectInRenderingRoot('span');
                 this.render();
             },
@@ -91,18 +64,8 @@
                 this._renderLabelTag();
                 this._renderInputTag();
                 this._renderErrorTag();
-                this.renderCalendar();
             },
             validate: function () {
-                if (this.regex) {
-                    var regularExpression = new RegExp(this.regex);
-                    var isMatching = this.value.match(regularExpression);
-                    if (!isMatching) {
-                        this.error = this.regexMessage;
-                        return false;
-                    }
-                }
-
                 if (this.value && this.maxLength) {
                     if (this.value.trim().length > this.maxLength) {
                         this.error = this.maxLengthMessage;
@@ -114,11 +77,11 @@
                     this.error = '';
                     return true;
                 }
-                if (!this.input.value) {
+                if (!this.textarea.value) {
                     this.error = this.requiredMessage;
                     return false;
                 }
-                if (!this.input.value.trim()) {
+                if (!this.textarea.value.trim()) {
                     this.error = this.requiredMessage;
                     return false;
                 }
@@ -131,11 +94,12 @@
                 this.labelTag.textContent = this.label;
             },
             _renderInputTag: function () {
-                this.input.placeholder = this.placeholder;
-                this.input.id = this.field;
-                this.input.name = this.field;
-                this.input.value = this.input.value || this.value;
-                this.input.disabled = this.disabled;
+                this.textarea.placeholder = this.placeholder;
+                this.textarea.id = this.field;
+                this.textarea.name = this.field;
+                this.textarea.rows = this.rows;
+                this.textarea.value = this.textarea.value || this.value;
+                this.textarea.disabled = this.disabled;
             },
             _renderErrorTag: function () {
                 if (this.error) {
@@ -145,27 +109,15 @@
                     this.errorSpan.textContent = undefined;
                     this.containerDiv.className = "form-group";
                 }
-            },
-            renderCalendar: function () {
-                var self = this;
-                if (self.jquery && self.dateFormat) {
-                    var $ = window[self.jquery];
-                    $('#' + self.field).datetimepicker({
-                        format: self.dateFormat,
-                        showClear: true,
-                        showTodayButton: true,
-                        showClose: true,
-                        keepOpen: false
-                    });
-                    $('#' + self.field).on("dp.change", function(e) {
-                        var input = self._selectInRenderingRoot("input");
-                        self.value = input.value;
-                        self.validate();
-                    });                    
-                }
+            }
+        },
+        events: {
+            keyup: function (e) {
+                this.value = this.textarea.value;
+                this.validate();               
             }
         }
     };
-    xtag.register('input-text', xtag.merge(FormBehaviours.inputTextElementBase, inputTextElement));
+    xtag.register('input-textarea', xtag.merge(FormBehaviours.inputTextElementBase, inputTextElement));
 })(window, document);
 </script>

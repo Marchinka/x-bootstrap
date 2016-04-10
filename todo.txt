@@ -1,0 +1,4 @@
+- Count of results in collection
+- Get in form
+- Redirect in form
+- Syncronize with url in search-form
