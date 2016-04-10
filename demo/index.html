@@ -15,7 +15,10 @@
         <small>Mocked ajax responses can be found in 'dummy-ajax-service.js'</small>
       </p>
       
-      <form-ajax post-url="/path/to/something">
+      <form-ajax  post-url="/path/to/something"
+                  redirect-url="test"
+                  redirect-to-id
+                  redirect-hash="yatta">
         
         <input-text value="Wrong value" 
                     field="denomination" 

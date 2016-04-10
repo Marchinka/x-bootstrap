@@ -33,6 +33,8 @@ window.restService = {
 		        break;
 		    case "/path/to/something":
 		        alert("Object posted: " + JSON.stringify(options.data));
+		        var result = { resultId: 666 };
+		        options.success(result);
 		        break;
 		    default:
 		        break;

@@ -21,7 +21,34 @@
                 set: function(data) {
                     this.xtag.data.postUrl = data;
                 }
-            },            
+            },
+            redirectUrl: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('redirect-url') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.redirectUrl = data;
+                }
+            },
+            redirectHash: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('redirect-hash') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.redirectHash = data;
+                }
+            },
+            redirectToId: {
+                attribute: { boolean: true },
+                get: function() {
+                    return this.hasAttribute('redirect-to-id') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.redirectToId = data;
+                }
+            },
             redirectUrl: {
                 attribute: {},
                 get: function() {
@@ -61,7 +88,29 @@
                     method: "POST",
                     data: formData,
                     success: function (result) {
-                        
+                        if (self.redirectUrl) {
+                            var redirectUrl = self.redirectUrl;
+                            if (self.redirectToId) {
+                                redirectUrl += "/" + result.resultId;
+                            }
+
+                            if (self.redirectHash) {
+                                var newUrl = window.location.origin + "/" + redirectUrl + "/#" + self.redirectHash;
+                                window.location.href = newUrl;
+                            } else {
+                                window.location.pathname = redirectUrl;    
+                            }
+                            return;
+                        }
+
+                        if (self.redirectHash) {
+                            var redirectHash = self.redirectHash;
+                            if (self.redirectToId) {
+                                redirectHash += "/" + result.resultId;
+                            }
+                            window.location.hash = redirectHash;
+                            return;
+                        }                        
                     }
                 });                
             }
