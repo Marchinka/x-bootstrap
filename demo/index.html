@@ -17,8 +17,7 @@
       
       <form-ajax  post-url="/path/to/something" get-url="/initial/data/from/here" clear-on-success>
         
-        <input-text value="Wrong value" 
-                    field="denomination" 
+        <input-text field="denomination" 
                     label="Denominazione" 
                     placeholder="Type something here"
                     max-length="4" 
@@ -43,7 +42,7 @@
         <input-textarea field="longText" 
                         label="Long Text" 
                         placeholder="A pretty long text"
-                        rows="6">
+                        rows="3">
         </input-textarea>
 
         <input-checkbox field="firstCondition" 
@@ -67,7 +66,7 @@
         </input-select>
 
         <input-autocomplete field="favoriteSuperHero" 
-                            label="Your Favorite Super Hero" 
+                            label="Your Favorite Super Hero (Batman... Duh!)" 
                             url="/SuperHeroes/"
                             placeholder="What is your favorite superhero?" 
                             required

@@ -16,9 +16,9 @@ var superheroList = [
 	{ key: 15, value: "Rocket Racoon"}
 ];
 
-var Error = function (field, error) {
+var ValidationError = function (field, message) {
 	this.field = field;
-	this.error = error;
+	this.message = message;
 };
 
 var ValidationResult = function (isValid) {
@@ -47,7 +47,7 @@ window.restService = {
 		        if (options.data.favoriteSuperHero !== "Batman") {
 		        	validationResult = {
 		        		isValid: false,
-		        		errors: [ new Error("favoriteSuperHero", "The server requires that your favorite superhero must be Batman.")]
+		        		errors: [ new ValidationError("favoriteSuperHero", "The server requires that your favorite superhero must be Batman.")]
 		        	}
 		        } else {
 					validationResult = {

@@ -123,7 +123,7 @@
         events: {
             keyup: function (e) {
                 this.value = this.input.value;
-                this.validate();               
+                this.validate();
             }
         }
     };

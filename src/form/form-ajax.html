@@ -87,16 +87,9 @@
                 this.render();
             },
             inserted: function () {
-                var self = this;
-                if (self.getUrl) {
-                    window.restService.ajax({
-                        url: self.getUrl,
-                        method: "GET",
-                        data: {},
-                        success: function (result) {
-                             self.setData(result);
-                        }
-                    });                     
+                // Executing this operation during insert destroys some events on x-tag accessors in child elements
+                if (false) {
+                    this.fetchInitialData();
                 }
             }
 
@@ -123,10 +116,37 @@
                             self.clearingProcedure(self);
                             self.redirectProcedure(self);
                         } else {
-
+                            self.bindErrors(result.validationResult.errors)
                         }
                     }
                 });                
+            },
+            fetchInitialData: function () {
+                var self = this;
+                window.restService.ajax({
+                    url: self.getUrl,
+                    method: "GET",
+                    data: {},
+                    success: function (result) {
+                        self.setData(result);
+                    }
+                });
+            },
+            removeErrors: function () {
+                var inputElements = this.getInputElements();
+                for (var i = 0; i < inputElements.length; i++) {
+                    var inputElement = inputElements[i];
+                    inputElement.error = "";
+                };
+            },
+            bindErrors: function (errors) {
+                for (var i = 0; i < errors.length; i++) {
+                    var error = errors[i];
+                    var field = error.field;
+                    var errorMessage = error.message;
+                    var inputElement = this._selectInRenderingRoot("[field=" + field + "]");
+                    inputElement.error = errorMessage;
+                };
             },
             clearingProcedure: function (self) {
                 if (self.clearOnSuccess) {
@@ -165,6 +185,7 @@
                 e.preventDefault();
                 var isFormValid = this.validate();
                 if (isFormValid) {
+                    this.removeErrors();
                     this._submitForm();
                 }
             }
