@@ -22,6 +22,15 @@
                     this.xtag.data.postUrl = data;
                 }
             },
+            getUrl: {
+                attribute: {},
+                get: function() {
+                    return this.getAttribute('get-url') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.getUrl = data;
+                }
+            },            
             redirectUrl: {
                 attribute: {},
                 get: function() {
@@ -57,7 +66,16 @@
                 set: function(data) {
                     this.xtag.data.redirectUrl = data;
                 }
-            }                  
+            },
+            clearOnSuccess: {
+                attribute: { boolean: true },
+                get: function() {
+                    return this.hasAttribute('clear-on-success') || '';
+                },
+                set: function(data) {
+                    this.xtag.data.clearOnSuccess = data;
+                }
+            },
         },
         lifecycle: {
             created: function() {
@@ -67,6 +85,19 @@
                 this._getRenderingRoot().appendChild(clone);
                 this.form = this._selectInRenderingRoot('form');
                 this.render();
+            },
+            inserted: function () {
+                var self = this;
+                if (self.getUrl) {
+                    window.restService.ajax({
+                        url: self.getUrl,
+                        method: "GET",
+                        data: {},
+                        success: function (result) {
+                             self.setData(result);
+                        }
+                    });                     
+                }
             }
 
         },
@@ -88,31 +119,41 @@
                     method: "POST",
                     data: formData,
                     success: function (result) {
-                        if (self.redirectUrl) {
-                            var redirectUrl = self.redirectUrl;
-                            if (self.redirectToId) {
-                                redirectUrl += "/" + result.resultId;
-                            }
-
-                            if (self.redirectHash) {
-                                var newUrl = window.location.origin + "/" + redirectUrl + "/#" + self.redirectHash;
-                                window.location.href = newUrl;
-                            } else {
-                                window.location.pathname = redirectUrl;    
-                            }
-                            return;
-                        }
-
-                        if (self.redirectHash) {
-                            var redirectHash = self.redirectHash;
-                            if (self.redirectToId) {
-                                redirectHash += "/" + result.resultId;
-                            }
-                            window.location.hash = redirectHash;
-                            return;
-                        }                        
+                         self.clearingProcedure(self);
+                         self.redirectProcedure(self);
                     }
                 });                
+            },
+            clearingProcedure: function (self) {
+                if (self.clearOnSuccess) {
+                    self.clearForm();
+                    return;
+                }
+            },
+            redirectProcedure: function(self) {
+                if (self.redirectUrl) {
+                    var redirectUrl = self.redirectUrl;
+                    if (self.redirectToId) {
+                        redirectUrl += "/" + result.resultId;
+                    }
+
+                    if (self.redirectHash) {
+                        var newUrl = window.location.origin + "/" + redirectUrl + "/#" + self.redirectHash;
+                        window.location.href = newUrl;
+                    } else {
+                        window.location.pathname = redirectUrl;    
+                    }
+                    return;
+                }
+
+                if (self.redirectHash) {
+                    var redirectHash = self.redirectHash;
+                    if (self.redirectToId) {
+                        redirectHash += "/" + result.resultId;
+                    }
+                    window.location.hash = redirectHash;
+                    return;
+                }                 
             }
         },
         events: {

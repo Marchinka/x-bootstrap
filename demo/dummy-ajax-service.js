@@ -16,6 +16,16 @@ var superheroList = [
 	{ key: 15, value: "Rocket Racoon"}
 ];
 
+var Error = function (field, error) {
+	this.field = field;
+	this.error = error;
+}
+
+var ValidationResult = function (isValid) {
+	this.isValid = isValid;
+	this.errors = [];
+}
+
 window.restService = {
 	ajax: function (options) {
 		switch(options.url) {
@@ -33,9 +43,24 @@ window.restService = {
 		        break;
 		    case "/path/to/something":
 		        alert("Object posted: " + JSON.stringify(options.data));
-		        var result = { resultId: 666 };
+		        var validationResult;
+		        if (options.data.favoriteSuperHero !== "Batman") {
+		        	validationResult = {
+		        		isValid: false,
+		        		errors: [ new Error("favoriteSuperHero", "The server requires that your favorite superhero must be Batman.")]
+		        	}
+		        } else {
+					validationResult = {
+		        		isValid: true
+		        	}		        	
+		        }
+		        var result = { resultId: 666, validationResult: validationResult };
 		        options.success(result);
 		        break;
+		    case "/initial/data/from/here":
+		        var result = { denomination: "Initial Value From Server" };
+		        options.success(result);
+		    	break;
 		    default:
 		        break;
 		}

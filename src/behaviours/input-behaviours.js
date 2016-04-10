@@ -190,11 +190,20 @@
 
     var formElementBase = xtag.merge({
         methods: {
-            getData: function () {
+            getInputElements: function () {
                 var inputElements = this._getRenderingRoot()
                     .querySelector("form")
                     .querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
-
+                return inputElements;
+            },
+            getEditableElements: function () {
+                var inputElements = this._getRenderingRoot()
+                    .querySelector("form")
+                    .querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
+                return inputElements;
+            },            
+            getData: function () {
+                var inputElements = this.getInputElements();
                 if (inputElements.length === 0) {
                     return null;
                 }
@@ -223,11 +232,19 @@
                     }
                 }
             },
+            clearForm: function () {
+                var inputElements = this.getEditableElements();
+                for (var i = 0; i < inputElements.length; i++) {
+                    var inputElement = inputElements[i];
+                    if (inputElement.nodeName === "INPUT-CHECKBOX") {
+                        inputElement.checked = false;
+                    } else {
+                        inputElement.value = "";
+                    }
+                };
+            },            
             validate: function () {
-                var inputElements = this._getRenderingRoot()
-                    .querySelector("form")
-                    .querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group");
-
+                var inputElements = this.getEditableElements();
                 var isFormValid = true;
                 for (var i = 0; i < inputElements.length; i++) {
                     var currentInput = inputElements[i];

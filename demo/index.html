@@ -15,18 +15,14 @@
         <small>Mocked ajax responses can be found in 'dummy-ajax-service.js'</small>
       </p>
       
-      <form-ajax  post-url="/path/to/something"
-                  redirect-url="test"
-                  redirect-to-id
-                  redirect-hash="yatta">
+      <form-ajax  post-url="/path/to/something" get-url="/initial/data/from/here" clear-on-success>
         
         <input-text value="Wrong value" 
                     field="denomination" 
                     label="Denominazione" 
                     placeholder="Type something here"
                     max-length="4" 
-                    max-length-message="This field must have at most 4 chars."
-                    error="Some validation error from the server.">
+                    max-length-message="This field must have at most 4 chars.">
         </input-text>
 
         <input-text value="This field is readonly" 
