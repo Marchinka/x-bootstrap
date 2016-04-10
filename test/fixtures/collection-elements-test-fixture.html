@@ -2,6 +2,14 @@
 	<collection-elements></collection-elements>
 </div>
 
+<div id="with-number-of-results-message">
+	<collection-elements number-of-results="12" number-of-results-message="Number of Results"></collection-elements>
+</div>
+
+<div id="with-number-of-results-message-and-number">
+	<collection-elements number-of-results="12" number-of-results-message="Number of Results: {0}"></collection-elements>
+</div>
+
 <div id="with-type-property">
 	<collection-elements type="test-element"></collection-elements>
 </div>
@@ -28,9 +36,9 @@
 
 	beforeEach(function() {
 		var testElement = getTestElement("#with-type-property");
-		testElement._getRenderingRoot().innerHTML = '';
+		testElement.emptyCollection();
 		var testElement = getTestElement("#with-inner-element");
-		testElement._getRenderingRoot().innerHTML = '';
+		testElement.emptyCollection();
 	});
 
 	describe("<collection-elements/>", function() {
@@ -98,6 +106,23 @@
 				});							
 			});
 		}); 
+
+		describe("with 'number-of-results-message' attribute", function() {
+			it("is rendered with inner 'p' with text equal to message", function() {
+				var testElement = getTestElement("#with-number-of-results-message");
+				var p = testElement.querySelector("p");
+				expect(p.textContent).to.equal(testElement.numberOfResultsMessage);
+			});
+
+			describe("and 'number-of-results' attribute", function() {
+				it("is rendered with inner 'p' with text equal to message with number", function() {
+					var testElement = getTestElement("#with-number-of-results-message-and-number");
+					var p = testElement.querySelector("p");
+					var expectedText = "Number of Results: 12";
+					expect(p.textContent).to.equal(expectedText);
+				});
+			});			
+		});
 
 		describe("with inner element", function() {
 			describe("'renderData' method", function() {

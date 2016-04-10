@@ -21,7 +21,7 @@
 (function(window, document) {
     var thatDoc = document;
     var thisDoc = document._currentScript.ownerDocument;
-    var template = thisDoc.querySelector('#collection-container-template').content;    
+    var template = thisDoc.querySelector('#collection-container-template').content;
     var element = {
         accessors: {
             url: {
@@ -153,7 +153,7 @@
                     method: "GET",
                     data: formData,
                     success: function (result) {
-                        self.collectionElementTag.appendData(result);
+                        self.collectionElementTag.addResults(result);
                     }
                 });                
             },
