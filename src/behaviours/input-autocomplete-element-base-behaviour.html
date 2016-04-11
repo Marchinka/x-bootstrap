@@ -1,0 +1,70 @@
+<link rel="import" href="./dropdown-input-element-base-behaviour.html">
+
+<script>
+(function(window, document) {
+    if (!window.xBootstrap) {
+        window.xBootstrap = {};
+    }
+
+    window.xBootstrap.getInputAutocompleteElementBase = function () {
+        var baseObject = {
+            methods: {
+                _fetchData: function () {
+                    var self = this;
+                    if (!self.url) {
+                        return;
+                    }
+
+                    if (!window.restService) {
+                        throw new Error("'restService' must be assigned to main window for <input-autocomplete/> to work correctly");   
+                    }
+
+                    window.restService.ajax({
+                        url: self.url,
+                        method: "GET",
+                        data: { search: this.value },
+                        success: function (result) {
+                            self.dropdownMenu.innerHTML = '';
+                            self.renderData(result);
+                        }
+                    });
+                },                     
+                _renderLabelTag: function () {
+                    this.labelTag.htmlFor = this.field;
+                    this.labelTag.textContent = this.label;
+                },
+                _renderInputTag: function () {
+                    this.input.placeholder = this.placeholder;
+                    this.input.id = this.field;
+                    this.input.name = this.field;
+                    this.input.value = this.value;
+                    this.input.disabled = this.disabled;
+                },
+                _renderErrorTag: function () {
+                    if (this.error) {
+                        this.errorSpan.textContent = this.error;
+                        this.containerDiv.className = "form-group has-error";
+                    } else {
+                        this.errorSpan.textContent = undefined;
+                        this.containerDiv.className = "form-group";
+                    }
+                },
+                _selectOption: function (dropdownOption) {
+                    if (!dropdownOption) {
+                        throw new Error("Not valid option for selection.");
+                    }
+
+                    this.value = dropdownOption.value;
+                    this.input.value = this.value;
+                    this.validate();
+                }                        
+            }
+        };
+
+        var protoTag = xtag.merge(xBootstrap.getDropdownInputTextElementBase(), baseObject);
+
+        return protoTag;
+    };
+        
+})(window, document);
+</script>
