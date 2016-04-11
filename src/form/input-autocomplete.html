@@ -29,7 +29,7 @@
                 this.input = this._selectInRenderingRoot('input');
                 this.errorSpan = this._selectInRenderingRoot('span');
                 this.dropdown = this._selectInRenderingRoot('.dropdown');
-                this.dropdownMenu = this._selectInRenderingRoot('.dropdown-menu');                
+                this.dropdownMenu = this._selectInRenderingRoot('.dropdown-menu');      
                 this.render();
             },
             inserted: function() {
@@ -41,9 +41,20 @@
         },
         methods: {
             render: function() {
-                this._renderLabelTag();
-                this._renderInputTag();
-                this._renderErrorTag();
+                this.labelTag.htmlFor = this.field;
+                this.labelTag.textContent = this.label;
+                this.input.placeholder = this.placeholder;
+                this.input.id = this.field;
+                this.input.name = this.field;
+                this.input.value = this.value;
+                this.input.disabled = this.disabled;
+                if (this.error) {
+                    this.errorSpan.textContent = this.error;
+                    this.containerDiv.className = "form-group has-error";
+                } else {
+                    this.errorSpan.textContent = '';
+                    this.containerDiv.className = "form-group";
+                }                    
             }                     
         },
         events: {

@@ -28,26 +28,6 @@
                             self.renderData(result);
                         }
                     });
-                },                     
-                _renderLabelTag: function () {
-                    this.labelTag.htmlFor = this.field;
-                    this.labelTag.textContent = this.label;
-                },
-                _renderInputTag: function () {
-                    this.input.placeholder = this.placeholder;
-                    this.input.id = this.field;
-                    this.input.name = this.field;
-                    this.input.value = this.value;
-                    this.input.disabled = this.disabled;
-                },
-                _renderErrorTag: function () {
-                    if (this.error) {
-                        this.errorSpan.textContent = this.error;
-                        this.containerDiv.className = "form-group has-error";
-                    } else {
-                        this.errorSpan.textContent = undefined;
-                        this.containerDiv.className = "form-group";
-                    }
                 },
                 _selectOption: function (dropdownOption) {
                     if (!dropdownOption) {
