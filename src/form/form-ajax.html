@@ -1,5 +1,5 @@
 <script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
-<script src="./../behaviours/input-behaviours.js"></script>
+<link rel="import" href="./../behaviours/form-element-base-behaviour.html">
 
 <template id="form-ajax-template">
     <form>
@@ -191,6 +191,6 @@
             }
         }
     };
-    xtag.register('form-ajax', xtag.merge(FormBehaviours.formElementBase, element));
+    xtag.register('form-ajax', xtag.merge(xBootstrap.getFormElementBase(), element));
 })(window, document);
 </script>

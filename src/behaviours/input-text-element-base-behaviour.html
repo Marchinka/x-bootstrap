@@ -1,0 +1,72 @@
+<link rel="import" href="./input-element-base-behaviour.html">
+
+<script>
+(function(window, document) {
+    if (!window.xBootstrap) {
+        window.xBootstrap = {};
+    }
+
+    window.xBootstrap.getInputTextElementBase = function () {
+        var baseObject = {
+            accessors: {
+                placeholder: {
+                    attribute: {},
+                    get: function() {
+                        return this.getAttribute('placeholder') || '';
+                    },
+                    set: function(value) {
+                        this.xtag.data.placeholder = value;
+                    }
+                },
+                required: {
+                    attribute: { boolean: true },
+                    get: function() {
+                        return this.hasAttribute('required');
+                    },
+                    set: function(data) {
+                        this.xtag.data.required = data;
+                    }
+                },
+                requiredMessage: {
+                    attribute: {},
+                    get: function() {
+                        return this.getAttribute('required-message') || '';
+                    },
+                    set: function(data) {
+                        this.xtag.data.requiredMessage = data;
+                    }
+                }
+            },
+            methods: {
+                validate: function () {
+                    if (!this.required) {
+                        this.error = '';
+                        return true;
+                    }
+                    if (!this.input.value) {
+                        this.error = this.requiredMessage;
+                        return false;
+                    }
+                    if (!this.input.value.trim()) {
+                        this.error = this.requiredMessage;
+                        return false;
+                    }
+                    this.error = ''
+                    return true;
+                }
+            },
+            events: {
+                keyup: function (e) {
+                    this.value = this.input.value;
+                    this.validate();
+                }
+            }
+        };
+
+        var protoTag = xtag.merge(xBootstrap.getInputElementBase(), baseObject);
+
+        return protoTag;
+    };
+        
+})(window, document);
+</script>

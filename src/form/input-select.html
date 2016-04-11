@@ -1,5 +1,5 @@
 <script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
-<script src="./../behaviours/input-behaviours.js"></script>
+<link rel="import" href="./../behaviours/dropdown-input-element-base-behaviour.html">
 
 <template id="input-select-template">
     <style>
@@ -32,7 +32,7 @@
     var thatDoc = document;
     var thisDoc = document._currentScript.ownerDocument;
     var template = thisDoc.querySelector('#input-select-template').content;
-    var inputTextElement = {
+    var baseObject = {
         accessors: {
             placeholder: {
                 attribute: {},
@@ -181,7 +181,9 @@
             }            
         }
     };
-    xtag.register('input-select', xtag.merge(FormBehaviours.dropdownInputElementBase, inputTextElement));
+
+    var protoTag = xtag.merge(xBootstrap.getDropdownInputElementBase(), baseObject);
+    xtag.register('input-select', protoTag);
 })(window, document);
 </script>
 

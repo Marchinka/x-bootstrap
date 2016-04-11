@@ -1,0 +1,23 @@
+<script>
+(function(window, document) {
+    if (!window.xBootstrap) {
+        window.xBootstrap = {};
+    }
+
+    window.xBootstrap.getElementBase = function () {
+        return {
+            methods: {
+                _getRenderingRoot: function () {
+                    // Could be used for shadow dom
+                    return this;
+                },
+                _selectInRenderingRoot: function (selector) {
+                    return this._getRenderingRoot().querySelector(selector);
+                }
+            }
+        };
+    };
+
+    
+})(window, document);
+</script>

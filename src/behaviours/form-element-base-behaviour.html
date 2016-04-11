@@ -1,0 +1,85 @@
+<link rel="import" href="./element-base-behaviour.html">
+
+<script>
+(function(window, document) {
+    if (!window.xBootstrap) {
+        window.xBootstrap = {};
+    }
+
+    window.xBootstrap.getFormElementBase = function () {
+        var baseObject = {
+            methods: {
+                getInputElements: function () {
+                    var inputElements = this._getRenderingRoot()
+                        .querySelector("form")
+                        .querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
+                    return inputElements;
+                },
+                getEditableElements: function () {
+                    var inputElements = this._getRenderingRoot()
+                        .querySelector("form")
+                        .querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
+                    return inputElements;
+                },            
+                getData: function () {
+                    var inputElements = this.getInputElements();
+                    if (inputElements.length === 0) {
+                        return null;
+                    }
+
+                    var data = {};
+                    for (var i = 0; i < inputElements.length; i++) {
+                        var currentInput = inputElements[i];
+                        var inputData = currentInput.getData();
+                        for (var attrname in inputData) { 
+                            data[attrname] = inputData[attrname];
+                        }
+                    }
+                    return data;
+                },
+                setData: function (object) {
+                    for (var attributeName in object) { 
+                        var innerInput = this._selectInRenderingRoot("[field=" + attributeName +"]");
+                        if (!innerInput) {
+                            continue;
+                        } else if (innerInput.nodeName === "INPUT-CHECKBOX") {
+                            var fieldValue = object[attributeName];
+                            innerInput.checked = fieldValue === true;
+                        } else {
+                            var fieldValue = object[attributeName];
+                            innerInput.value = fieldValue;
+                        }
+                    }
+                },
+                clearForm: function () {
+                    var inputElements = this.getEditableElements();
+                    for (var i = 0; i < inputElements.length; i++) {
+                        var inputElement = inputElements[i];
+                        if (inputElement.nodeName === "INPUT-CHECKBOX") {
+                            inputElement.checked = false;
+                        } else {
+                            inputElement.value = "";
+                        }
+                    };
+                },            
+                validate: function () {
+                    var inputElements = this.getEditableElements();
+                    var isFormValid = true;
+                    for (var i = 0; i < inputElements.length; i++) {
+                        var currentInput = inputElements[i];
+                        if (typeof currentInput.validate == 'function') {
+                            var isInputValid = currentInput.validate();
+                            isFormValid = isFormValid && isInputValid;
+                        }
+                    }
+                    return isFormValid;
+                }              
+            }
+        };
+
+        var protoTag = xtag.merge(xBootstrap.getElementBase(), baseObject);
+        return protoTag;
+    };
+        
+})(window, document);
+</script>
