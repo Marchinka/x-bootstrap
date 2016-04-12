@@ -61,9 +61,9 @@
         },
         methods: {
             render: function() {
-                this._renderLabelTag();
-                this._renderInputTag();
-                this._renderErrorTag();
+                this.renderLabelTag();
+                this.renderInputTag();
+                this.renderErrorTag();
             },
             validate: function () {
                 if (this.value && this.maxLength) {
@@ -89,11 +89,11 @@
                 this.error = ''
                 return true;
             },
-            _renderLabelTag: function () {
+            renderLabelTag: function () {
                 this.labelTag.htmlFor = this.field;
                 this.labelTag.textContent = this.label;
             },
-            _renderInputTag: function () {
+            renderInputTag: function () {
                 this.textarea.placeholder = this.placeholder;
                 this.textarea.id = this.field;
                 this.textarea.name = this.field;
@@ -101,7 +101,7 @@
                 this.textarea.value = this.value;
                 this.textarea.disabled = this.disabled;
             },
-            _renderErrorTag: function () {
+            renderErrorTag: function () {
                 if (this.error) {
                     this.errorSpan.textContent = this.error;
                     this.containerDiv.className = "form-group has-error";

@@ -108,9 +108,9 @@
         },
         methods: {
             render: function() {
-                this._renderLabelTag();
-                this._renderInputTag();
-                this._renderErrorTag();
+                this.renderLabelTag();
+                this.renderInputTag();
+                this.renderErrorTag();
                 this.renderCalendar();
             },
             validate: function () {
@@ -146,18 +146,18 @@
                 this.error = ''
                 return true;
             },
-            _renderLabelTag: function () {
+            renderLabelTag: function () {
                 this.labelTag.htmlFor = this.field;
                 this.labelTag.textContent = this.label;
             },
-            _renderInputTag: function () {
+            renderInputTag: function () {
                 this.input.placeholder = this.placeholder;
                 this.input.id = this.field;
                 this.input.name = this.field;
                 this.input.value = this.value;
                 this.input.disabled = this.disabled;
             },
-            _renderErrorTag: function () {
+            renderErrorTag: function () {
                 if (this.error) {
                     this.errorSpan.textContent = this.error;
                     this.containerDiv.className = "form-group has-error";

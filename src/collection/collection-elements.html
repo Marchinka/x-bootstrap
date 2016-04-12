@@ -79,7 +79,7 @@
 
                 for (var i = 0; i < data.length; i++) {
                     var elementData  = data[i];
-                    var domElement = this._getChildElement(elementData);
+                    var domElement = this.getChildElement(elementData);
                     this.innerContainer.appendChild(domElement);
                 }                
             },
@@ -90,7 +90,7 @@
             emptyCollection: function () {
                 this.innerContainer.innerHTML = '';
             },
-            _getChildElement: function (elementData) {
+            getChildElement: function (elementData) {
                 var domElement;
                 if (this.listItemTemplate) {
                     domElement = this.listItemTemplate.cloneNode(true);

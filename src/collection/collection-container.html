@@ -77,6 +77,15 @@
                 set: function(data) {
                     this.xtag.data.currentPage = data;
                 }
+            },
+            refreshEvery: {
+                attribute: { },
+                get: function() {
+                    return this.getAttribute('refresh-every');
+                },
+                set: function(data) {
+                    this.xtag.data.refreshEvery = data;
+                }
             },            
         },
         lifecycle: {
@@ -99,23 +108,23 @@
                     window.addEventListener("scroll", function () {                    
                         var positionOffset = window.innerHeight + window.scrollY - thatDoc.body.offsetHeight;
                         if (positionOffset >= 0) {
-                            self._appendNextPageData();
+                            self.appendNextPageData();
                         }                    
                     }, false);
                 }
                 else if (self.showMoreButton) {
                     self.selectInRenderingRoot(".show-more").hidden = false;
                     self.showMoreButtonTag.onclick = function() {
-                        self._appendNextPageData();
+                        self.appendNextPageData();
                     };
                 }
                 else if (self.pager) {
                     self.selectInRenderingRoot(".pager").hidden = false;
                     self.nextButton.onclick = function() {
-                        self._fetchNextPageData();
+                        self.fetchNextPageData();
                     };
                     self.previousButton.onclick = function() {
-                        self._fetchPreviousPageData();
+                        self.fetchPreviousPageData();
                     };                    
                 }             
                 self.fetchData();
@@ -157,21 +166,16 @@
                     }
                 });                
             },
-            _appendNextPageData: function () {
+            appendNextPageData: function () {
                 this.currentPage++;
                 this.fetchData();
-                //var br = document.createElement("br");
-                //this.getRenderingRoot().querySelector("collection-elements").getRenderingRoot().appendChild(br);
-                //var p = document.createElement("p");
-                //p.textContent = "guarda che figo";
-                //this.getRenderingRoot().querySelector("collection-elements").getRenderingRoot().appendChild(p);
             },
-            _fetchNextPageData: function () {
+            fetchNextPageData: function () {
                 this.collectionElementTag.emptyCollection();
                 this.currentPage++;
                 this.fetchData();
             },
-            _fetchPreviousPageData: function () {
+            fetchPreviousPageData: function () {
                 if (this.currentPage == 1) {
                     return;
                 }

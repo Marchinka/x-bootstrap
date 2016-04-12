@@ -1,6 +1,6 @@
 {
   "name": "x-bootstrap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a custom tag collection based on bootstrap layout",
   "main": "index.js",
   "scripts": {

@@ -45,9 +45,9 @@
         },
         methods: {
             render: function() {
-                this._renderLabelTag();
-                this._renderInputTag();
-                this._renderErrorTag();
+                this.renderLabelTag();
+                this.renderInputTag();
+                this.renderErrorTag();
             },
             validate: function () {
                 this.error = '';
@@ -61,18 +61,18 @@
                 data[this.field] = this.checked;
                 return data;
             },            
-            _renderLabelTag: function () {
+            renderLabelTag: function () {
                 this.labelTag.htmlFor = this.field;
                 this.labelSpan.textContent = this.label;
             },
-            _renderInputTag: function () {
+            renderInputTag: function () {
                 this.input.placeholder = this.placeholder;
                 this.input.id = this.field;
                 this.input.name = this.field;
                 this.input.checked = this.checked;
                 this.input.disabled = this.disabled;
             },
-            _renderErrorTag: function () {
+            renderErrorTag: function () {
                 if (this.error) {
                     this.errorSpan.textContent = this.error;
                     this.containerDiv.className = "form-group checkbox has-error";
