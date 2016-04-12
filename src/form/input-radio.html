@@ -64,9 +64,9 @@
             created: function() {
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this.input = this._selectInRenderingRoot("input");
-                this.radioLabel = this._selectInRenderingRoot(".radio-label");
+                this.getRenderingRoot().appendChild(clone);
+                this.input = this.selectInRenderingRoot("input");
+                this.radioLabel = this.selectInRenderingRoot(".radio-label");
                 this.render();
             },
             attributeChanged: function(attributeName) {

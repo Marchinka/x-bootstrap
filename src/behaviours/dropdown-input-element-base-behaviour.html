@@ -30,38 +30,38 @@
 
                     for (var i = 0; i < data.length; i++) {
                         var optionData = data[i];
-                        var dropdownOption = this._createDropdownOption(optionData);
+                        var dropdownOption = this.createDropdownOption(optionData);
                         this.dropdownMenu.appendChild(dropdownOption);
                     }
                 },
-                _createDropdownOption: function (optionData) {
+                createDropdownOption: function (optionData) {
                     var dropdownOption = document.createElement("dropdown-option");
                     dropdownOption.key = optionData.key;
                     dropdownOption.value = optionData.value;
                     return dropdownOption;
                 },
-                _showMenu: function () {
+                showMenu: function () {
                     if (this.disabled) {
-                        this._hideMenu();
+                        this.hideMenu();
                     } else {
                         this.dropdown.className = "dropdown open";
                     }
                 },
-                _hideMenu: function () {
+                hideMenu: function () {
                     this.dropdown.className = "dropdown";
                 } 
             },
             events: {
                 focus: function () {
-                    this._showMenu();
+                    this.showMenu();
                 },
                 blur: function () {
-                    this._hideMenu();
+                    this.hideMenu();
                 },
                 mousedown: function (e) {
                     if (e.target.parentElement.parentElement.nodeName === "DROPDOWN-OPTION") {
                         var dropdownOption = e.target.parentElement.parentElement;
-                        this._selectOption(dropdownOption);
+                        this.selectOption(dropdownOption);
                     }
                 } 
             }

@@ -95,11 +95,11 @@
                     inputGroupAddon.innerHTML = innerContent;
                 }
                 this.innerHTML = '';
-                this._getRenderingRoot().appendChild(clone);
-                this.containerDiv = this._selectInRenderingRoot('.form-group');
-                this.labelTag = this._selectInRenderingRoot('label');
-                this.input = this._selectInRenderingRoot('input');
-                this.errorSpan = this._selectInRenderingRoot('.help-block');
+                this.getRenderingRoot().appendChild(clone);
+                this.containerDiv = this.selectInRenderingRoot('.form-group');
+                this.labelTag = this.selectInRenderingRoot('label');
+                this.input = this.selectInRenderingRoot('input');
+                this.errorSpan = this.selectInRenderingRoot('.help-block');
                 this.render();
             },
             attributeChanged: function(attributeName) {
@@ -178,7 +178,7 @@
                         keepOpen: false
                     });
                     $('#' + self.field).on("dp.change", function(e) {
-                        var input = self._selectInRenderingRoot("input");
+                        var input = self.selectInRenderingRoot("input");
                         self.value = input.value;
                         self.validate();
                     });                    

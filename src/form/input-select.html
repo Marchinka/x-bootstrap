@@ -76,18 +76,18 @@
                 this.innerContent = this.innerHTML;
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this.containerDiv = this._selectInRenderingRoot('.form-group');
-                this.labelTag = this._selectInRenderingRoot('label');
-                this.button = this._selectInRenderingRoot('button');
-                this.buttonSpan = this._selectInRenderingRoot('.pull-left');
-                this.errorSpan = this._selectInRenderingRoot('.help-block');
-                this.dropdown = this._selectInRenderingRoot('.dropdown');
-                this.dropdownMenu = this._selectInRenderingRoot('.dropdown-menu');
+                this.getRenderingRoot().appendChild(clone);
+                this.containerDiv = this.selectInRenderingRoot('.form-group');
+                this.labelTag = this.selectInRenderingRoot('label');
+                this.button = this.selectInRenderingRoot('button');
+                this.buttonSpan = this.selectInRenderingRoot('.pull-left');
+                this.errorSpan = this.selectInRenderingRoot('.help-block');
+                this.dropdown = this.selectInRenderingRoot('.dropdown');
+                this.dropdownMenu = this.selectInRenderingRoot('.dropdown-menu');
                 this.render();
             },
             inserted: function() {
-                this._fetchData();                
+                this.fetchData();                
             },
             attributeChanged: function(attributeName) {
                 if (attributeName === "value") {
@@ -119,7 +119,7 @@
                 this.error = ''
                 return true;
             },   
-            _fetchData: function () {
+            fetchData: function () {
                 var self = this;
                 if (!self.url) {
                     return;
@@ -162,7 +162,7 @@
                     this.containerDiv.className = "form-group";
                 }
             },
-            _selectOption: function (dropdownOption) {
+            selectOption: function (dropdownOption) {
                 if (!dropdownOption) {
                     throw new Error("Not valid option for selection.");
                 }
@@ -174,10 +174,10 @@
         },
         events: {
             focus: function () {
-                this._showMenu();
+                this.showMenu();
             },
             blur: function () {
-                this._hideMenu();
+                this.hideMenu();
             }            
         }
     };

@@ -105,7 +105,7 @@
 	var getTestElement = function (selector) {
 		var testContainer = currentDocument.querySelector(selector);
 		var sut = testContainer.querySelector(tagSutName);
-		return sut._getRenderingRoot();
+		return sut.getRenderingRoot();
 	};
 
 	describe("<form-ajax/>", function() {
@@ -374,7 +374,7 @@
 						result: { validationResult: { isValid: true} }
 					};
 					window.restService.addMockedAjax(mock);			
-					testElement._submitForm();
+					testElement.submitForm();
 					expect(mock.called).to.be.true;
 				});
 
@@ -387,7 +387,7 @@
 						result: { validationResult: { isValid: true} }
 					};
 					window.restService.addMockedAjax(mock);			
-					testElement._submitForm();
+					testElement.submitForm();
 					expect(mock.data.firstFieldName).to.be.equal("firstFieldValue");
 					expect(mock.data.secondFieldName).to.be.equal("secondFieldValue");
 				});		
@@ -400,7 +400,7 @@
 					var testElement = getTestElement("#with-no-post-url");
 					var errorMessage = "Post url is not defined";
 					var errorThrower = function () {
-						testElement._submitForm();
+						testElement.submitForm();
 					};
 					expect(errorThrower).to.throw(errorMessage);
 				});

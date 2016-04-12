@@ -55,8 +55,8 @@
             created: function() {
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this.li = this._getRenderingRoot().querySelector("a");
+                this.getRenderingRoot().appendChild(clone);
+                this.li = this.getRenderingRoot().querySelector("a");
                 this.render();
             },
             attributeChanged: function(attributeName) {

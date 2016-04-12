@@ -10,13 +10,13 @@
         var baseObject = {
             methods: {
                 getInputElements: function () {
-                    var inputElements = this._getRenderingRoot()
+                    var inputElements = this.getRenderingRoot()
                         .querySelector("form")
                         .querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
                     return inputElements;
                 },
                 getEditableElements: function () {
-                    var inputElements = this._getRenderingRoot()
+                    var inputElements = this.getRenderingRoot()
                         .querySelector("form")
                         .querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
                     return inputElements;
@@ -39,7 +39,7 @@
                 },
                 setData: function (object) {
                     for (var attributeName in object) { 
-                        var innerInput = this._selectInRenderingRoot("[field=" + attributeName +"]");
+                        var innerInput = this.selectInRenderingRoot("[field=" + attributeName +"]");
                         if (!innerInput) {
                             continue;
                         } else if (innerInput.nodeName === "INPUT-CHECKBOX") {

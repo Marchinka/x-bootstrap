@@ -7,12 +7,12 @@
     window.xBootstrap.getElementBase = function () {
         return {
             methods: {
-                _getRenderingRoot: function () {
+                getRenderingRoot: function () {
                     // Could be used for shadow dom
                     return this;
                 },
-                _selectInRenderingRoot: function (selector) {
-                    return this._getRenderingRoot().querySelector(selector);
+                selectInRenderingRoot: function (selector) {
+                    return this.getRenderingRoot().querySelector(selector);
                 }
             }
         };

@@ -84,13 +84,13 @@
                 this.innerContent = this.innerHTML;
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this._selectInRenderingRoot("#inner-content").innerHTML = this.innerContent;
-                this.collectionElementTag = this._selectInRenderingRoot("collection-elements");
-                this.searchForm = this._selectInRenderingRoot("collection-search-form");
-                this.showMoreButtonTag = this._selectInRenderingRoot("#show-more-button");
-                this.nextButton = this._selectInRenderingRoot("#next-button");
-                this.previousButton = this._selectInRenderingRoot("#previous-button");
+                this.getRenderingRoot().appendChild(clone);
+                this.selectInRenderingRoot("#inner-content").innerHTML = this.innerContent;
+                this.collectionElementTag = this.selectInRenderingRoot("collection-elements");
+                this.searchForm = this.selectInRenderingRoot("collection-search-form");
+                this.showMoreButtonTag = this.selectInRenderingRoot("#show-more-button");
+                this.nextButton = this.selectInRenderingRoot("#next-button");
+                this.previousButton = this.selectInRenderingRoot("#previous-button");
                 this.currentPage = this.currentPage || 1;
             },
             inserted: function () {
@@ -104,13 +104,13 @@
                     }, false);
                 }
                 else if (self.showMoreButton) {
-                    self._selectInRenderingRoot(".show-more").hidden = false;
+                    self.selectInRenderingRoot(".show-more").hidden = false;
                     self.showMoreButtonTag.onclick = function() {
                         self._appendNextPageData();
                     };
                 }
                 else if (self.pager) {
-                    self._selectInRenderingRoot(".pager").hidden = false;
+                    self.selectInRenderingRoot(".pager").hidden = false;
                     self.nextButton.onclick = function() {
                         self._fetchNextPageData();
                     };
@@ -118,11 +118,11 @@
                         self._fetchPreviousPageData();
                     };                    
                 }             
-                self._fetchData();
+                self.fetchData();
             }
         },
         methods: {
-            _fetchData: function() {
+            fetchData: function() {
                 var self = this;
 
                 if (!self.url) {
@@ -159,17 +159,17 @@
             },
             _appendNextPageData: function () {
                 this.currentPage++;
-                this._fetchData();
+                this.fetchData();
                 //var br = document.createElement("br");
-                //this._getRenderingRoot().querySelector("collection-elements")._getRenderingRoot().appendChild(br);
+                //this.getRenderingRoot().querySelector("collection-elements").getRenderingRoot().appendChild(br);
                 //var p = document.createElement("p");
                 //p.textContent = "guarda che figo";
-                //this._getRenderingRoot().querySelector("collection-elements")._getRenderingRoot().appendChild(p);
+                //this.getRenderingRoot().querySelector("collection-elements").getRenderingRoot().appendChild(p);
             },
             _fetchNextPageData: function () {
                 this.collectionElementTag.emptyCollection();
                 this.currentPage++;
-                this._fetchData();
+                this.fetchData();
             },
             _fetchPreviousPageData: function () {
                 if (this.currentPage == 1) {
@@ -177,14 +177,14 @@
                 }
                 this.collectionElementTag.emptyCollection();
                 this.currentPage--;
-                this._fetchData();
+                this.fetchData();
             }
         },
         events: {
             submit: function (e) {
                 e.preventDefault();
                 this.currentPage = 1;
-                this._fetchData();
+                this.fetchData();
             },
             tap: function () {
 

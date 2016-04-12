@@ -17,8 +17,8 @@
                 this.innerContent = this.innerHTML;
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this.form = this._selectInRenderingRoot('form');
+                this.getRenderingRoot().appendChild(clone);
+                this.form = this.selectInRenderingRoot('form');
                 this.render();
             }
 

@@ -43,7 +43,7 @@
 	var getTestElement = function (selector) {
 		var testContainer = currentDocument.querySelector(selector);
 		var sut = testContainer.querySelector(tagSutName);
-		return sut._getRenderingRoot();
+		return sut.getRenderingRoot();
 	};
 
 	describe("<input-checkbox/>", function() {

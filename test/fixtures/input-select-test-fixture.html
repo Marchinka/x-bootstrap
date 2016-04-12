@@ -100,7 +100,7 @@
 	var getTestElement = function (selector) {
 		var testContainer = currentDocument.querySelector(selector);
 		var sut = testContainer.querySelector(tagSutName);
-		return sut._getRenderingRoot();
+		return sut.getRenderingRoot();
 	};
 
 	describe("<input-select/>", function() {
@@ -255,13 +255,13 @@
 		    });  
 		});
 
-		describe("'_selectOption' method", function () {
+		describe("'selectOption' method", function () {
 			describe("with undefined input", function () {
 		   	    it("throws error", function () {
 					var inputSelect = getTestElement("#withField");
 					var expectedError = "Not valid option for selection."
 					var exceptionThrower = function () {
-						inputSelect._selectOption(undefined);
+						inputSelect.selectOption(undefined);
 					};
 					expect(exceptionThrower).to.throw(expectedError);
 		    	});
@@ -274,7 +274,7 @@
 	                var dropdownOption = document.createElement("dropdown-option");
 	                dropdownOption.key = "key1";
 	                dropdownOption.value = "value1"
-	                inputSelect._selectOption(dropdownOption);
+	                inputSelect.selectOption(dropdownOption);
 	                expect(inputSelect.value).to.equal(dropdownOption.key);
 					expect(button.innerHTML).to.have.string(dropdownOption.value);
 		    	});
@@ -286,7 +286,7 @@
 					var button = inputSelect.querySelector("button");
 	                var dropdownOption = document.createElement("dropdown-option");
 	                dropdownOption.value = "value1"
-	                inputSelect._selectOption(dropdownOption);
+	                inputSelect.selectOption(dropdownOption);
 	                expect(inputSelect.value).to.equal(dropdownOption.value);
 					expect(button.innerHTML).to.have.string(dropdownOption.value);
 		    	});
@@ -350,7 +350,7 @@
 		});
 
 		describe("with 'url' attribute", function () {
-	   	    it("calls url via ajax get in '_fetchData' method", function () {
+	   	    it("calls url via ajax get in 'fetchData' method", function () {
 				// SETUP
 				var restUrl = "api/path/to/empty/options";
 				var mock = {
@@ -364,13 +364,13 @@
 				currentDocument.body.appendChild(newElement);
 
 				// EXERCISE
-				newElement._fetchData();
+				newElement.fetchData();
 
 				// ASSERT
 				expect(mock.called).to.be.true;
 		    });
 
-	   	    it("calls url via ajax get in '_fetchData' method and renders option from fetched data", function () {
+	   	    it("calls url via ajax get in 'fetchData' method and renders option from fetched data", function () {
 				// SETUP
 				var data = [
 					{ key: "key1", value: "value1"},
@@ -389,7 +389,7 @@
 				currentDocument.body.appendChild(newElement);
 
 				// EXERCISE
-				newElement._fetchData();
+				newElement.fetchData();
 
 				// ASSERT
 				var options = newElement

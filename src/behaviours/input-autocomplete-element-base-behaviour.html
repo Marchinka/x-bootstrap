@@ -9,7 +9,7 @@
     window.xBootstrap.getInputAutocompleteElementBase = function () {
         var baseObject = {
             methods: {
-                _fetchData: function () {
+                fetchData: function () {
                     var self = this;
                     if (!self.url) {
                         return;
@@ -29,7 +29,7 @@
                         }
                     });
                 },
-                _selectOption: function (dropdownOption) {
+                selectOption: function (dropdownOption) {
                     if (!dropdownOption) {
                         throw new Error("Not valid option for selection.");
                     }

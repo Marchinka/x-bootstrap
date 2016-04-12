@@ -31,7 +31,7 @@
 	var getTestElement = function (selector) {
 		var testContainer = currentDocument.querySelector(selector);
 		var sut = testContainer.querySelector("collection-elements");
-		return sut._getRenderingRoot();
+		return sut.getRenderingRoot();
 	};
 
 	beforeEach(function() {

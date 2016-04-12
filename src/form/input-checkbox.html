@@ -31,12 +31,12 @@
             created: function() {
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this.containerDiv = this._selectInRenderingRoot('.form-group');
-                this.labelTag = this._selectInRenderingRoot('label');
-                this.labelSpan = this._selectInRenderingRoot('.label-text');
-                this.input = this._selectInRenderingRoot('input');
-                this.errorSpan = this._selectInRenderingRoot('.help-block');
+                this.getRenderingRoot().appendChild(clone);
+                this.containerDiv = this.selectInRenderingRoot('.form-group');
+                this.labelTag = this.selectInRenderingRoot('label');
+                this.labelSpan = this.selectInRenderingRoot('.label-text');
+                this.input = this.selectInRenderingRoot('input');
+                this.errorSpan = this.selectInRenderingRoot('.help-block');
                 this.render();
             },
             attributeChanged: function(attributeName) {

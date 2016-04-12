@@ -41,13 +41,13 @@
                 var innerContent = this.innerHTML;
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this.innerContentTag = this._selectInRenderingRoot(".inner-content");
+                this.getRenderingRoot().appendChild(clone);
+                this.innerContentTag = this.selectInRenderingRoot(".inner-content");
                 this.innerContentTag.innerHTML = innerContent;
-                this.innerRadios = this._getRenderingRoot().querySelectorAll("input-radio");
-                this.labelTag = this._selectInRenderingRoot("label");
-                this.formGroup = this._selectInRenderingRoot(".form-group");
-                this.errorSpan = this._selectInRenderingRoot(".help-block");
+                this.innerRadios = this.getRenderingRoot().querySelectorAll("input-radio");
+                this.labelTag = this.selectInRenderingRoot("label");
+                this.formGroup = this.selectInRenderingRoot(".form-group");
+                this.errorSpan = this.selectInRenderingRoot(".help-block");
                 this.render();
             },
             attributeChanged: function(attributeName) {
@@ -70,7 +70,7 @@
                 }
             },
             fixMultipleChecks: function () {
-                var checkedRadios = this._getRenderingRoot().querySelectorAll("input-radio[checked]");
+                var checkedRadios = this.getRenderingRoot().querySelectorAll("input-radio[checked]");
                 if (checkedRadios.length < 2) {
                     return;
                 }

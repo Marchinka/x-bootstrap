@@ -48,11 +48,11 @@
             created: function() {
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this.containerDiv = this._selectInRenderingRoot('.form-group');
-                this.labelTag = this._selectInRenderingRoot('label');
-                this.textarea = this._selectInRenderingRoot('textarea');
-                this.errorSpan = this._selectInRenderingRoot('span');
+                this.getRenderingRoot().appendChild(clone);
+                this.containerDiv = this.selectInRenderingRoot('.form-group');
+                this.labelTag = this.selectInRenderingRoot('label');
+                this.textarea = this.selectInRenderingRoot('textarea');
+                this.errorSpan = this.selectInRenderingRoot('span');
                 this.render();
             },
             attributeChanged: function(attributeName) {

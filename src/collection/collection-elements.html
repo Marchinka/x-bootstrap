@@ -43,15 +43,15 @@
         },
         lifecycle: {
             created: function() {
-                var firstChild = this._getRenderingRoot().firstElementChild;
+                var firstChild = this.getRenderingRoot().firstElementChild;
                 if (firstChild) {
                     this.listItemTemplate = firstChild.cloneNode(true);    
                 }
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this.p = this._selectInRenderingRoot('#number-of-result');
-                this.innerContainer = this._selectInRenderingRoot('#inner-container');
+                this.getRenderingRoot().appendChild(clone);
+                this.p = this.selectInRenderingRoot('#number-of-result');
+                this.innerContainer = this.selectInRenderingRoot('#inner-container');
                 this.render();
             },
             attributeChanged: function(attributeName) {

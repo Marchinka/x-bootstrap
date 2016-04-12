@@ -94,7 +94,7 @@
 	var getTestElement = function (selector) {
 		var testContainer = currentDocument.querySelector(selector);
 		var sut = testContainer.querySelector(tagSutName);
-		return sut._getRenderingRoot();
+		return sut.getRenderingRoot();
 	};
 
 	describe("<input-autocomplete/>", function() {
@@ -256,32 +256,32 @@
 	    	});
 		});
 
-		describe("'_showMenu' method", function () {
+		describe("'showMenu' method", function () {
 	   	    it("adds 'open' class to 'dropdown' element", function () {
 				var inputAutocomplete = getTestElement("#withField");
-				inputAutocomplete._showMenu();
+				inputAutocomplete.showMenu();
 				var dropdown = inputAutocomplete.querySelector(".dropdown");
 				expect(dropdown.className).to.equal("dropdown open");
 	    	});
 		});
 
-		describe("'_hideMenu' method", function () {
+		describe("'hideMenu' method", function () {
 	   	    it("removed 'open' class to 'dropdown' element", function () {
 				var inputAutocomplete = getTestElement("#withField");
-				inputAutocomplete._showMenu();
-				inputAutocomplete._hideMenu();
+				inputAutocomplete.showMenu();
+				inputAutocomplete.hideMenu();
 				var dropdown = inputAutocomplete.querySelector(".dropdown");
 				expect(dropdown.className).to.equal("dropdown");
 	    	});
 		});
 
-		describe("'_selectOption' method", function () {
+		describe("'selectOption' method", function () {
 			describe("with undefined input", function () {
 		   	    it("throws error", function () {
 					var inputAutocomplete = getTestElement("#withField");
 					var expectedError = "Not valid option for selection."
 					var exceptionThrower = function () {
-						inputAutocomplete._selectOption(undefined);
+						inputAutocomplete.selectOption(undefined);
 					};
 					expect(exceptionThrower).to.throw(expectedError);
 		    	});
@@ -293,7 +293,7 @@
 					var input = inputAutocomplete.querySelector("input");
 	                var dropdownOption = document.createElement("dropdown-option");
 	                dropdownOption.value = "value1"
-	                inputAutocomplete._selectOption(dropdownOption);
+	                inputAutocomplete.selectOption(dropdownOption);
 	                expect(inputAutocomplete.value).to.equal(dropdownOption.value);
 					expect(input.value).to.equal(dropdownOption.value);
 		    	});
@@ -339,7 +339,7 @@
 		});
 
 		describe("with 'url' attribute", function () {
-	   	    it("calls url via ajax get in '_fetchData' method", function () {
+	   	    it("calls url via ajax get in 'fetchData' method", function () {
 				// SETUP
 				var restUrl = "api/path/to/empty/options/for/autocomplete";
 				var mock = {
@@ -353,13 +353,13 @@
 				currentDocument.body.appendChild(newElement);
 
 				// EXERCISE
-				newElement._fetchData();
+				newElement.fetchData();
 
 				// ASSERT
 				expect(mock.called).to.be.true;
 		    });
 
-	   	    it("calls url via ajax get in '_fetchData' method and renders option from fetched data", function () {
+	   	    it("calls url via ajax get in 'fetchData' method and renders option from fetched data", function () {
 				// SETUP
 				var data = [
 					{ key: "key1", value: "value1"},
@@ -378,7 +378,7 @@
 				currentDocument.body.appendChild(newElement);
 
 				// EXERCISE
-				newElement._fetchData();
+				newElement.fetchData();
 
 				// ASSERT
 				var options = newElement

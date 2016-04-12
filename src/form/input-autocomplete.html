@@ -23,17 +23,17 @@
             created: function() {
                 this.innerHTML = '';
                 var clone = thatDoc.importNode(template, true);
-                this._getRenderingRoot().appendChild(clone);
-                this.containerDiv = this._selectInRenderingRoot('.form-group');
-                this.labelTag = this._selectInRenderingRoot('label');
-                this.input = this._selectInRenderingRoot('input');
-                this.errorSpan = this._selectInRenderingRoot('span');
-                this.dropdown = this._selectInRenderingRoot('.dropdown');
-                this.dropdownMenu = this._selectInRenderingRoot('.dropdown-menu');      
+                this.getRenderingRoot().appendChild(clone);
+                this.containerDiv = this.selectInRenderingRoot('.form-group');
+                this.labelTag = this.selectInRenderingRoot('label');
+                this.input = this.selectInRenderingRoot('input');
+                this.errorSpan = this.selectInRenderingRoot('span');
+                this.dropdown = this.selectInRenderingRoot('.dropdown');
+                this.dropdownMenu = this.selectInRenderingRoot('.dropdown-menu');      
                 this.render();
             },
             inserted: function() {
-                this._fetchData();                
+                this.fetchData();                
             },            
             attributeChanged: function(attributeName) {
                 this.render();
@@ -60,7 +60,7 @@
         events: {
             keyup: function () {
                 this.value = this.input.value;
-                this._fetchData();
+                this.fetchData();
             }
         }
     };

@@ -74,7 +74,7 @@
                 },
             },
             methods: {
-                _submitForm: function () {
+                submitForm: function () {
                     var self = this;
 
                     if (!self.postUrl) {
@@ -119,7 +119,7 @@
                         var error = errors[i];
                         var field = error.field;
                         var errorMessage = error.message;
-                        var inputElement = this._selectInRenderingRoot("[field=" + field + "]");
+                        var inputElement = this.selectInRenderingRoot("[field=" + field + "]");
                         inputElement.error = errorMessage;
                     };
                 },
@@ -161,7 +161,7 @@
                     var isFormValid = this.validate();
                     if (isFormValid) {
                         this.removeErrors();
-                        this._submitForm();
+                        this.submitForm();
                     }
                 }
             }
