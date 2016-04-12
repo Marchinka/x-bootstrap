@@ -103,31 +103,14 @@
                 this.currentPage = this.currentPage || 1;
             },
             inserted: function () {
-                var self = this;
-                if (self.infiniteScrolling) {
-                    window.addEventListener("scroll", function () {                    
-                        var positionOffset = window.innerHeight + window.scrollY - thatDoc.body.offsetHeight;
-                        if (positionOffset >= 0) {
-                            self.appendNextPageData();
-                        }                    
-                    }, false);
-                }
-                else if (self.showMoreButton) {
-                    self.selectInRenderingRoot(".show-more").hidden = false;
-                    self.showMoreButtonTag.onclick = function() {
-                        self.appendNextPageData();
-                    };
-                }
-                else if (self.pager) {
-                    self.selectInRenderingRoot(".pager").hidden = false;
-                    self.nextButton.onclick = function() {
-                        self.fetchNextPageData();
-                    };
-                    self.previousButton.onclick = function() {
-                        self.fetchPreviousPageData();
-                    };                    
-                }             
-                self.fetchData();
+                this.renderInfiniteScrolling();
+                this.renderShowMoreButton();
+                this.renderPager();
+                this.fetchData();
+                this.activateRefreshing();
+            },
+            attributeChanged: function(attributeName) {
+                this.activateRefreshing();
             }
         },
         methods: {
@@ -182,6 +165,56 @@
                 this.collectionElementTag.emptyCollection();
                 this.currentPage--;
                 this.fetchData();
+            },
+            renderShowMoreButton: function () {
+                var self = this;
+                if (self.showMoreButton) {
+                    self.selectInRenderingRoot(".show-more").hidden = false;
+                    self.showMoreButtonTag.onclick = function() {
+                        self.appendNextPageData();
+                    };
+                }                
+            },
+            renderPager: function () {
+                var self = this;
+                if (self.pager) {
+                    self.selectInRenderingRoot(".pager").hidden = false;
+                    self.nextButton.onclick = function() {
+                        self.fetchNextPageData();
+                    };
+                    self.previousButton.onclick = function() {
+                        self.fetchPreviousPageData();
+                    };                    
+                }
+            },
+            renderInfiniteScrolling: function () {
+                var self = this;
+                if (self.infiniteScrolling) {
+                    window.addEventListener("scroll", function () {                    
+                        var positionOffset = window.innerHeight + window.scrollY - thatDoc.body.offsetHeight;
+                        if (positionOffset >= 0) {
+                            self.appendNextPageData();
+                        }                    
+                    }, false);
+                }                
+            },
+            activateRefreshing: function() {
+                var self = this;
+                clearInterval(self.refreshInterval);
+
+                if(!self.refreshEvery) {
+                    return;
+                }
+
+                if (self.refreshEvery <= 0 ) {
+                    return;
+                }
+
+                self.refreshInterval = setInterval(function () {
+                    self.collectionElementTag.emptyCollection();
+                    self.fetchData();
+                }, 1000 * self.refreshEvery);
+
             }
         },
         events: {

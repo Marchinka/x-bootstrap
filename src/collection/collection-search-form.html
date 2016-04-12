@@ -40,6 +40,7 @@
             }
         }
     };
-    xtag.register('collection-search-form', xtag.merge(xBootstrap.getFormElementBase(), element));
+    var protoTag = xtag.merge(xBootstrap.getFormElementBase(), element);
+    xtag.register('collection-search-form', protoTag);
 })(window, document);
 </script>
