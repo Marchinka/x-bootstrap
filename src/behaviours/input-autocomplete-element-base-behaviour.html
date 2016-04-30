@@ -41,7 +41,7 @@
             }
         };
 
-        var protoTag = xtag.merge(xBootstrap.getDropdownInputTextElementBase(), baseObject);
+        var protoTag = xBootstrap.extend(baseObject).from(xBootstrap.getDropdownInputTextElementBase());
 
         return protoTag;
     };

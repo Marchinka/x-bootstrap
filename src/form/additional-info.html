@@ -56,7 +56,7 @@
             }
         }
     };
-    var protoTag = xtag.merge(xBootstrap.getElementBase(), element);
+    var protoTag = xBootstrap.extend(element).from(xBootstrap.getElementBase());
     xtag.register('additional-info', protoTag);
 })(window, document);
 </script>

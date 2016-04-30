@@ -1,3 +1,5 @@
+<script type="text/javascript" src="./../../node_modules/underscore/underscore.js"></script>
+
 <script>
 (function(window, document) {
     if (!window.xBootstrap) {
@@ -18,10 +20,18 @@
         };
     };
 
-    window.xBootstrap.extend = function (source, target) {
-        return xtag.merge(source target);
-    };
+    var Extender = function (target) {
+        this.target = target;
+        this.from = function (source) {
+            return xtag.merge(source, this.target);
+        }
+    }
 
+    window.xBootstrap.extend = function (originalTarget) {
+        var target =_.clone(originalTarget);
+        var result = new Extender(target);
+        return result;
+    };
     
 })(window, document);
 </script>

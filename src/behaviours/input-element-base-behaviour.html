@@ -67,7 +67,7 @@
             }
         };
 
-        var protoTag = xtag.merge(xBootstrap.getElementBase(), baseObject);
+        var protoTag = xBootstrap.extend(baseObject).from(xBootstrap.getElementBase());
         return protoTag;
     };
 })(window, document);

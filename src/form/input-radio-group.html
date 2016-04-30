@@ -147,7 +147,7 @@
             }
         }        
     };
-    var protoTag = xtag.merge(xBootstrap.getInputElementBase(), element);
+    var protoTag = xBootstrap.extend(element).from(xBootstrap.getInputElementBase());
     xtag.register('input-radio-group', protoTag);
 })(window, document);
 </script>

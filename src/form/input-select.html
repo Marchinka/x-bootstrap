@@ -182,7 +182,7 @@
         }
     };
 
-    var protoTag = xtag.merge(xBootstrap.getDropdownInputElementBase(), baseObject);
+    var protoTag = xBootstrap.extend(baseObject).from(xBootstrap.getDropdownInputElementBase());
     xtag.register('input-select', protoTag);
 })(window, document);
 </script>

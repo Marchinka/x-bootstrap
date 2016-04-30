@@ -228,6 +228,6 @@
             }
         }
     };
-    xtag.register('collection-container', xtag.merge(xBootstrap.getElementBase(), element));
+    xtag.register('collection-container', xBootstrap.extend(element).from(xBootstrap.getElementBase()));
 })(window, document);
 </script>

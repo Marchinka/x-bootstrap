@@ -167,7 +167,7 @@
             }
         };
 
-        var protoTag = xtag.merge(xBootstrap.getFormElementBase(), baseObject);
+        var protoTag = xBootstrap.extend(baseObject).from(xBootstrap.getFormElementBase());
         return protoTag;
     };
         

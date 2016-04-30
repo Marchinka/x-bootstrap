@@ -86,6 +86,6 @@
             }
         }
     };
-    xtag.register('input-radio', xtag.merge(xBootstrap.getElementBase(), element));
+    xtag.register('input-radio', xBootstrap.extend(element).from(xBootstrap.getElementBase()));
 })(window, document);
 </script>

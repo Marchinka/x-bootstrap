@@ -69,7 +69,7 @@
             }
         }
     };
-    var protoTag = xtag.merge(xBootstrap.getElementBase(), element);
+    var protoTag = xBootstrap.extend(element).from(xBootstrap.getElementBase());
     xtag.register('dropdown-option', protoTag);
 })(window, document);
 </script>

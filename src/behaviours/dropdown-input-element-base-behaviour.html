@@ -67,13 +67,12 @@
             }
         };
 
-        var protoTag = xtag.merge(xBootstrap.getInputElementBase(), baseObject);
-
+        var protoTag = xBootstrap.extend(baseObject).from(xBootstrap.getInputElementBase());
         return protoTag;
     };
         
     window.xBootstrap.getDropdownInputTextElementBase = function () {
-        var protoTag = xtag.merge(xBootstrap.getDropdownInputElementBase(), xBootstrap.getInputTextElementBase());
+        var protoTag = xBootstrap.extend(xBootstrap.getInputTextElementBase()).from(xBootstrap.getDropdownInputElementBase());
         return protoTag;
     };
 

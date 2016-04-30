@@ -64,7 +64,7 @@
             }
         };
 
-        var protoTag = xtag.merge(xBootstrap.getInputElementBase(), baseObject);
+        var protoTag = xBootstrap.extend(baseObject).from(xBootstrap.getInputElementBase());
 
         return protoTag;
     };

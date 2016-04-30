@@ -65,7 +65,7 @@
         }
     };
 
-    var protoTag = xtag.merge(xBootstrap.getInputAutocompleteElementBase(), baseObject);
+    var protoTag = xBootstrap.extend(baseObject).from(xBootstrap.getInputAutocompleteElementBase());
     xtag.register('input-autocomplete', protoTag);
 })(window, document);
 </script>

@@ -37,7 +37,7 @@
         }
     };
 
-    var protoTag = xtag.merge(xBootstrap.getFormAjaxElementBase(), element);
+    var protoTag = xBootstrap.extend(element).from(xBootstrap.getFormAjaxElementBase());
     xtag.register('form-ajax', protoTag);
 })(window, document);
 </script>

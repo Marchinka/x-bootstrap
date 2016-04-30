@@ -83,6 +83,6 @@
             }
         }
     };
-    xtag.register('input-checkbox', xtag.merge(xBootstrap.getInputElementBase(), element));
+    xtag.register('input-checkbox', xBootstrap.extend(element).from(xBootstrap.getInputElementBase()));
 })(window, document);
 </script>

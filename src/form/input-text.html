@@ -186,7 +186,7 @@
             }
         }
     };
-    var protoTag = xtag.merge(xBootstrap.getInputTextElementBase(), inputTextElement)
+    var protoTag = xBootstrap.extend(inputTextElement).from(xBootstrap.getInputTextElementBase())
     xtag.register('input-text', protoTag);
 })(window, document);
 </script>

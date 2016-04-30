@@ -107,6 +107,6 @@
             }
         }
     };
-    xtag.register('collection-elements', xtag.merge(xBootstrap.getElementBase(), element));
+    xtag.register('collection-elements', xBootstrap.extend(element).from(xBootstrap.getElementBase()));
 })(window, document);
 </script>
