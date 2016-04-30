@@ -1,5 +1,6 @@
 <script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
 <link rel="import" href="./../behaviours/input-element-base-behaviour.html">
+<script type="text/javascript" src="./../../node_modules/underscore/underscore.js"></script>
 
 <template id="input-radio-group-template">
     <div class="form-group">
@@ -63,11 +64,10 @@
                 this.renderErrorTag();
             },
             assignFieldAndDisabledToRadios: function () {
-                for (var i = 0; i < this.innerRadios.length; i++) {
-                    var radioButton = this.innerRadios[i];
+                _.each(this.innerRadios, function (radioButton) {
                     radioButton.field = this.field;
                     radioButton.disabled = radioButton.disabled || this.disabled;
-                }
+                }, this);
             },
             fixMultipleChecks: function () {
                 var checkedRadios = this.getRenderingRoot().querySelectorAll("input-radio[checked]");
@@ -75,25 +75,24 @@
                     return;
                 }
 
-                for (var i = 0; i < checkedRadios.length - 1; i++) {
-                    var radio = checkedRadios[i];
+                _.each(checkedRadios, function (radio) {
                     radio.checked = false;
-                };
+                });
+
+                _.last(checkedRadios).checked = true;
             },
             uncheckAllRadios: function () {
-                for (var i = 0; i < this.innerRadios.length; i++) {
-                    var radioButton = this.innerRadios[i];
+                _.each(this.innerRadios, function (radioButton) {
                     radioButton.checked = false;
-                }
+                }, this);
             },
             checkRadioValue: function (radioValue) {
                 if (!radioValue) {
                     return;
                 }
-                for (var i = 0; i < this.innerRadios.length; i++) {
-                    var radioButton = this.innerRadios[i];
+                _.each(this.innerRadios, function (radioButton) {
                     radioButton.checked = radioButton.value == radioValue;
-                }
+                }, this);
             },
             renderErrorTag: function () {
                 if (this.error) {
@@ -123,15 +122,15 @@
                 }
 
                 var data = {};
-                for (var i = 0; i < this.innerRadios.length; i++) {
-                    var radio = this.innerRadios[i];
+
+                _.each(this.innerRadios, function (radio) {
                     if (radio.isChecked()) {
                         radio.checked = true;
                         data[this.field] = radio.value;
                     } else {
                         radio.checked = false;
                     }
-                }
+                }, this);
                 
                 return data;
             }
