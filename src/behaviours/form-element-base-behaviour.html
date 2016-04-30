@@ -30,9 +30,7 @@
                     var data = {};
                     _.each(inputElements, function (currentInput) {
                         var inputData = currentInput.getData();
-                        for (var attrname in inputData) { 
-                            data[attrname] = inputData[attrname];
-                        }                        
+                        _.extend(data, inputData);
                     });
                     return data;
                 },

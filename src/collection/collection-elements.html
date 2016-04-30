@@ -99,10 +99,7 @@
                 } else {
                     throw new Error("Neither 'type' property nor inner element defined in <collection-elements/>.");
                 }
-
-                for (var attrname in elementData) { 
-                    domElement[attrname] = elementData[attrname];
-                }                     
+                _.extend(domElement, elementData);
                 return domElement;
             }
         }
