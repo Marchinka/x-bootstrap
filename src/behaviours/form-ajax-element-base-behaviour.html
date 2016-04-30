@@ -109,19 +109,17 @@
                 },
                 removeErrors: function () {
                     var inputElements = this.getInputElements();
-                    for (var i = 0; i < inputElements.length; i++) {
-                        var inputElement = inputElements[i];
+                    _.each(inputElement, function (inputElement) {
                         inputElement.error = "";
-                    };
+                    });
                 },
                 bindErrors: function (errors) {
-                    for (var i = 0; i < errors.length; i++) {
-                        var error = errors[i];
+                    _.each(errors, function(error) {
                         var field = error.field;
                         var errorMessage = error.message;
                         var inputElement = this.selectInRenderingRoot("[field=" + field + "]");
-                        inputElement.error = errorMessage;
-                    };
+                        inputElement.error = errorMessage;                        
+                    });
                 },
                 clearingProcedure: function (self) {
                     if (self.clearOnSuccess) {

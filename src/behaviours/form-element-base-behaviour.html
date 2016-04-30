@@ -28,13 +28,12 @@
                     }
 
                     var data = {};
-                    for (var i = 0; i < inputElements.length; i++) {
-                        var currentInput = inputElements[i];
+                    _.each(inputElements, function (currentInput) {
                         var inputData = currentInput.getData();
                         for (var attrname in inputData) { 
                             data[attrname] = inputData[attrname];
-                        }
-                    }
+                        }                        
+                    });
                     return data;
                 },
                 setData: function (object) {
@@ -53,25 +52,24 @@
                 },
                 clearForm: function () {
                     var inputElements = this.getEditableElements();
-                    for (var i = 0; i < inputElements.length; i++) {
-                        var inputElement = inputElements[i];
+                    _.each(inputElements, function (inputElement) {
                         if (inputElement.nodeName === "INPUT-CHECKBOX") {
                             inputElement.checked = false;
                         } else {
                             inputElement.value = "";
-                        }
-                    };
+                        }                    
+                    });
                 },            
                 validate: function () {
                     var inputElements = this.getEditableElements();
                     var isFormValid = true;
-                    for (var i = 0; i < inputElements.length; i++) {
-                        var currentInput = inputElements[i];
+                    _.each(inputElements, function (currentInput) {
+                        var inputData = currentInput.getData();
                         if (typeof currentInput.validate == 'function') {
                             var isInputValid = currentInput.validate();
                             isFormValid = isFormValid && isInputValid;
-                        }
-                    }
+                        }                      
+                    });
                     return isFormValid;
                 }              
             }

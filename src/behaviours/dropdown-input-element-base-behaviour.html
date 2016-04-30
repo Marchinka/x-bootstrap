@@ -35,9 +35,10 @@
                     }, this);
                 },
                 createDropdownOption: function (optionData) {
-                    var dropdownOption = document.createElement("dropdown-option");
-                    dropdownOption.key = optionData.key;
-                    dropdownOption.value = optionData.value;
+                    var dropdownOption = xBootstrap.createElement("dropdown-option", {
+                       key: optionData.key ,
+                       value: optionData.value
+                    });
                     return dropdownOption;
                 },
                 showMenu: function () {

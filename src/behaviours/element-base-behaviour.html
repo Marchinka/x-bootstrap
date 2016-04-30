@@ -25,12 +25,20 @@
         this.from = function (source) {
             return xtag.merge(source, this.target);
         }
-    }
+    };
 
     window.xBootstrap.extend = function (originalTarget) {
         var target =_.clone(originalTarget);
         var result = new Extender(target);
         return result;
+    };
+
+    window.xBootstrap.createElement = function (tagName, object) {
+        var element = document.createElement(tagName);
+        for (var attrname in object) { 
+            element[attrname] = object[attrname];
+        }
+        return element;
     };
     
 })(window, document);
