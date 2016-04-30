@@ -1,4 +1,5 @@
 <link rel="import" href="./input-text-element-base-behaviour.html">
+<script type="text/javascript" src="./../../node_modules/underscore/underscore.js"></script>
 
 <script>
 (function(window, document) {
@@ -24,15 +25,14 @@
                     if (!data) {
                         throw new Error("Data not defined.");
                     }
-                    if (!data.length && data.length != 0) {
+                    if (_.isEmpty(data)) {
                         throw new Error("Data must be a collection.");   
                     }
 
-                    for (var i = 0; i < data.length; i++) {
-                        var optionData = data[i];
+                    _.each(data, function (optionData) {
                         var dropdownOption = this.createDropdownOption(optionData);
-                        this.dropdownMenu.appendChild(dropdownOption);
-                    }
+                        this.dropdownMenu.appendChild(dropdownOption);                       
+                    }, this);
                 },
                 createDropdownOption: function (optionData) {
                     var dropdownOption = document.createElement("dropdown-option");

@@ -11,6 +11,7 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "jquery": "^2.2.2",
+    "underscore": "^1.8.3",
     "webcomponents.js": "^0.7.21",
     "x-tag": "^1.5.6"
   },
