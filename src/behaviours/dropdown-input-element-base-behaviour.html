@@ -31,7 +31,7 @@
 
                     _.each(data, function (optionData) {
                         var dropdownOption = this.createDropdownOption(optionData);
-                        this.dropdownMenu.appendChild(dropdownOption);                       
+                        this.getDropdownMenu().appendChild(dropdownOption);                       
                     }, this);
                 },
                 createDropdownOption: function (optionData) {
@@ -41,15 +41,29 @@
                     });
                     return dropdownOption;
                 },
+                getDropdown: function () {
+                    var dropdown = this.selectInRenderingRoot(".dropdown");
+                    if (!dropdown) {
+                        throw new Error("A .dropdown div must be defined inside autocomplete template");
+                    }
+                    return dropdown;
+                },
+                getDropdownMenu: function () {
+                    var dropdownMenu = this.selectInRenderingRoot(".dropdown-menu");
+                    if (!dropdownMenu) {
+                        throw new Error("A .dropdown-menu div must be defined inside autocomplete template");
+                    }
+                    return dropdownMenu;
+                },                
                 showMenu: function () {
                     if (this.disabled) {
                         this.hideMenu();
                     } else {
-                        this.dropdown.className = "dropdown open";
+                        this.getDropdown().className = "dropdown open";
                     }
                 },
                 hideMenu: function () {
-                    this.dropdown.className = "dropdown";
+                    this.getDropdown().className = "dropdown";
                 } 
             },
             events: {

@@ -1,14 +1,34 @@
 <script src="./../../node_modules/x-tag/dist/x-tag-core.js"></script>
 <link rel="import" href="./../behaviours/input-autocomplete-element-base-behaviour.html">
 
-<template id="input-autocomplete-template">
-    <div class="form-group">
+<template id="autocomplete-template">
+
+    <div class="<%= errorClass %>">
         <div class="dropdown">
-            <label></label>
-            <input type="text" class="form-control"/>
+            <label for="<%= field %>"><%= label %></label>
+
+            <% if ( disabled ) { %>
+
+            <input class="form-control" type="text"
+                id="<%= field %>" 
+                name="<%= field %>" 
+                value="<%= value %>"
+                placeholder="<%= placeholder %>"
+                disabled/>
+
+            <% }  else { %>
+
+            <input class="form-control" type="text"
+                id="<%= field %>" 
+                name="<%= field %>" 
+                value="<%= value %>"
+                placeholder="<%= placeholder %>"/>
+
+            <% }  %>
+
             <ul class="dropdown-menu" style="width: 100%"></ul>
         </div>
-        <span class="help-block"></span>
+        <span class="help-block"><%= error %></span>
     </div>
 </template>
 
@@ -16,50 +36,47 @@
 (function(window, document) {
     var thatDoc = document;
     var thisDoc = document._currentScript.ownerDocument;
-    var template = thisDoc.querySelector('#input-autocomplete-template').content;
+    var templateHtml =thisDoc.querySelector('#autocomplete-template').innerHTML;
+    var autocompleteTemplate = _.unescape(templateHtml);
+    var RenderTemplate = _.template(autocompleteTemplate);
 
     var baseObject = {
         lifecycle: {
             created: function() {
-                this.innerHTML = '';
-                var clone = thatDoc.importNode(template, true);
-                this.getRenderingRoot().appendChild(clone);
-                this.containerDiv = this.selectInRenderingRoot('.form-group');
-                this.labelTag = this.selectInRenderingRoot('label');
-                this.input = this.selectInRenderingRoot('input');
-                this.errorSpan = this.selectInRenderingRoot('span');
-                this.dropdown = this.selectInRenderingRoot('.dropdown');
-                this.dropdownMenu = this.selectInRenderingRoot('.dropdown-menu');      
                 this.render();
             },
             inserted: function() {
-                this.fetchData();                
+                this.fetchData();
             },            
-            attributeChanged: function(attributeName) {
-                this.render();
+            attributeChanged: function(attributeName, oldValue, newValue) {
+                if (attributeName == "value") {
+                    this.getInput().value = newValue;
+                } else {
+                    this.render();
+                }
+                if (this.optionData) {
+                    this.renderData(this.optionData);
+                }
             }
         },
         methods: {
-            render: function() {
-                this.labelTag.htmlFor = this.field;
-                this.labelTag.textContent = this.label;
-                this.input.placeholder = this.placeholder;
-                this.input.id = this.field;
-                this.input.name = this.field;
-                this.input.value = this.value;
-                this.input.disabled = this.disabled;
-                if (this.error) {
-                    this.errorSpan.textContent = this.error;
-                    this.containerDiv.className = "form-group has-error";
-                } else {
-                    this.errorSpan.textContent = '';
-                    this.containerDiv.className = "form-group";
-                }                    
+            render: function () {
+                var data = {
+                    errorClass: this.errorClass,
+                    placeholder: this.placeholder || '',
+                    disabled: this.disabled === true,
+                    error: this.error || '',
+                    field: this.field || '',
+                    label: this.label || '',
+                    value: this.value || '',
+                };
+                var html = RenderTemplate(data);
+                this.getRenderingRoot().innerHTML = html;
             }                     
         },
         events: {
             keyup: function () {
-                this.value = this.input.value;
+                this.value = this.getInput().value;
                 this.fetchData();
             }
         }
@@ -69,5 +86,7 @@
     xtag.register('input-autocomplete', protoTag);
 })(window, document);
 </script>
+
+
 
 <link rel="import" href="./dropdown-option.html">

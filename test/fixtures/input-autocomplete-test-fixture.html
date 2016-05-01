@@ -290,11 +290,11 @@
 			describe("with option", function () {
 		   	    it("sets value as option value", function () {
 					var inputAutocomplete = getTestElement("#withField");
+					var dropdownOption = document.createElement("dropdown-option");
+					dropdownOption.value = "value1"
+					inputAutocomplete.selectOption(dropdownOption);
+					expect(inputAutocomplete.value).to.equal(dropdownOption.value);
 					var input = inputAutocomplete.querySelector("input");
-	                var dropdownOption = document.createElement("dropdown-option");
-	                dropdownOption.value = "value1"
-	                inputAutocomplete.selectOption(dropdownOption);
-	                expect(inputAutocomplete.value).to.equal(dropdownOption.value);
 					expect(input.value).to.equal(dropdownOption.value);
 		    	});
 		    });  

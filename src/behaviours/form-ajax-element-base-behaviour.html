@@ -109,7 +109,7 @@
                 },
                 removeErrors: function () {
                     var inputElements = this.getInputElements();
-                    _.each(inputElement, function (inputElement) {
+                    _.each(inputElements, function (inputElement) {
                         inputElement.error = "";
                     });
                 },
@@ -119,7 +119,7 @@
                         var errorMessage = error.message;
                         var inputElement = this.selectInRenderingRoot("[field=" + field + "]");
                         inputElement.error = errorMessage;                        
-                    });
+                    }, this);
                 },
                 clearingProcedure: function (self) {
                     if (self.clearOnSuccess) {

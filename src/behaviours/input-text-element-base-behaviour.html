@@ -39,16 +39,23 @@
                 }
             },
             methods: {
+                getInput: function () {
+                    var input = this.selectInRenderingRoot("input");
+                    if (!input) {
+                        throw new Error("A input must be defined inside input text template")
+                    }
+                    return input;
+                },
                 validate: function () {
                     if (!this.required) {
                         this.error = '';
                         return true;
                     }
-                    if (!this.input.value) {
+                    if (!this.getInput().value) {
                         this.error = this.requiredMessage;
                         return false;
                     }
-                    if (!this.input.value.trim()) {
+                    if (!this.getInput().value.trim()) {
                         this.error = this.requiredMessage;
                         return false;
                     }
@@ -58,7 +65,7 @@
             },
             events: {
                 keyup: function (e) {
-                    this.value = this.input.value;
+                    this.value = this.getInput().value;
                     this.validate();
                 }
             }

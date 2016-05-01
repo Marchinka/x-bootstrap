@@ -24,8 +24,9 @@
                         method: "GET",
                         data: { search: this.value },
                         success: function (result) {
-                            self.dropdownMenu.innerHTML = '';
-                            self.renderData(result);
+                            self.optionData = result;
+                            self.getDropdownMenu().innerHTML = '';
+                            self.renderData(self.optionData);
                         }
                     });
                 },
@@ -35,7 +36,7 @@
                     }
 
                     this.value = dropdownOption.value;
-                    this.input.value = this.value;
+                    this.getInput().value = this.value;
                     this.validate();
                 }                        
             }

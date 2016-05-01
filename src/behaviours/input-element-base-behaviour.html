@@ -36,6 +36,15 @@
                         this.xtag.data.error = value;
                     }
                 },
+                errorClass: {
+                    attribute: {},
+                    get: function() {
+                        if (this.error) {
+                            return "form-group has-error";
+                        }
+                        return "form-group";
+                    }
+                },                
                 value: {
                     attribute: {},
                     get: function() {
