@@ -23,8 +23,7 @@
                 this.render();
             },
             inserted: function () {
-                // Executing this operation during insert destroys some events on x-tag accessors in child elements
-                if (false) {
+                if (this.getUrl) {
                     this.fetchInitialData();
                 }
             }

@@ -82,12 +82,16 @@
             }
         };
 
-        var protoTag = xBootstrap.extend(baseObject).from(xBootstrap.getInputElementBase());
+        var protoTag = xBootstrap
+            .extend(baseObject)
+            .from(xBootstrap.getInputElementBase());
         return protoTag;
     };
         
     window.xBootstrap.getDropdownInputTextElementBase = function () {
-        var protoTag = xBootstrap.extend(xBootstrap.getInputTextElementBase()).from(xBootstrap.getDropdownInputElementBase());
+        var protoTag = xBootstrap
+            .extend(xBootstrap.getInputTextElementBase())
+            .from(xBootstrap.getDropdownInputElementBase());
         return protoTag;
     };
 

@@ -6,26 +6,12 @@
     <div class="<%= errorClass %>">
         <div class="dropdown">
             <label for="<%= field %>"><%= label %></label>
-
-            <% if ( disabled ) { %>
-
             <input class="form-control" type="text"
                 id="<%= field %>" 
                 name="<%= field %>" 
                 value="<%= value %>"
                 placeholder="<%= placeholder %>"
-                disabled/>
-
-            <% }  else { %>
-
-            <input class="form-control" type="text"
-                id="<%= field %>" 
-                name="<%= field %>" 
-                value="<%= value %>"
-                placeholder="<%= placeholder %>"/>
-
-            <% }  %>
-
+                />
             <ul class="dropdown-menu" style="width: 100%"></ul>
         </div>
         <span class="help-block"><%= error %></span>
@@ -34,10 +20,8 @@
 
 <script>
 (function(window, document) {
-    var thatDoc = document;
     var thisDoc = document._currentScript.ownerDocument;
-    var templateHtml =thisDoc.querySelector('#autocomplete-template').innerHTML;
-    var autocompleteTemplate = _.unescape(templateHtml);
+    var autocompleteTemplate = _.unescape(thisDoc.querySelector('#autocomplete-template').innerHTML);
     var RenderTemplate = _.template(autocompleteTemplate);
 
     var baseObject = {
@@ -72,6 +56,7 @@
                 };
                 var html = RenderTemplate(data);
                 this.getRenderingRoot().innerHTML = html;
+                this.getInput().disabled = this.disabled;
             }                     
         },
         events: {
