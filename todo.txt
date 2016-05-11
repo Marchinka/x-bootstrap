@@ -1,2 +1,0 @@
-- Validation result handling
-- Syncronize with url in search-form
