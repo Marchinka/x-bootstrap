@@ -1,25 +1,18 @@
 var gulp = require('gulp');
 
-var clean = require('gulp-clean');
- gulp.task('clean', function () {
-	return gulp.src('./public', { read: false })
-		.pipe(clean());
-});
-
 var webpack = require('webpack-stream');
 var webpackConfiguration = {
-	context: __dirname + "/src",
-	entry: "./js/app.js",
+	context: __dirname + "/sources",
+	entry: "./x-bootstrap.js",
 	output: {
-	filename: "js/app.js",
-		path: __dirname + "/public",
+    filename: "x-bootstrap.js"
 	},
 	module: {
   		loaders: [
     		{
       			test: /\.jsx?$/,
       			exclude: /(node_modules|bower_components)/,
-      			loader: 'babel', // 'babel-loader' is also a legal name to reference
+      			loader: 'babel',
       			query: {
         			presets: ['es2015']
       			}
@@ -28,7 +21,7 @@ var webpackConfiguration = {
 	}
 };
 gulp.task('js-bundle', function() {
-  return gulp.src('src/index.js')
+  return gulp.src('sources/x-bootstrap.js')
     .pipe(webpack(webpackConfiguration))
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('dist'));
 });
