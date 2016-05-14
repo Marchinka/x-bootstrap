@@ -98,15 +98,12 @@
 	  }
 
 	  _createClass(TestElement, [{
-	    key: "createdCallback",
-	    value: function createdCallback() {}
-	  }, {
 	    key: "render",
 	    value: function render() {
 	      var model = {
 	        text: this.dataset['text']
 	      };
-	      var html = "<h1>Un bellissimo modo di programmare</h1>\n                  <p>" + model.text + "</p>";
+	      var html = "<h1>Un bellissimo modo di programmare</h1>\n                <p>" + model.text + "</p>";
 	      this.innerHTML = html;
 	    }
 	  }, {
