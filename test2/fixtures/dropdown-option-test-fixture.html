@@ -1,0 +1,44 @@
+<div id="withValue">
+	<dropdown-option value="helloWorld"></dropdown-option>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var tagSutName = "dropdown-option";
+
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector(tagSutName);
+		return sut.getRenderingRoot();
+	};
+
+	describe("<dropdown-option/>", function() {
+	    it("is rendered with an inner <li/>", function() {
+			var option = getTestElement("#withValue");
+			var expectedLi = option.querySelector("li");
+			expect(expectedLi).not.to.be.null;
+	    }); 
+
+	    it("is rendered with an inner <li/> with an inner '<a/>'", function() {
+			var option = getTestElement("#withValue");
+			var expectedLi = option.querySelector("li a");
+			expect(expectedLi).not.to.be.null;
+	    });               
+
+	    it("is rendered with an inner <a/> with 'selectable' class", function() {
+			var option = getTestElement("#withValue");
+			var expectedLi = option.querySelector("a.selectable");
+			expect(expectedLi).not.to.be.null;
+	    });               
+
+	    describe("with 'value' attribute", function() {
+	        it("is rendered with inner text content equal to parent's 'value'", function() {
+				var option = getTestElement("#withValue");
+				var expectedLi = option.querySelector("a");
+				expect(expectedLi.textContent).to.equal(option.value);
+	        });
+	    });
+	});
+})(document._currentScript.ownerDocument);
+</script>
+

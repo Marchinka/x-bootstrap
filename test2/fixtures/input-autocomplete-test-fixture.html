@@ -1,0 +1,392 @@
+<div id="withField">
+	<input-autocomplete field="fieldName"></input-autocomplete>
+</div>
+
+<div id="withError">
+	<input-autocomplete error="Some validation error"></input-autocomplete>
+</div>
+
+<div id="withoutError">
+	<input-autocomplete></input-autocomplete>
+</div>
+
+<div id="withEmptyError">
+	<input-autocomplete error=""></input-autocomplete>
+</div>
+
+<div id="withPlaceholder">
+	<input-autocomplete placeholder="input placeholder"></input-autocomplete>
+</div>
+
+<div id="withValue">
+	<input-autocomplete value="input text value"></input-autocomplete>
+</div>
+
+<div id="withLabel">
+	<input-autocomplete label="field description"></input-autocomplete>
+</div>
+
+<div id="withDisabled">
+	<input-autocomplete disabled></input-autocomplete>
+</div>
+
+<div id="get data test elements">
+	<div id="withoutField">
+		<input-autocomplete value="something"></input-autocomplete>
+	</div>
+
+	<div id="withFieldAndValue">
+		<input-autocomplete field="fieldName" value="something"></input-autocomplete>
+	</div>	
+</div>
+
+<div id="not required test elements">
+	<div id="withValueAndNotRequired">
+		<input-autocomplete value="something"></input-autocomplete>
+	</div>
+
+	<div id="withoutValueAndNotRequired">
+		<input-autocomplete></input-autocomplete>
+	</div>
+
+	<div id="withEmptyValueAndNotRequired">
+		<input-autocomplete value=""></input-autocomplete>
+	</div>
+
+	<div id="withWhitespaceValueAndNotRequired">
+		<input-autocomplete value="       "></input-autocomplete>
+	</div>	
+</div>
+
+<div id="required test elements">
+	<div id="withValueAndRequired">
+		<input-autocomplete required 
+					required-message="Fill this input" 
+					value="something">
+		</input-autocomplete>
+	</div>
+
+	<div id="withoutValueAndRequired">
+		<input-autocomplete required 
+					required-message="Fill this input">
+		</input-autocomplete>
+	</div>
+
+	<div id="withEmptyValueAndRequired">
+		<input-autocomplete required 
+					required-message="Fill this input" 
+					value="">
+		</input-autocomplete>
+	</div>
+
+	<div id="withWhitespaceValueAndRequired">
+		<input-autocomplete required 
+					required-message="Fill this input" 
+					value="        ">
+		</input-autocomplete>
+	</div>	
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var tagSutName = "input-autocomplete";
+
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector(tagSutName);
+		return sut.getRenderingRoot();
+	};
+
+	describe("<input-autocomplete/>", function() {
+	    describe("with 'field' attribute", function() {
+	        it("is rendered with inner <input/> with 'name' attribute equal to parent's 'field' attribute", function() {
+				var inputAutocomplete = getTestElement("#withField");
+				var expectedInput = inputAutocomplete.querySelector("input");
+				expect(expectedInput.name).to.equal(inputAutocomplete.field);
+	        });
+
+	        it("is rendered with inner <input/> with 'id' attribute equal to parent's 'field' attribute", function() {
+				var inputAutocomplete = getTestElement("#withField");
+				var expectedInput = inputAutocomplete.querySelector("input");
+				expect(expectedInput.id).to.equal(inputAutocomplete.field);
+	        });
+
+	        it("is rendered with inner <label/> with 'for' attribute equal to parent's 'field' attribute", function () {
+				var inputAutocomplete = getTestElement("#withField");
+				var expectedLabel = inputAutocomplete.querySelector("label");
+				expect(expectedLabel.htmlFor).to.equal(inputAutocomplete.field);
+		    });
+	    });
+
+		describe("with 'disabled' attribute", function () {
+	    	it("is renderd with disabled input", function () {
+				var testElement = getTestElement("#withDisabled");
+				var input = testElement.querySelector("input");
+				expect(input.disabled).to.be.true;
+	    	});
+		});
+
+	    describe("with 'error' attribute", function () {
+		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {
+				var inputAutocomplete = getTestElement("#withError");
+				var expectedSpan = inputAutocomplete.querySelector(".help-block");
+				expect(expectedSpan.innerHTML).to.equal(inputAutocomplete.error);
+		    });
+
+		    it("is rendered with 'has-error' and 'form-group' class on input group", function () {
+				var inputAutocomplete = getTestElement("#withError");
+				var expectedContainer = inputAutocomplete.querySelector(".has-error");
+				expect(expectedContainer).not.to.be.null;
+		    });
+	    });
+
+	    describe("without 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var inputAutocomplete = getTestElement("#withoutError");
+				var unexpectedContainer = inputAutocomplete.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });
+
+	    describe("with string empty 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var inputAutocomplete = getTestElement("#withEmptyError");
+				var unexpectedContainer = inputAutocomplete.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });
+
+	    describe("with 'placeholder' attribute", function() {
+	        it("is rendered with inner <input/> with 'placeholder' attribute equal to parent's 'placeholder' attribute", function() {
+				var inputAutocomplete = getTestElement("#withPlaceholder");
+				var expectedInput = inputAutocomplete.querySelector("input");
+				expect(expectedInput.placeholder).to.equal(inputAutocomplete.placeholder);
+	        });
+	    });
+
+	    describe("with 'value' attribute", function() {
+	        it("is rendered with inner <input/> with 'value' attribute equal to parent's 'value' attribute", function() {
+				var inputAutocomplete = getTestElement("#withValue");
+				var expectedInput = inputAutocomplete.querySelector("input");
+				expect(expectedInput.value).to.equal(inputAutocomplete.value);
+	        });
+	    });
+
+	    describe("with 'label' attribute", function() {
+	        it("is rendered with inner <label/> with text content equal to parent's 'label' attribute", function() {
+				var inputAutocomplete = getTestElement("#withLabel");
+				var expectedLabel = inputAutocomplete.querySelector("label");
+				expect(expectedLabel.textContent).to.equal(inputAutocomplete.label);
+	        });
+	    });
+
+		describe("with no 'field' property", function () {
+	    	describe("getData method", function () {
+		   	    it("throws error", function () {
+					var inputAutocomplete = getTestElement("#withoutField");
+					var errorMessage = "Attribute 'field' must be defined";
+					expect(inputAutocomplete.getData).to.throw(errorMessage);
+			    });	    
+	    	});
+		});
+
+		describe("with 'field' and 'value' properties", function () {
+	    	describe("getData method", function () {
+		   	    it("returns result with input value", function () {
+					var inputAutocomplete = getTestElement("#withFieldAndValue");
+					var result = inputAutocomplete.getData();
+					expect(result[inputAutocomplete.field]).to.equal(inputAutocomplete.value);
+			    });	    
+	    	});
+		});
+
+		describe("without 'required' attribute", function () {
+	    	describe("validate method", function () {
+		   	    it("returns true in if 'value' is populated", function () {
+					var inputAutocomplete = getTestElement("#withValueAndNotRequired");
+					var result = inputAutocomplete.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is undefined", function () {
+					var inputAutocomplete = getTestElement("#withoutValueAndNotRequired");
+					var result = inputAutocomplete.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is string empty", function () {
+					var inputAutocomplete = getTestElement("#withEmptyValueAndNotRequired");
+					var result = inputAutocomplete.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is string whitespace", function () {
+					var inputAutocomplete = getTestElement("#withWhitespaceValueAndNotRequired");
+					var result = inputAutocomplete.validate();
+					expect(result).to.be.true;
+			    });
+	    	});
+		});
+
+		describe("with 'required' and 'required-message' attribute", function () {
+	    	describe("validate method", function () {
+		   	    it("returns true in if 'value' is populated", function () {
+					var inputAutocomplete = getTestElement("#withValueAndRequired");
+					var result = inputAutocomplete.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns false if 'value' is undefined", function () {
+					var inputAutocomplete = getTestElement("#withoutValueAndRequired");
+					var result = inputAutocomplete.validate();
+					expect(result).to.be.false;
+			    });
+
+			    it("returns false if 'value' is string empty", function () {
+					var inputAutocomplete = getTestElement("#withEmptyValueAndRequired");
+					var result = inputAutocomplete.validate();
+					expect(result).to.be.false;
+			    });
+
+			    it("returns false if 'value' is string whitespace", function () {
+					var inputAutocomplete = getTestElement("#withWhitespaceValueAndRequired");
+					var result = inputAutocomplete.validate();
+					expect(result).to.be.false;
+			    });
+	    	});
+		});
+
+		describe("'showMenu' method", function () {
+	   	    it("adds 'open' class to 'dropdown' element", function () {
+				var inputAutocomplete = getTestElement("#withField");
+				inputAutocomplete.showMenu();
+				var dropdown = inputAutocomplete.querySelector(".dropdown");
+				expect(dropdown.className).to.equal("dropdown open");
+	    	});
+		});
+
+		describe("'hideMenu' method", function () {
+	   	    it("removed 'open' class to 'dropdown' element", function () {
+				var inputAutocomplete = getTestElement("#withField");
+				inputAutocomplete.showMenu();
+				inputAutocomplete.hideMenu();
+				var dropdown = inputAutocomplete.querySelector(".dropdown");
+				expect(dropdown.className).to.equal("dropdown");
+	    	});
+		});
+
+		describe("'selectOption' method", function () {
+			describe("with undefined input", function () {
+		   	    it("throws error", function () {
+					var inputAutocomplete = getTestElement("#withField");
+					var expectedError = "Not valid option for selection."
+					var exceptionThrower = function () {
+						inputAutocomplete.selectOption(undefined);
+					};
+					expect(exceptionThrower).to.throw(expectedError);
+		    	});
+		    });
+
+			describe("with option", function () {
+		   	    it("sets value as option value", function () {
+					var inputAutocomplete = getTestElement("#withField");
+					var dropdownOption = document.createElement("dropdown-option");
+					dropdownOption.value = "value1"
+					inputAutocomplete.selectOption(dropdownOption);
+					expect(inputAutocomplete.value).to.equal(dropdownOption.value);
+					var input = inputAutocomplete.querySelector("input");
+					expect(input.value).to.equal(dropdownOption.value);
+		    	});
+		    });  
+		});
+
+		describe("'renderData' method", function () {
+			describe("with undefined input", function () {
+		   	    it("throws error", function () {
+					var inputAutocomplete = getTestElement("#withField");
+					var expectedError = "Data not defined."
+					var exceptionThrower = function () {
+						inputAutocomplete.renderData(undefined);
+					};
+					expect(exceptionThrower).to.throw(expectedError);
+		    	});
+		    });
+
+			describe("with input not being a collection", function () {
+		   	    it("throws error", function () {
+					var inputAutocomplete = getTestElement("#withField");
+					var expectedError = "Data must be a collection."
+					var exceptionThrower = function () {
+						inputAutocomplete.renderData({});
+					};
+					expect(exceptionThrower).to.throw(expectedError);
+		    	});
+		    });	  
+
+			describe("with valid input", function () {
+		   	    it("renders two <dropdown-option/>", function () {
+					var data = [
+						{ key: "key1", value: "value1"},
+						{ key: "key2", value: "value2"}
+					];
+					var inputAutocomplete = getTestElement("#withField");
+					inputAutocomplete.renderData(data);
+					var options = inputAutocomplete.querySelector(".dropdown-menu")
+								.querySelectorAll("dropdown-option");
+					expect(options.length).to.equal(2);
+		    	});
+		    });  
+		});
+
+		describe("with 'url' attribute", function () {
+	   	    it("calls url via ajax get in 'fetchData' method", function () {
+				// SETUP
+				var restUrl = "api/path/to/empty/options/for/autocomplete";
+				var mock = {
+					method: "GET",
+					url: restUrl,
+					result: {}
+				};
+				window.restService.addMockedAjax(mock);
+				var newElement = document.createElement("input-autocomplete");
+				newElement.url = restUrl;			
+				currentDocument.body.appendChild(newElement);
+
+				// EXERCISE
+				newElement.fetchData();
+
+				// ASSERT
+				expect(mock.called).to.be.true;
+		    });
+
+	   	    it("calls url via ajax get in 'fetchData' method and renders option from fetched data", function () {
+				// SETUP
+				var data = [
+					{ key: "key1", value: "value1"},
+					{ key: "key2", value: "value2"}
+				];
+				var restUrl = "api/path/to/options/for/autocomplete";
+				var mock = {
+					method: "GET",
+					url: restUrl,
+					result: data,
+					callbackType: "success"
+				};
+				window.restService.addMockedAjax(mock);
+				var newElement = document.createElement("input-autocomplete");
+				newElement.url = restUrl;			
+				currentDocument.body.appendChild(newElement);
+
+				// EXERCISE
+				newElement.fetchData();
+
+				// ASSERT
+				var options = newElement
+								.querySelector(".dropdown-menu")
+								.querySelectorAll("dropdown-option");
+				expect(options.length).to.equal(2);
+		    });	   
+		});
+	});
+})(document._currentScript.ownerDocument);
+</script>

@@ -1,0 +1,315 @@
+<div id="withField">
+	<input-textarea field="fieldName"></input-textarea>
+</div>
+
+<div id="withError">
+	<input-textarea error="Some validation error"></input-textarea>
+</div>
+
+<div id="withoutError">
+	<input-textarea></input-textarea>
+</div>
+
+<div id="withEmptyError">
+	<input-textarea error=""></input-textarea>
+</div>
+
+<div id="withPlaceholder">
+	<input-textarea placeholder="input placeholder"></input-textarea>
+</div>
+
+<div id="withDisabled">
+	<input-textarea disabled></input-textarea>
+</div>
+
+<div id="withPlaceholder">
+	<input-textarea placeholder="input placeholder"></input-textarea>
+</div>
+
+<div id="withValue">
+	<input-textarea value="input text value"></input-textarea>
+</div>
+
+<div id="withLabel">
+	<input-textarea label="field description"></input-textarea>
+</div>
+
+<div id="get data test elements">
+	<div id="withoutField">
+		<input-textarea value="something"></input-textarea>
+	</div>
+
+	<div id="withFieldAndValue">
+		<input-textarea field="fieldName" value="something"></input-textarea>
+	</div>	
+</div>
+
+<div id="not required test elements">
+	<div id="withValueAndNotRequired">
+		<input-textarea value="something"></input-textarea>
+	</div>
+
+	<div id="withoutValueAndNotRequired">
+		<input-textarea></input-textarea>
+	</div>
+
+	<div id="withEmptyValueAndNotRequired">
+		<input-textarea value=""></input-textarea>
+	</div>
+
+	<div id="withWhitespaceValueAndNotRequired">
+		<input-textarea value="       "></input-textarea>
+	</div>	
+</div>
+
+<div id="required test elements">
+	<div id="withValueAndRequired">
+		<input-textarea required 
+					required-message="Fill this input" 
+					value="something">
+		</input-textarea>
+	</div>
+
+	<div id="withoutValueAndRequired">
+		<input-textarea required 
+					required-message="Fill this input">
+		</input-textarea>
+	</div>
+
+	<div id="withEmptyValueAndRequired">
+		<input-textarea required 
+					required-message="Fill this input" 
+					value="">
+		</input-textarea>
+	</div>
+
+	<div id="withWhitespaceValueAndRequired">
+		<input-textarea required 
+					required-message="Fill this input" 
+					value="        ">
+		</input-textarea>
+	</div>	
+</div>
+
+<div id="withMaxLength">
+	<div id="withMaxLengthAndShortValue">
+		<input-textarea max-length="12" 
+					max-length-message="This field is too long" 
+					value="5544545">
+		</input-textarea>
+	</div>
+
+	<div id="withMaxLengthAndTooLongValue">
+		<input-textarea max-length="3" 
+					max-length-message="This field is too long" 
+					value="123456">
+		</input-textarea>		
+	</div>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var tagSutName = "input-textarea";
+
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector(tagSutName);
+		return sut.getRenderingRoot();
+	};
+
+	describe("<input-textarea/>", function() {
+	    describe("with 'field' attribute", function() {
+	        it("is rendered with inner <textarea/> with 'name' attribute equal to parent's 'field' attribute", function() {
+				var testElement = getTestElement("#withField");
+				var expectedInput = testElement.querySelector("textarea");
+				expect(expectedInput.name).to.equal(testElement.field);
+	        });
+
+	        it("is rendered with inner <textarea/> with 'id' attribute equal to parent's 'field' attribute", function() {
+				var testElement = getTestElement("#withField");
+				var expectedInput = testElement.querySelector("textarea");
+				expect(expectedInput.id).to.equal(testElement.field);
+	        });
+
+	        it("is rendered with inner <label/> with 'for' attribute equal to parent's 'field' attribute", function () {
+				var testElement = getTestElement("#withField");
+				var expectedLabel = testElement.querySelector("label");
+				expect(expectedLabel.htmlFor).to.equal(testElement.field);
+		    });
+	    });
+
+	    describe("with 'error' attribute", function () {
+		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {
+				var testElement = getTestElement("#withError");
+				var expectedSpan = testElement.querySelector(".help-block");
+				expect(expectedSpan.innerHTML).to.equal(testElement.error);
+		    });
+
+		    it("is rendered with 'has-error' and 'form-group' class on input group", function () {
+				var testElement = getTestElement("#withError");
+				var expectedContainer = testElement.querySelector(".has-error");
+				expect(expectedContainer).not.to.be.null;
+		    });
+	    });
+
+	    describe("without 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var testElement = getTestElement("#withoutError");
+				var unexpectedContainer = testElement.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });
+
+	    describe("with string empty 'error' attribute", function () {
+		    it("is rendered without 'has-error' class and with 'form-group' class on input group", function () {
+				var testElement = getTestElement("#withEmptyError");
+				var unexpectedContainer = testElement.querySelector(".has-error");
+				expect(unexpectedContainer).to.be.null;
+		    });
+	    });
+
+	    describe("with 'placeholder' attribute", function() {
+	        it("is rendered with inner <input/> with 'placeholder' attribute equal to parent's 'placeholder' attribute", function() {
+				var testElement = getTestElement("#withPlaceholder");
+				var expectedInput = testElement.querySelector("textarea");
+				expect(expectedInput.placeholder).to.equal(testElement.placeholder);
+	        });
+	    });
+
+	    describe("with 'max-length' attribute", function() {
+	    	describe("and short value", function() {
+	    		describe("'validate' method", function() {
+			        it("returns true", function() {
+						var testElement = getTestElement("#withMaxLengthAndShortValue");
+						var result = testElement.validate();
+						expect(result).to.be.true;
+			        });
+			    });
+		    });
+
+	    	describe("and too long value", function() {
+	    		describe("'validate' method", function() {
+			        it("returns false", function() {
+						var testElement = getTestElement("#withMaxLengthAndTooLongValue");
+						var result = testElement.validate();
+						expect(result).to.be.false;
+			        });
+			    });
+		    });		    
+	    });
+
+	    describe("with 'value' attribute", function() {
+	        it("is rendered with inner <textarea/> with 'value' attribute equal to parent's 'value' attribute", function() {
+				var testElement = getTestElement("#withValue");
+				var expectedInput = testElement.querySelector("textarea");
+				expect(expectedInput.value).to.equal(testElement.value);
+	        });
+	    });
+
+	    describe("with 'label' attribute", function() {
+	        it("is rendered with inner <label/> with text content equal to parent's 'label' attribute", function() {
+				var testElement = getTestElement("#withLabel");
+				var expectedLabel = testElement.querySelector("label");
+				expect(expectedLabel.textContent).to.equal(testElement.label);
+	        });
+	    });
+
+		describe("with no 'field' property", function () {
+	    	describe("getData method", function () {
+		   	    it("throws error", function () {
+					var testElement = getTestElement("#withoutField");
+					var errorMessage = "Attribute 'field' must be defined";
+					expect(testElement.getData).to.throw(errorMessage);
+			    });	    
+	    	});
+		});
+
+		describe("with 'disabled' attribute", function () {
+	    	it("is renderd with disabled input", function () {
+				var testElement = getTestElement("#withDisabled");
+				var input = testElement.querySelector("textarea");
+				expect(input.disabled).to.be.true;
+	    	});
+		});
+
+		describe("with 'field' and 'value' properties", function () {
+	    	describe("getData method", function () {
+		   	    it("returns result with input value", function () {
+					var testElement = getTestElement("#withFieldAndValue");
+					var result = testElement.getData();
+					expect(result[testElement.field]).to.equal(testElement.value);
+			    });	    
+	    	});
+		});
+
+		describe("without 'required' attribute", function () {
+	    	describe("validate method", function () {
+		   	    it("returns true in if 'value' is populated", function () {
+					var testElement = getTestElement("#withValueAndNotRequired");
+					var result = testElement.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is undefined", function () {
+					var testElement = getTestElement("#withoutValueAndNotRequired");
+					var result = testElement.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is string empty", function () {
+					var testElement = getTestElement("#withEmptyValueAndNotRequired");
+					var result = testElement.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns true even if 'value' is string whitespace", function () {
+					var testElement = getTestElement("#withWhitespaceValueAndNotRequired");
+					var result = testElement.validate();
+					expect(result).to.be.true;
+			    });
+	    	});
+		});
+
+		describe("with 'required' and 'required-message' attribute", function () {
+	    	describe("validate method", function () {
+		   	    it("returns true in if 'value' is populated", function () {
+					var testElement = getTestElement("#withValueAndRequired");
+					var result = testElement.validate();
+					expect(result).to.be.true;
+			    });
+
+			    it("returns false if 'value' is undefined", function () {
+					var testElement = getTestElement("#withoutValueAndRequired");
+					var result = testElement.validate();
+					expect(result).to.be.false;
+			    });
+
+			    it("returns false if 'value' is string empty", function () {
+					var testElement = getTestElement("#withEmptyValueAndRequired");
+					var result = testElement.validate();
+					expect(result).to.be.false;
+			    });
+
+			    it("returns false if 'value' is string whitespace", function () {
+					var testElement = getTestElement("#withWhitespaceValueAndRequired");
+					var result = testElement.validate();
+					expect(result).to.be.false;
+			    });
+	    	});
+		});
+	});
+
+	// describe("test spies", function () {
+	// 	it("are worning", function () {
+	// 		function myFunction () {
+	// 		  console.log("Hello");
+	// 		}
+			
+	// 		myFunction = chai.spy(myFunction);
+	// 		expect(myFunction).to.be.spy;
+	// 		myFunction();
+	// 		expect(myFunction).to.have.been.called();
+	// 	});
+	// });
+})(document._currentScript.ownerDocument);
+</script>

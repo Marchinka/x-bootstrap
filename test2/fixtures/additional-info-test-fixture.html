@@ -1,0 +1,107 @@
+<div id="with-no-field">
+	<additional-info></additional-info>
+</div>
+
+<div id="with-field">
+	<additional-info field="fieldName"></additional-info>
+</div>
+
+<div id="with-field-and-value">
+	<additional-info field="fieldName" value="testValue"></additional-info>
+</div>
+
+<div id="with-field-and-value-of">
+	<additional-info field="fieldName" value-of="testFunction"></additional-info>
+</div>
+
+<div id="with-field-and-invalid-value-of">
+	<additional-info field="fieldName" value-of="testzzzZZZZZzzzzFunction"></additional-info>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector("additional-info");
+		return sut.getRenderingRoot();
+	};	
+
+	describe("<additional-info/>", function() {
+		describe("with no 'field' property", function() {
+			describe("'getData' method", function() {
+				it("throws error", function() {
+					var testElement = getTestElement("#with-no-field");
+					var errorThrower = function () {
+						testElement.getData();
+					};
+					var errorMessage = "Attribute 'field' must be defined";
+					expect(errorThrower).to.throw(errorMessage);				
+				});
+			});
+		});
+
+		describe("with 'field' property", function() {
+			describe("and no 'value' property", function() {
+				describe("'getData' method", function() {
+					it("returns object with element property's value equal to undefined", function() {
+						var testElement = getTestElement("#with-field");
+						var result = testElement.getData();
+						expect(result[testElement.field]).to.be.null;
+					});
+				});
+			});
+
+			describe("and 'value' property", function() {
+				describe("'getData' method", function() {
+					it("returns object with element property's value equal to element value", function() {
+						var testElement = getTestElement("#with-field-and-value");
+						var result = testElement.getData();
+						expect(result[testElement.field]).to.equal(testElement.value);
+					});
+				});
+			});
+
+			describe("and 'value-of' property", function() {
+				describe("'getData' method", function() {
+					it("returns object with element property's value return value of function in window scope", function() {
+						var returnValue = "testValue";
+						window.testFunction = function () {
+							return returnValue;
+						};
+						var testElement = getTestElement("#with-field-and-value-of");
+						var result = testElement.getData();
+						expect(result[testElement.field]).to.equal(returnValue);
+					});
+				});
+			});	
+
+			describe("and 'value-of' property with unexisting funziont name", function() {
+				describe("'getData' method", function() {
+					it("throws error", function() {
+						var testElement = getTestElement("#with-field-and-invalid-value-of");
+						var errorThrower = function () {
+							testElement.getData();
+						};
+						var errorMessage = "Not valid function name in 'value-of' property";
+						expect(errorThrower).to.throw(errorMessage);
+					});
+				});
+			});	
+
+			// describe("and 'value-of' property assigned in javascript", function() {
+			// 	describe("'getData' method", function() {
+			// 		it("returns object with element property's value return value of assigned function", function() {
+			// 			var returnValue = "testValue";
+			// 			var testElement = getTestElement("#with-field");
+			// 			testElement.valueOf = function () {
+			// 				return returnValue;
+			// 			};
+			// 			var result = testElement.getData();
+			// 			expect(result[testElement.field]).to.equal(returnValue);
+			// 		});
+			// 	});
+			// });									
+		});		
+	});
+})(document._currentScript.ownerDocument);
+</script>

@@ -1,0 +1,98 @@
+<div id="withAllAttributes">
+	<input-radio field="fieldName" value="fieldValue" label="fieldLabel"></input-radio>
+</div>
+
+<div id="withoutCheckedAttribute">
+	<input-radio field="fieldName" value="fieldValue" label="fieldLabel"></input-radio>
+</div>
+
+<div id="withCheckedAttribute">
+	<input-radio field="fieldName" value="fieldValue" label="fieldLabel" checked></input-radio>
+</div>
+
+<div id="withDisabled">
+	<input-radio disabled></input-radio>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var tagSutName = "input-radio";
+
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector(tagSutName);
+		return sut.getRenderingRoot();
+	};
+
+	describe("<input-radio/>", function() {
+		it("is rendered with inner <input/>", function() {
+			var testElement = getTestElement("#withAllAttributes");
+			var innerInput = testElement.querySelector("input");
+			expect(innerInput).not.to.be.null;
+		});
+
+		it("is rendered with inner <label/>", function() {
+			var testElement = getTestElement("#withAllAttributes");
+			var innerInput = testElement.querySelector("label");
+			expect(innerInput).not.to.be.null;
+		});
+
+		it("is rendered with inner <input/> of type 'radio'", function() {
+			var testElement = getTestElement("#withAllAttributes");
+			var innerInput = testElement.querySelector("input");
+			expect(innerInput.type).to.equal("radio");
+		});
+
+		describe("with 'disabled' attribute", function () {
+	    	it("is renderd with disabled input", function () {
+				var testElement = getTestElement("#withDisabled");
+				var input = testElement.querySelector("input");
+				expect(input.disabled).to.be.true;
+	    	});
+		});
+
+		describe("with field attribute", function() {
+		    it("is rendered with inner <input/> with 'name' equal to 'field' attribute value", function() {
+				var testElement = getTestElement("#withAllAttributes");
+				var innerInput = testElement.querySelector("input");
+				expect(innerInput.name).to.equal(testElement.field);
+		    }); 
+	    }); 
+
+		describe("with field attribute", function() {
+		    it("is rendered with inner <input/> with 'id' equal to 'field' attribute value", function() {
+				var testElement = getTestElement("#withAllAttributes");
+				var innerInput = testElement.querySelector("input");
+				expect(innerInput.id).to.equal(testElement.field);
+		    }); 
+	    });	    
+
+		describe("with field attribute", function() {
+		    it("is rendered with inner <label/> inner text equal to 'label' attribute value", function() {
+				var testElement = getTestElement("#withAllAttributes");
+				var innerText = testElement
+					.querySelector("label")
+					.querySelector("span").textContent;
+				expect(innerText).to.equal(testElement.label);
+		    }); 
+	    });
+
+		describe("without checked attribute", function() {
+		    it("is rendered with inner <input/> unchecked", function() {
+				var testElement = getTestElement("#withoutCheckedAttribute");
+				var innerInput = testElement.querySelector("input");
+				expect(innerInput.checked).to.be.false;
+		    }); 
+	    });	 	    
+
+		describe("with checked attribute", function() {
+		    it("is rendered with inner <input/> checked", function() {
+				var testElement = getTestElement("#withCheckedAttribute");
+				var innerInput = testElement.querySelector("input");
+				expect(innerInput.checked).to.be.true;
+		    }); 
+	    });	    
+	});
+})(document._currentScript.ownerDocument);
+</script>
+
