@@ -10,13 +10,7 @@ if (!window.xtag) {
 	throw new Error("x-tag-core.js must be loaded as a dependency, as long as JQuery, Underscore.js and Bootstrap.js.");
 }
 
-import TestElement from "./test-element.js";
-import Base from "./base.js";
 import utils from "./utils/utils.js";
-
-var protoTag = utils.extend(TestElement).from(Base);
-
-import elementBase from "./base/element-base.js";
 
 
 
@@ -30,4 +24,13 @@ xtag.register('additional-info', utils
 	.extend(additionaInfo)
 	.from(elementBase));
 
+import inputRadio from "./elements/input-radio.js";
+xtag.register('input-radio', utils
+	.extend(inputRadio)
+	.from(elementBase));
+
+import TestElement from "./test-element.js";
+import Base from "./base.js";
+var protoTag = utils.extend(TestElement).from(Base);
+import elementBase from "./base/element-base.js";
 xtag.register('x-clock', protoTag);

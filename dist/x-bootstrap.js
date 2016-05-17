@@ -46,29 +46,33 @@
 
 	"use strict";
 
-	var _testElement = __webpack_require__(1);
-
-	var _testElement2 = _interopRequireDefault(_testElement);
-
-	var _base = __webpack_require__(2);
-
-	var _base2 = _interopRequireDefault(_base);
-
-	var _utils = __webpack_require__(3);
+	var _utils = __webpack_require__(1);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _elementBase = __webpack_require__(5);
-
-	var _elementBase2 = _interopRequireDefault(_elementBase);
-
-	var _dropdownOption = __webpack_require__(6);
+	var _dropdownOption = __webpack_require__(3);
 
 	var _dropdownOption2 = _interopRequireDefault(_dropdownOption);
 
-	var _additionalInfo = __webpack_require__(7);
+	var _additionalInfo = __webpack_require__(4);
 
 	var _additionalInfo2 = _interopRequireDefault(_additionalInfo);
+
+	var _inputRadio = __webpack_require__(5);
+
+	var _inputRadio2 = _interopRequireDefault(_inputRadio);
+
+	var _testElement = __webpack_require__(6);
+
+	var _testElement2 = _interopRequireDefault(_testElement);
+
+	var _base = __webpack_require__(7);
+
+	var _base2 = _interopRequireDefault(_base);
+
+	var _elementBase = __webpack_require__(8);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -84,64 +88,18 @@
 		throw new Error("x-tag-core.js must be loaded as a dependency, as long as JQuery, Underscore.js and Bootstrap.js.");
 	}
 
-	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
-
 	xtag.register('dropdown-option', _utils2.default.extend(_dropdownOption2.default).from(_elementBase2.default));
 
 	xtag.register('additional-info', _utils2.default.extend(_additionalInfo2.default).from(_elementBase2.default));
+
+	xtag.register('input-radio', _utils2.default.extend(_inputRadio2.default).from(_elementBase2.default));
+
+	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
 
 	xtag.register('x-clock', protoTag);
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = {
-	  lifecycle: {
-	    created: function created() {
-	      this.start();
-	    }
-	  },
-	  methods: {
-	    start: function start() {
-	      this.update();
-	      this.xtag.interval = setInterval(this.update.bind(this), 1000);
-	    }
-	  },
-	  events: {
-	    tap: function tap() {
-	      if (this.xtag.interval) this.stop();else this.start();
-	    }
-	  }
-	};
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = {
-	  methods: {
-	    stop: function stop() {
-	      this.xtag.interval = clearInterval(this.xtag.interval);
-	    },
-	    update: function update() {
-	      this.textContent = new Date().toLocaleTimeString();
-	    }
-	  }
-	};
-
-/***/ },
-/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -150,7 +108,7 @@
 	  value: true
 	});
 
-	var _extender = __webpack_require__(4);
+	var _extender = __webpack_require__(2);
 
 	var _extender2 = _interopRequireDefault(_extender);
 
@@ -163,7 +121,7 @@
 	};
 
 /***/ },
-/* 4 */
+/* 2 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -209,28 +167,7 @@
 	exports.default = Extender;
 
 /***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.default = {
-		methods: {
-			getRenderingRoot: function getRenderingRoot() {
-				// Could be used for shadow dom
-				return this;
-			},
-			selectInRenderingRoot: function selectInRenderingRoot(selector) {
-				return this.getRenderingRoot().querySelector(selector);
-			}
-		}
-	};
-
-/***/ },
-/* 6 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -282,7 +219,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -327,19 +264,177 @@
 	            }
 	            var data = {};
 	            if (this.valueOf) {
-	                var functionInWindow = window[this.valueOf];
-	                if (functionInWindow) {
-	                    var result = functionInWindow();
-	                    data[this.field] = result;
-	                } else {
-	                    throw new Error("Not valid function name in 'value-of' property");
-	                }
+	                data[this.field] = this.executeFromWindow();
 	            } else {
 	                data[this.field] = this.value;
 	            }
 	            return data;
+	        },
+	        executeFromWindow: function executeFromWindow() {
+	            var functionInWindow = window[this.valueOf];
+	            if (functionInWindow) {
+	                var result = functionInWindow();
+	                return result;
+	            } else {
+	                throw new Error("Not valid function name in 'value-of' property");
+	            }
 	        }
 	    }
+	};
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var template = function template(data) {
+	    return '    \n\t<div class="radio">\n      <label>\n      \t<input \tid="' + data.field + '" \n      \t\t\tname="' + data.field + '"\n      \t\t\ttype="radio"\n      \t\t\t' + data.disabled + '\n      \t\t\t' + data.checked + '/>\n      \t\t<span class="radio-label">' + data.label + '</span>\n      \t</label>\n    </div>';
+	};
+
+	exports.default = {
+	    accessors: {
+	        field: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('field');
+	            },
+	            set: function set(value) {
+	                this.xtag.data.field = value;
+	            }
+	        },
+	        value: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('value');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.value = data;
+	            }
+	        },
+	        label: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('label');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.label = data;
+	            }
+	        },
+	        checked: {
+	            attribute: { boolean: true },
+	            get: function get() {
+	                return this.hasAttribute('checked');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.checked = data === true;
+	            }
+	        },
+	        disabled: {
+	            attribute: { boolean: true },
+	            get: function get() {
+	                return this.hasAttribute('disabled');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.disabled = data === true;
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        created: function created() {
+	            this.render();
+	        },
+	        attributeChanged: function attributeChanged(attributeName) {
+	            this.render();
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            var data = {
+	                field: this.field,
+	                value: this.value,
+	                label: this.label,
+	                disabled: this.disabled ? 'disabled' : '',
+	                checked: this.checked ? 'checked' : ''
+	            };
+	            this.getRenderingRoot().innerHTML = template(data);
+	        },
+	        isChecked: function isChecked() {
+	            return this.input.checked;
+	        }
+	    }
+	};
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  lifecycle: {
+	    created: function created() {
+	      this.start();
+	    }
+	  },
+	  methods: {
+	    start: function start() {
+	      this.update();
+	      this.xtag.interval = setInterval(this.update.bind(this), 1000);
+	    }
+	  },
+	  events: {
+	    tap: function tap() {
+	      if (this.xtag.interval) this.stop();else this.start();
+	    }
+	  }
+	};
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  methods: {
+	    stop: function stop() {
+	      this.xtag.interval = clearInterval(this.xtag.interval);
+	    },
+	    update: function update() {
+	      this.textContent = new Date().toLocaleTimeString();
+	    }
+	  }
+	};
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = {
+		methods: {
+			getRenderingRoot: function getRenderingRoot() {
+				// Could be used for shadow dom
+				return this;
+			},
+			selectInRenderingRoot: function selectInRenderingRoot(selector) {
+				return this.getRenderingRoot().querySelector(selector);
+			}
+		}
 	};
 
 /***/ }

@@ -35,17 +35,20 @@ export default {
             }
             var data = {};
             if (this.valueOf) {
-                var functionInWindow = window[this.valueOf];
-                if (functionInWindow) {
-                    var result = functionInWindow();
-                    data[this.field] = result;
-                } else {
-                    throw new Error("Not valid function name in 'value-of' property");
-                }
+            	data[this.field] = this.executeFromWindow();
             } else {
                 data[this.field] = this.value;
             }
             return data;
-        }
+        },
+        executeFromWindow: function () {
+            var functionInWindow = window[this.valueOf];
+            if (functionInWindow) {
+                var result = functionInWindow();
+                return result;
+            } else {
+                throw new Error("Not valid function name in 'value-of' property");
+            }
+        }     
     }
 };
