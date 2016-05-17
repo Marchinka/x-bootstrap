@@ -5,7 +5,7 @@
 </div>
 
 <div id="withError">
-	<input-radio-group error="Erro Message"></input-radio-group>
+	<input-radio-group error="Error Message"></input-radio-group>
 </div>
 
 <div id="withoutError">
@@ -143,7 +143,7 @@
 		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {
 				var testElement = getTestElement("#withError");
 				var expectedSpan = testElement.querySelector(".help-block");
-				expect(expectedSpan.innerHTML).to.equal(testElement.error);
+				expect(expectedSpan.innerHTML).to.contain(testElement.error);
 		    });
 
 		    it("is rendered with 'has-error' and 'form-group' class on input group", function () {
@@ -265,7 +265,10 @@
 			   	    it("throws error", function () {
 						var element = getTestElement("#withoutField");
 						var errorMessage = "Attribute 'field' must be defined";
-						expect(element.getData).to.throw(errorMessage);
+						var exceptionThrower = function () {
+							element.getData();
+						};
+						expect(exceptionThrower).to.throw(errorMessage);
 				    });	    
 		    	});
 		    });

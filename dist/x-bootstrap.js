@@ -50,29 +50,37 @@
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _dropdownOption = __webpack_require__(3);
+	var _elementBase = __webpack_require__(3);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	var _inputElementBase = __webpack_require__(4);
+
+	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
+
+	var _dropdownOption = __webpack_require__(5);
 
 	var _dropdownOption2 = _interopRequireDefault(_dropdownOption);
 
-	var _additionalInfo = __webpack_require__(4);
+	var _additionalInfo = __webpack_require__(6);
 
 	var _additionalInfo2 = _interopRequireDefault(_additionalInfo);
 
-	var _inputRadio = __webpack_require__(5);
+	var _inputRadio = __webpack_require__(7);
 
 	var _inputRadio2 = _interopRequireDefault(_inputRadio);
 
-	var _testElement = __webpack_require__(6);
+	var _inputRadioGroup = __webpack_require__(8);
+
+	var _inputRadioGroup2 = _interopRequireDefault(_inputRadioGroup);
+
+	var _testElement = __webpack_require__(9);
 
 	var _testElement2 = _interopRequireDefault(_testElement);
 
-	var _base = __webpack_require__(7);
+	var _base = __webpack_require__(10);
 
 	var _base2 = _interopRequireDefault(_base);
-
-	var _elementBase = __webpack_require__(8);
-
-	var _elementBase2 = _interopRequireDefault(_elementBase);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -94,8 +102,9 @@
 
 	xtag.register('input-radio', _utils2.default.extend(_inputRadio2.default).from(_elementBase2.default));
 
-	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
+	xtag.register('input-radio-group', _utils2.default.extend(_inputRadioGroup2.default).from(_inputElementBase2.default));
 
+	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
 	xtag.register('x-clock', protoTag);
 
 /***/ },
@@ -144,12 +153,12 @@
 		_createClass(Extender, [{
 			key: "from",
 			value: function from(baseElement) {
-				var target = _.clone(this.elementToExtend);
 				var source = _.clone(baseElement);
-				var lifecycle = _(target.lifecycle || {}).extend(source.lifecycle || {});
-				var accessors = _(target.accessors || {}).extend(source.accessors || {});
-				var methods = _(target.methods || {}).extend(source.methods || {});
-				var events = _(target.events || {}).extend(source.events || {});
+				var target = _.clone(this.elementToExtend);
+				var lifecycle = _(source.lifecycle || {}).extend(target.lifecycle || {});
+				var accessors = _(source.accessors || {}).extend(target.accessors || {});
+				var methods = _(source.methods || {}).extend(target.methods || {});
+				var events = _(source.events || {}).extend(target.events || {});
 				var result = {
 					lifecycle: lifecycle,
 					accessors: accessors,
@@ -168,6 +177,118 @@
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = {
+		methods: {
+			getRenderingRoot: function getRenderingRoot() {
+				// Could be used for shadow dom
+				return this;
+			},
+			selectInRenderingRoot: function selectInRenderingRoot(selector) {
+				return this.getRenderingRoot().querySelector(selector);
+			}
+		}
+	};
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(3);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var inputElementBase = {
+	    accessors: {
+	        field: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('field');
+	            },
+	            set: function set(value) {
+	                this.xtag.data.field = value;
+	            }
+	        },
+	        label: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('label');
+	            },
+	            set: function set(value) {
+	                this.xtag.data.label = value;
+	            }
+	        },
+	        error: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('error') || '';
+	            },
+	            set: function set(value) {
+	                this.xtag.data.error = value;
+	            }
+	        },
+	        errorClass: {
+	            attribute: {},
+	            get: function get() {
+	                if (this.error) {
+	                    return "form-group has-error";
+	                }
+	                return "form-group";
+	            }
+	        },
+	        value: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('value') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.value = data;
+	            }
+	        },
+	        disabled: {
+	            attribute: {},
+	            get: function get() {
+	                return this.hasAttribute('disabled');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.disabled = data;
+	            }
+	        }
+	    },
+	    methods: {
+	        getData: function getData() {
+	            if (!this.field) {
+	                throw new Error("Attribute 'field' must be defined");
+	            }
+	            var data = {};
+	            data[this.field] = this.value;
+	            return data;
+	        }
+	    }
+	};
+
+	exports.default = _utils2.default.extend(inputElementBase).from(_elementBase2.default);
+
+/***/ },
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -219,7 +340,7 @@
 	};
 
 /***/ },
-/* 4 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -283,7 +404,7 @@
 	};
 
 /***/ },
-/* 5 */
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -292,7 +413,7 @@
 	    value: true
 	});
 	var template = function template(data) {
-	    return '    \n\t<div class="radio">\n      <label>\n      \t<input \tid="' + data.field + '" \n      \t\t\tname="' + data.field + '"\n      \t\t\ttype="radio"\n      \t\t\t' + data.disabled + '\n      \t\t\t' + data.checked + '/>\n      \t\t<span class="radio-label">' + data.label + '</span>\n      \t</label>\n    </div>';
+	    return '    \n\t<div class="radio">\n      <label>\n      \t<input \tname="' + data.field + '"\n      \t\t\tvalue="' + data.value + '"\n      \t\t\ttype="radio"\n      \t\t\t' + data.disabled + '\n      \t\t\t' + data.checked + '/>\n      \t\t<span class="radio-label">' + data.label + '</span>\n      \t</label>\n    </div>';
 	};
 
 	exports.default = {
@@ -363,13 +484,159 @@
 	            this.getRenderingRoot().innerHTML = template(data);
 	        },
 	        isChecked: function isChecked() {
-	            return this.input.checked;
+	            var input = this.selectInRenderingRoot("input");
+	            var manuallyChecked = input.checked;
+	            var input = this.selectInRenderingRoot("input[checked]");
+	            var defaultCheck = input ? input.checked : false;
+	            return manuallyChecked || defaultCheck;
 	        }
 	    }
 	};
 
 /***/ },
-/* 6 */
+/* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var template = function template(data) {
+	    return '    \n\t<div class="' + data.errorClass + '">\n        <label>' + data.label + '</label>\n        <div class="inner-content">\n        \t' + data.innerContent + '\n        </div>\n        <span class="help-block">\n        \t' + data.error + '\n        </span>\n    </div>';
+	};
+
+	exports.default = {
+	    accessors: {
+	        required: {
+	            attribute: { boolean: true },
+	            get: function get() {
+	                return this.hasAttribute('required');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.required = data;
+	            }
+	        },
+	        requiredMessage: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('required-message') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.requiredMessage = data;
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        created: function created() {
+	            this.innerContent = this.innerHTML;
+	            this.render();
+	        },
+	        attributeChanged: function attributeChanged(attributeName) {
+	            if (attributeName === "error") {
+	                this.selectInRenderingRoot(".form-group").className = this.errorClass;
+	                this.selectInRenderingRoot(".help-block").textContent = this.error;
+	                return;
+	            }
+	            this.render();
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            var data = {
+	                label: this.label,
+	                error: this.error,
+	                errorClass: this.errorClass,
+	                innerContent: this.innerContent
+	            };
+	            this.getRenderingRoot().innerHTML = template(data);
+	            this.innerRadios = this.getRenderingRoot().querySelectorAll("input-radio");
+	            this.assignFieldAndDisabledToRadios();
+	            this.checkRadioValue(this.value);
+	            this.fixMultipleChecks();
+	        },
+	        assignFieldAndDisabledToRadios: function assignFieldAndDisabledToRadios() {
+	            _.each(this.innerRadios, function (radioButton) {
+	                radioButton.field = this.field;
+	                radioButton.disabled = radioButton.disabled || this.disabled;
+	            }, this);
+	        },
+	        fixMultipleChecks: function fixMultipleChecks() {
+	            var checkedRadios = this.getRenderingRoot().querySelectorAll("input-radio[checked]");
+	            if (checkedRadios.length < 2) {
+	                return;
+	            }
+
+	            _.each(checkedRadios, function (radio) {
+	                radio.checked = false;
+	            });
+
+	            _.last(checkedRadios).checked = true;
+	        },
+	        uncheckAllRadios: function uncheckAllRadios() {
+	            _.each(this.innerRadios, function (radioButton) {
+	                radioButton.checked = false;
+	            }, this);
+	        },
+	        checkRadioValue: function checkRadioValue(radioValue) {
+	            if (!radioValue) {
+	                return;
+	            }
+	            _.each(this.innerRadios, function (radioButton) {
+	                radioButton.checked = radioButton.value == radioValue;
+	            }, this);
+	        },
+	        renderErrorTag: function renderErrorTag() {
+	            if (this.error) {
+	                this.errorSpan.textContent = this.error;
+	                this.formGroup.className = "form-group has-error";
+	            } else {
+	                this.errorSpan.textContent = undefined;
+	                this.formGroup.className = "form-group";
+	            }
+	        },
+	        validate: function validate() {
+	            if (!this.required) {
+	                this.error = '';
+	                return true;
+	            }
+	            var data = this.getData();
+	            if (!data[this.field]) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+	            this.error = '';
+	            return true;
+	        },
+	        getData: function getData() {
+	            if (!this.field) {
+	                throw new Error("Attribute 'field' must be defined");
+	            }
+
+	            var data = {};
+	            _.each(this.innerRadios, function (radio) {
+	                if (radio.isChecked()) {
+	                    radio.checked = true;
+	                    data[this.field] = radio.value;
+	                } else {
+	                    radio.checked = false;
+	                }
+	            }, this);
+
+	            return data;
+	        }
+	    },
+	    events: {
+	        tap: function tap(e) {
+	            if (e.target.nodeName === "INPUT-RADIO" || e.target.nodeName === "INPUT" || e.target.className === "radio-label") {
+	                this.error = '';
+	            }
+	        }
+	    }
+	};
+
+/***/ },
+/* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -397,7 +664,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -414,27 +681,6 @@
 	      this.textContent = new Date().toLocaleTimeString();
 	    }
 	  }
-	};
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.default = {
-		methods: {
-			getRenderingRoot: function getRenderingRoot() {
-				// Could be used for shadow dom
-				return this;
-			},
-			selectInRenderingRoot: function selectInRenderingRoot(selector) {
-				return this.getRenderingRoot().querySelector(selector);
-			}
-		}
 	};
 
 /***/ }

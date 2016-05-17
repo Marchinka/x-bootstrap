@@ -4,12 +4,12 @@ export default class Extender {
 	}
 
 	from (baseElement) {
-		var target =_.clone(this.elementToExtend);
 		var source =_.clone(baseElement);
-		var lifecycle = _(target.lifecycle || {}).extend(source.lifecycle || {});
-		var accessors = _(target.accessors || {}).extend(source.accessors || {});
-		var methods = _(target.methods || {}).extend(source.methods || {});
-		var events = _(target.events || {}).extend(source.events || {});
+		var target =_.clone(this.elementToExtend);
+		var lifecycle = _(source.lifecycle || {}).extend(target.lifecycle || {});
+		var accessors = _(source.accessors || {}).extend(target.accessors || {});
+		var methods = _(source.methods || {}).extend(target.methods || {});
+		var events = _(source.events || {}).extend(target.events || {});
 		var result = {
 			lifecycle: lifecycle,
 			accessors: accessors,

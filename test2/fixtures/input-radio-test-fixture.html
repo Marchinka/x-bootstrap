@@ -60,14 +60,6 @@
 	    }); 
 
 		describe("with field attribute", function() {
-		    it("is rendered with inner <input/> with 'id' equal to 'field' attribute value", function() {
-				var testElement = getTestElement("#withAllAttributes");
-				var innerInput = testElement.querySelector("input");
-				expect(innerInput.id).to.equal(testElement.field);
-		    }); 
-	    });	    
-
-		describe("with field attribute", function() {
 		    it("is rendered with inner <label/> inner text equal to 'label' attribute value", function() {
 				var testElement = getTestElement("#withAllAttributes");
 				var innerText = testElement

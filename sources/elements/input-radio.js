@@ -1,8 +1,8 @@
 const template = data => `    
 	<div class="radio">
       <label>
-      	<input 	id="${data.field}" 
-      			name="${data.field}"
+      	<input 	name="${data.field}"
+      			value="${data.value}"
       			type="radio"
       			${data.disabled}
       			${data.checked}/>
@@ -78,7 +78,11 @@ export default {
             this.getRenderingRoot().innerHTML = template(data);
         },
         isChecked: function () {
-            return this.input.checked;
+            var input = this.selectInRenderingRoot("input");
+            var manuallyChecked = input.checked;
+            var input = this.selectInRenderingRoot("input[checked]");
+            var defaultCheck = input ? input.checked : false;
+            return manuallyChecked || defaultCheck;
         }
     }
 };

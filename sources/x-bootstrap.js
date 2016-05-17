@@ -11,8 +11,8 @@ if (!window.xtag) {
 }
 
 import utils from "./utils/utils.js";
-
-
+import elementBase from "./base/element-base.js";
+import inputElementBase from "./base/input-element-base.js";
 
 import dropdownElement from "./elements/dropdown-option.js";
 xtag.register('dropdown-option', utils
@@ -29,8 +29,12 @@ xtag.register('input-radio', utils
 	.extend(inputRadio)
 	.from(elementBase));
 
+import inputRadioGroup from "./elements/input-radio-group.js";
+xtag.register('input-radio-group', utils
+	.extend(inputRadioGroup)
+	.from(inputElementBase));
+
 import TestElement from "./test-element.js";
 import Base from "./base.js";
 var protoTag = utils.extend(TestElement).from(Base);
-import elementBase from "./base/element-base.js";
 xtag.register('x-clock', protoTag);
