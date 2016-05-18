@@ -96,13 +96,13 @@
 		throw new Error("x-tag-core.js must be loaded as a dependency, as long as JQuery, Underscore.js and Bootstrap.js.");
 	}
 
-	xtag.register('dropdown-option', _utils2.default.extend(_dropdownOption2.default).from(_elementBase2.default));
+	_utils2.default.register('dropdown-option', _utils2.default.extend(_dropdownOption2.default).from(_elementBase2.default));
 
-	xtag.register('additional-info', _utils2.default.extend(_additionalInfo2.default).from(_elementBase2.default));
+	_utils2.default.register('additional-info', _utils2.default.extend(_additionalInfo2.default).from(_elementBase2.default));
 
-	xtag.register('input-radio', _utils2.default.extend(_inputRadio2.default).from(_elementBase2.default));
+	_utils2.default.register('input-radio', _utils2.default.extend(_inputRadio2.default).from(_elementBase2.default));
 
-	xtag.register('input-radio-group', _utils2.default.extend(_inputRadioGroup2.default).from(_inputElementBase2.default));
+	_utils2.default.register('input-radio-group', _utils2.default.extend(_inputRadioGroup2.default).from(_inputElementBase2.default));
 
 	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
 	xtag.register('x-clock', protoTag);
@@ -126,6 +126,20 @@
 	exports.default = {
 	  extend: function extend(element) {
 	    return new _extender2.default(element);
+	  },
+	  forMoUnsupported: function forMoUnsupported(action) {
+	    if (!this.isBrowserSupportingMo()) {
+	      action();
+	    }
+	  },
+	  isBrowserSupportingMo: function isBrowserSupportingMo() {
+	    if (!document.all) {
+	      return true;
+	    }
+	    return false;
+	  },
+	  register: function register(elementName, object) {
+	    return xtag.register(elementName, object);
 	  }
 	};
 
@@ -177,13 +191,20 @@
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	exports.default = {
 		methods: {
 			getRenderingRoot: function getRenderingRoot() {
@@ -192,6 +213,15 @@
 			},
 			selectInRenderingRoot: function selectInRenderingRoot(selector) {
 				return this.getRenderingRoot().querySelector(selector);
+			},
+			raiseAttributeChanged: function raiseAttributeChanged(attributeName, oldValue, newValue) {
+				if (_utils2.default.isBrowserSupportingMo()) {
+					return;
+				} else if (!this.changeCallback) {
+					console.log("You should implement a 'changeCallback' for browsers not supporting mutation observers.");
+				} else {
+					this.changeCallback(attributeName, oldValue, newValue);
+				}
 			}
 		}
 	};
@@ -242,7 +272,9 @@
 	                return this.getAttribute('error') || '';
 	            },
 	            set: function set(value) {
+	                var old = this.xtag.data.error;
 	                this.xtag.data.error = value;
+	                this.raiseAttributeChanged("error", old, value);
 	            }
 	        },
 	        errorClass: {
@@ -533,12 +565,7 @@
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
-	            if (attributeName === "error") {
-	                this.selectInRenderingRoot(".form-group").className = this.errorClass;
-	                this.selectInRenderingRoot(".help-block").textContent = this.error;
-	                return;
-	            }
-	            this.render();
+	            this.changeCallback(attributeName);
 	        }
 	    },
 	    methods: {
@@ -624,6 +651,14 @@
 	            }, this);
 
 	            return data;
+	        },
+	        changeCallback: function changeCallback(attributeName) {
+	            if (attributeName === "error") {
+	                this.selectInRenderingRoot(".form-group").className = this.errorClass;
+	                this.selectInRenderingRoot(".help-block").textContent = this.error;
+	                return;
+	            }
+	            this.render();
 	        }
 	    },
 	    events: {

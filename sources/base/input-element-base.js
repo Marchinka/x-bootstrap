@@ -27,7 +27,9 @@ var inputElementBase = {
                 return this.getAttribute('error') || '';
             },
             set: function(value) {
+                var old = this.xtag.data.error;
                 this.xtag.data.error = value;
+                this.raiseAttributeChanged("error", old, value);
             }
         },
         errorClass: {

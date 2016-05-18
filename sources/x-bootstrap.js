@@ -15,22 +15,22 @@ import elementBase from "./base/element-base.js";
 import inputElementBase from "./base/input-element-base.js";
 
 import dropdownElement from "./elements/dropdown-option.js";
-xtag.register('dropdown-option', utils
+utils.register('dropdown-option', utils
 	.extend(dropdownElement)
 	.from(elementBase));
 
 import additionaInfo from "./elements/additional-info.js";
-xtag.register('additional-info', utils
+utils.register('additional-info', utils
 	.extend(additionaInfo)
 	.from(elementBase));
 
 import inputRadio from "./elements/input-radio.js";
-xtag.register('input-radio', utils
+utils.register('input-radio', utils
 	.extend(inputRadio)
 	.from(elementBase));
 
 import inputRadioGroup from "./elements/input-radio-group.js";
-xtag.register('input-radio-group', utils
+utils.register('input-radio-group', utils
 	.extend(inputRadioGroup)
 	.from(inputElementBase));
 

@@ -36,12 +36,7 @@ export default {
             this.render();
         },
         attributeChanged: function(attributeName) {
-        	if (attributeName === "error") {
-        		this.selectInRenderingRoot(".form-group").className = this.errorClass;
-        		this.selectInRenderingRoot(".help-block").textContent = this.error;
-        		return;
-        	}
-            this.render();
+        	this.changeCallback(attributeName);
         }
     },
     methods: {
@@ -127,6 +122,14 @@ export default {
             }, this);
             
             return data;
+        },
+        changeCallback: function (attributeName) {
+            if (attributeName === "error") {
+                this.selectInRenderingRoot(".form-group").className = this.errorClass;
+                this.selectInRenderingRoot(".help-block").textContent = this.error;
+                return;
+            }
+            this.render();
         }
     },
     events: {
