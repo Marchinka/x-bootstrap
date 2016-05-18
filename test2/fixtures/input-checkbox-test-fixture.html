@@ -129,7 +129,7 @@
 	        it("is rendered with inner <label/> with text content equal to parent's 'label' attribute", function() {
 				var inputCheckbox = getTestElement("#withLabel");
 				var expectedLabel = inputCheckbox.querySelector("label");
-				expect(expectedLabel.textContent).to.equal(inputCheckbox.label);
+				expect(expectedLabel.textContent).to.contain(inputCheckbox.label);
 	        });
 	    });
 
@@ -138,7 +138,10 @@
 		   	    it("throws error", function () {
 					var inputCheckbox = getTestElement("#withoutField");
 					var errorMessage = "Attribute 'field' must be defined";
-					expect(inputCheckbox.getData).to.throw(errorMessage);
+					var errorThrower = function () {
+						inputCheckbox.getData();
+					};
+					expect(errorThrower).to.throw(errorMessage);
 			    });	    
 	    	});
 		});

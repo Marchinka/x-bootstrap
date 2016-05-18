@@ -34,6 +34,11 @@ utils.register('input-radio-group', utils
 	.extend(inputRadioGroup)
 	.from(inputElementBase));
 
+import inputCheckbox from "./elements/input-checkbox.js";
+utils.register('input-checkbox', utils
+	.extend(inputCheckbox)
+	.from(inputElementBase));
+
 import TestElement from "./test-element.js";
 import Base from "./base.js";
 var protoTag = utils.extend(TestElement).from(Base);

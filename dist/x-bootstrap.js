@@ -74,11 +74,15 @@
 
 	var _inputRadioGroup2 = _interopRequireDefault(_inputRadioGroup);
 
-	var _testElement = __webpack_require__(9);
+	var _inputCheckbox = __webpack_require__(9);
+
+	var _inputCheckbox2 = _interopRequireDefault(_inputCheckbox);
+
+	var _testElement = __webpack_require__(10);
 
 	var _testElement2 = _interopRequireDefault(_testElement);
 
-	var _base = __webpack_require__(10);
+	var _base = __webpack_require__(11);
 
 	var _base2 = _interopRequireDefault(_base);
 
@@ -103,6 +107,8 @@
 	_utils2.default.register('input-radio', _utils2.default.extend(_inputRadio2.default).from(_elementBase2.default));
 
 	_utils2.default.register('input-radio-group', _utils2.default.extend(_inputRadioGroup2.default).from(_inputElementBase2.default));
+
+	_utils2.default.register('input-checkbox', _utils2.default.extend(_inputCheckbox2.default).from(_inputElementBase2.default));
 
 	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
 	xtag.register('x-clock', protoTag);
@@ -674,6 +680,72 @@
 /* 9 */
 /***/ function(module, exports) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var template = function template(data) {
+	    return '\n    <div class="' + data.errorClass + ' checkbox">\n        <label for="' + data.field + '">\n            <input  type="checkbox"\n                    id="' + data.field + '"\n                    name="' + data.field + '"\n                    ' + data.checked + '\n                    ' + data.disabled + '/>\n            <span class="label-text">' + data.label + '</span>\n        </label>            \n        <span class="help-block">' + data.error + '</span>\n    </div>';
+	};
+
+	exports.default = {
+	    accessors: {
+	        checked: {
+	            attribute: { boolean: true },
+	            get: function get() {
+	                if (this.input) {
+	                    return this.input.checked;
+	                }
+	                return false;
+	            },
+	            set: function set(data) {
+	                if (this.input) {
+	                    this.input.checked = data;
+	                }
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        created: function created() {
+	            this.render();
+	            this.input = this.selectInRenderingRoot("input");
+	        },
+	        attributeChanged: function attributeChanged(attributeName) {
+	            this.render();
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            var data = {
+	                checked: this.checked ? 'checked' : '',
+	                disabled: this.disabled ? 'disabled' : '',
+	                error: this.error,
+	                errorClass: this.errorClass,
+	                field: this.field,
+	                label: this.label
+	            };
+	            this.innerHTML = template(data);
+	        },
+	        validate: function validate() {
+	            this.error = '';
+	            return true;
+	        },
+	        getData: function getData() {
+	            if (!this.field) {
+	                throw new Error("Attribute 'field' must be defined");
+	            }
+	            var data = {};
+	            data[this.field] = this.checked;
+	            return data;
+	        }
+	    }
+	};
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -699,7 +771,7 @@
 	};
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	"use strict";
