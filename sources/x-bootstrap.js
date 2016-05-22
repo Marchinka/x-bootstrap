@@ -51,7 +51,11 @@ var textProto = utils
 	.from(inputTextElementBase);
 utils.register('input-text', textProto);
 
-
+import inputTextarea from "./elements/input-textarea.js";
+var textareaProto = utils
+	.extend(inputTextarea)
+	.from(inputTextElementBase);
+utils.register('input-textarea', textareaProto);
 
 import TestElement from "./test-element.js";
 import Base from "./base.js";

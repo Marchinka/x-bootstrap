@@ -68,7 +68,13 @@ var inputElementBase = {
             var data = {};
             data[this.field] = this.value;
             return data;
-        }
+        },
+        renderError: function () {
+            var container = this.selectInRenderingRoot(".form-group");
+            container.className = this.errorClass;
+            var messageSpan = this.selectInRenderingRoot(".help-block");
+            messageSpan.textContent = this.error;
+        }        
     }
 };
 

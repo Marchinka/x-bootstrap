@@ -142,7 +142,7 @@
 		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {
 				var testElement = getTestElement("#withError");
 				var expectedSpan = testElement.querySelector(".help-block");
-				expect(expectedSpan.innerHTML).to.equal(testElement.error);
+				expect(expectedSpan.innerHTML).to.contain(testElement.error);
 		    });
 
 		    it("is rendered with 'has-error' and 'form-group' class on input group", function () {
@@ -202,7 +202,7 @@
 	        it("is rendered with inner <textarea/> with 'value' attribute equal to parent's 'value' attribute", function() {
 				var testElement = getTestElement("#withValue");
 				var expectedInput = testElement.querySelector("textarea");
-				expect(expectedInput.value).to.equal(testElement.value);
+				expect(expectedInput.value).to.contain(testElement.value);
 	        });
 	    });
 
@@ -210,7 +210,7 @@
 	        it("is rendered with inner <label/> with text content equal to parent's 'label' attribute", function() {
 				var testElement = getTestElement("#withLabel");
 				var expectedLabel = testElement.querySelector("label");
-				expect(expectedLabel.textContent).to.equal(testElement.label);
+				expect(expectedLabel.textContent).to.contain(testElement.label);
 	        });
 	    });
 
@@ -219,7 +219,10 @@
 		   	    it("throws error", function () {
 					var testElement = getTestElement("#withoutField");
 					var errorMessage = "Attribute 'field' must be defined";
-					expect(testElement.getData).to.throw(errorMessage);
+					var errorThrower = function () {
+						testElement.getData();
+					};
+					expect(errorThrower).to.throw(errorMessage);
 			    });	    
 	    	});
 		});

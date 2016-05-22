@@ -100,7 +100,11 @@ export default {
             this.render();
         },
         attributeChanged: function(attributeName) {
-            this.render();
+            if (attributeName === "error") {
+                this.renderError();
+            } else if (attributeName !== "value") {
+                this.render();                
+            }
         }
     },
     methods: {
@@ -144,7 +148,7 @@ export default {
                 return true;
             }
 
-            var input = this.selectInRenderingRoot("input");
+            var input = this.getInput();
             if (!input.value) {
                 this.error = this.requiredMessage;
                 return false;

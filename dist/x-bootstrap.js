@@ -86,11 +86,15 @@
 
 	var _inputText2 = _interopRequireDefault(_inputText);
 
-	var _testElement = __webpack_require__(12);
+	var _inputTextarea = __webpack_require__(12);
+
+	var _inputTextarea2 = _interopRequireDefault(_inputTextarea);
+
+	var _testElement = __webpack_require__(13);
 
 	var _testElement2 = _interopRequireDefault(_testElement);
 
-	var _base = __webpack_require__(13);
+	var _base = __webpack_require__(14);
 
 	var _base2 = _interopRequireDefault(_base);
 
@@ -125,6 +129,9 @@
 
 	var textProto = _utils2.default.extend(_inputText2.default).from(_inputTextElementBase2.default);
 	_utils2.default.register('input-text', textProto);
+
+	var textareaProto = _utils2.default.extend(_inputTextarea2.default).from(_inputTextElementBase2.default);
+	_utils2.default.register('input-textarea', textareaProto);
 
 	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
 	xtag.register('x-clock', protoTag);
@@ -335,6 +342,12 @@
 	            var data = {};
 	            data[this.field] = this.value;
 	            return data;
+	        },
+	        renderError: function renderError() {
+	            var container = this.selectInRenderingRoot(".form-group");
+	            container.className = this.errorClass;
+	            var messageSpan = this.selectInRenderingRoot(".help-block");
+	            messageSpan.textContent = this.error;
 	        }
 	    }
 	};
@@ -923,7 +936,11 @@
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
-	            this.render();
+	            if (attributeName === "error") {
+	                this.renderError();
+	            } else if (attributeName !== "value") {
+	                this.render();
+	            }
 	        }
 	    },
 	    methods: {
@@ -967,7 +984,7 @@
 	                return true;
 	            }
 
-	            var input = this.selectInRenderingRoot("input");
+	            var input = this.getInput();
 	            if (!input.value) {
 	                this.error = this.requiredMessage;
 	                return false;
@@ -1005,6 +1022,110 @@
 /* 12 */
 /***/ function(module, exports) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var template = function template(data) {
+	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <textarea   class="form-control"\n                    id="' + data.field + '"\n                    name="' + data.field + '"\n                    placeholder="' + data.placeholder + '"\n                    value="' + data.value + '"\n                    rows="' + data.rows + '"\n                    ' + data.disabled + '>' + data.value + '</textarea>\n        <span class="help-block">\n            ' + data.error + '\n        </span>\n    </div>';
+	};
+
+	exports.default = {
+	    accessors: {
+	        rows: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('rows');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.rows = data;
+	            }
+	        },
+	        maxLength: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('max-length');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.maxLength = data;
+	            }
+	        },
+	        maxLengthMessage: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('max-length-message') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.maxLengthMessage = data;
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        created: function created() {
+	            this.render();
+	        },
+	        attributeChanged: function attributeChanged(attributeName) {
+	            if (attributeName === "error") {
+	                this.renderError();
+	            } else if (attributeName !== "value") {
+	                this.render();
+	            }
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            var data = {
+	                field: this.field,
+	                label: this.label,
+	                error: this.error,
+	                errorClass: this.errorClass,
+	                value: this.value,
+	                rows: this.rows,
+	                placeholder: this.placeholder,
+	                disabled: this.disabled ? 'disabled' : ''
+	            };
+	            this.innerHTML = template(data);
+	        },
+	        validate: function validate() {
+	            if (this.value && this.maxLength) {
+	                if (this.value.trim().length > this.maxLength) {
+	                    this.error = this.maxLengthMessage;
+	                    return false;
+	                }
+	            }
+
+	            if (!this.required) {
+	                this.error = '';
+	                return true;
+	            }
+	            var textarea = this.selectInRenderingRoot("textarea");
+	            if (!textarea.value) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+	            if (!textarea.value.trim()) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+
+	            this.error = '';
+	            return true;
+	        }
+	    },
+	    events: {
+	        keyup: function keyup(e) {
+	            var textarea = this.selectInRenderingRoot("textarea");
+	            this.value = textarea.value;
+	            this.validate();
+	        }
+	    }
+	};
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -1030,7 +1151,7 @@
 	};
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
