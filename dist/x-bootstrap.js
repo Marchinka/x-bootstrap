@@ -58,31 +58,39 @@
 
 	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
 
-	var _dropdownOption = __webpack_require__(5);
+	var _inputTextElementBase = __webpack_require__(5);
+
+	var _inputTextElementBase2 = _interopRequireDefault(_inputTextElementBase);
+
+	var _dropdownOption = __webpack_require__(6);
 
 	var _dropdownOption2 = _interopRequireDefault(_dropdownOption);
 
-	var _additionalInfo = __webpack_require__(6);
+	var _additionalInfo = __webpack_require__(7);
 
 	var _additionalInfo2 = _interopRequireDefault(_additionalInfo);
 
-	var _inputRadio = __webpack_require__(7);
+	var _inputRadio = __webpack_require__(8);
 
 	var _inputRadio2 = _interopRequireDefault(_inputRadio);
 
-	var _inputRadioGroup = __webpack_require__(8);
+	var _inputRadioGroup = __webpack_require__(9);
 
 	var _inputRadioGroup2 = _interopRequireDefault(_inputRadioGroup);
 
-	var _inputCheckbox = __webpack_require__(9);
+	var _inputCheckbox = __webpack_require__(10);
 
 	var _inputCheckbox2 = _interopRequireDefault(_inputCheckbox);
 
-	var _testElement = __webpack_require__(10);
+	var _inputText = __webpack_require__(11);
+
+	var _inputText2 = _interopRequireDefault(_inputText);
+
+	var _testElement = __webpack_require__(12);
 
 	var _testElement2 = _interopRequireDefault(_testElement);
 
-	var _base = __webpack_require__(11);
+	var _base = __webpack_require__(13);
 
 	var _base2 = _interopRequireDefault(_base);
 
@@ -100,15 +108,23 @@
 		throw new Error("x-tag-core.js must be loaded as a dependency, as long as JQuery, Underscore.js and Bootstrap.js.");
 	}
 
-	_utils2.default.register('dropdown-option', _utils2.default.extend(_dropdownOption2.default).from(_elementBase2.default));
+	var dropdownProto = _utils2.default.extend(_dropdownOption2.default).from(_elementBase2.default);
+	_utils2.default.register('dropdown-option', dropdownProto);
 
-	_utils2.default.register('additional-info', _utils2.default.extend(_additionalInfo2.default).from(_elementBase2.default));
+	var additionaInfoProto = _utils2.default.extend(_additionalInfo2.default).from(_elementBase2.default);
+	_utils2.default.register('additional-info', additionaInfoProto);
 
-	_utils2.default.register('input-radio', _utils2.default.extend(_inputRadio2.default).from(_elementBase2.default));
+	var radioProto = _utils2.default.extend(_inputRadio2.default).from(_elementBase2.default);
+	_utils2.default.register('input-radio', radioProto);
 
-	_utils2.default.register('input-radio-group', _utils2.default.extend(_inputRadioGroup2.default).from(_inputElementBase2.default));
+	var inputGroupProto = _utils2.default.extend(_inputRadioGroup2.default).from(_inputElementBase2.default);
+	_utils2.default.register('input-radio-group', inputGroupProto);
 
-	_utils2.default.register('input-checkbox', _utils2.default.extend(_inputCheckbox2.default).from(_inputElementBase2.default));
+	var checkboxProto = _utils2.default.extend(_inputCheckbox2.default).from(_inputElementBase2.default);
+	_utils2.default.register('input-checkbox', checkboxProto);
+
+	var textProto = _utils2.default.extend(_inputText2.default).from(_inputTextElementBase2.default);
+	_utils2.default.register('input-text', textProto);
 
 	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
 	xtag.register('x-clock', protoTag);
@@ -180,13 +196,13 @@
 				var methods = _(source.methods || {}).extend(target.methods || {});
 				var events = _(source.events || {}).extend(target.events || {});
 				var result = {
-					lifecycle: lifecycle,
-					accessors: accessors,
-					methods: methods,
-					events: events
+					lifecycle: _(lifecycle).clone(),
+					accessors: _(accessors).clone(),
+					methods: _(methods).clone(),
+					events: _(events).clone()
 				};
 				return result;
-				return xtag.merge(source, this.target);;
+				return xtag.merge(source, this.target);
 			}
 		}]);
 
@@ -327,6 +343,91 @@
 
 /***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _inputElementBase = __webpack_require__(4);
+
+	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var inputTextElementBase = {
+	    accessors: {
+	        placeholder: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('placeholder') || '';
+	            },
+	            set: function set(value) {
+	                this.xtag.data.placeholder = value;
+	            }
+	        },
+	        required: {
+	            attribute: { boolean: true },
+	            get: function get() {
+	                return this.hasAttribute('required');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.required = data;
+	            }
+	        },
+	        requiredMessage: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('required-message') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.requiredMessage = data;
+	            }
+	        }
+	    },
+	    methods: {
+	        getInput: function getInput() {
+	            var input = this.selectInRenderingRoot("input");
+	            if (!input) {
+	                throw new Error("A input must be defined inside input text template");
+	            }
+	            return input;
+	        },
+	        validate: function validate() {
+	            if (!this.required) {
+	                this.error = '';
+	                return true;
+	            }
+	            if (!this.getInput().value) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+	            if (!this.getInput().value.trim()) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+	            this.error = '';
+	            return true;
+	        }
+	    },
+	    events: {
+	        keyup: function keyup(e) {
+	            this.value = this.getInput().value;
+	            this.validate();
+	        }
+	    }
+	};
+
+	exports.default = _utils2.default.extend(inputTextElementBase).from(_inputElementBase2.default);
+
+/***/ },
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -378,7 +479,7 @@
 	};
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -442,7 +543,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -532,7 +633,7 @@
 	};
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -677,7 +778,7 @@
 	};
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -743,7 +844,165 @@
 	};
 
 /***/ },
-/* 10 */
+/* 11 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var template = function template(data) {
+	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <input  type="text" \n                class="form-control"\n                id="' + data.field + '"\n                name="' + data.field + '"\n                placeholder="' + data.placeholder + '"\n                value="' + data.value + '"\n                ' + data.disabled + '/>\n        <span class="help-block">\n            ' + data.error + '\n        </span>\n    </div>';
+	};
+
+	var templateWithAddOn = function templateWithAddOn(data) {
+	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <div class=\'input-group\'>\n            <input  type="text" \n                    class="form-control"\n                    id="' + data.field + '"\n                    name="' + data.field + '"\n                    placeholder="' + data.placeholder + '"\n                    value="' + data.value + '"\n                    ' + data.disabled + '/>\n            <span class="input-group-addon">\n                ' + data.innerContent + '\n            </span>\n        </div>                    \n        <span class="help-block">\n            ' + data.error + '\n        </span>\n    </div>';
+	};
+
+	exports.default = {
+	    accessors: {
+	        jquery: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('jquery') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.jquery = data;
+	            }
+	        },
+	        dateFormat: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('date-format') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.dateFormat = data;
+	            }
+	        },
+	        regex: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('regex') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.regex = data;
+	            }
+	        },
+	        regexMessage: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('regex-message') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.regexMessage = data;
+	            }
+	        },
+	        maxLength: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('max-length');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.maxLength = data;
+	            }
+	        },
+	        maxLengthMessage: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('max-length-message') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.maxLengthMessage = data;
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        created: function created() {
+	            this.innerContent = this.innerHTML;
+	            this.render();
+	        },
+	        attributeChanged: function attributeChanged(attributeName) {
+	            this.render();
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            var data = {
+	                field: this.field,
+	                label: this.label,
+	                error: this.error,
+	                value: this.value,
+	                placeholder: this.placeholder,
+	                errorClass: this.errorClass,
+	                disabled: this.disabled ? 'disabled' : ''
+	            };
+	            if (this.innerContent && this.innerContent.trim()) {
+	                data.innerContent = this.innerContent;
+	                this.innerHTML = templateWithAddOn(data);
+	            } else {
+	                this.innerHTML = template(data);
+	            }
+	            this.renderCalendar();
+	        },
+	        validate: function validate() {
+	            if (this.regex) {
+	                var regularExpression = new RegExp(this.regex);
+	                var isMatching = this.value.match(regularExpression);
+	                if (!isMatching) {
+	                    this.error = this.regexMessage;
+	                    return false;
+	                }
+	            }
+
+	            if (this.value && this.maxLength) {
+	                if (this.value.trim().length > this.maxLength) {
+	                    this.error = this.maxLengthMessage;
+	                    return false;
+	                }
+	            }
+
+	            if (!this.required) {
+	                this.error = '';
+	                return true;
+	            }
+
+	            var input = this.selectInRenderingRoot("input");
+	            if (!input.value) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+	            if (!input.value.trim()) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+
+	            this.error = '';
+	            return true;
+	        },
+	        renderCalendar: function renderCalendar() {
+	            var self = this;
+	            if (self.jquery && self.dateFormat) {
+	                var $ = window[self.jquery];
+	                $('#' + self.field).datetimepicker({
+	                    format: self.dateFormat,
+	                    showClear: true,
+	                    showTodayButton: true,
+	                    showClose: true,
+	                    keepOpen: false
+	                });
+	                $('#' + self.field).on("dp.change", function (e) {
+	                    var input = self.selectInRenderingRoot("input");
+	                    self.value = input.value;
+	                    self.validate();
+	                });
+	            }
+	        }
+	    }
+	};
+
+/***/ },
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -771,7 +1030,7 @@
 	};
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports) {
 
 	"use strict";

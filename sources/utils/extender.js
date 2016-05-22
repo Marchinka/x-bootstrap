@@ -11,12 +11,12 @@ export default class Extender {
 		var methods = _(source.methods || {}).extend(target.methods || {});
 		var events = _(source.events || {}).extend(target.events || {});
 		var result = {
-			lifecycle: lifecycle,
-			accessors: accessors,
-			methods: methods,
-			events: events
+			lifecycle: _(lifecycle).clone(),
+			accessors: _(accessors).clone(),
+			methods: _(methods).clone(),
+			events: _(events).clone()
 		};
 		return result;
-		return xtag.merge(source, this.target);;
+		return xtag.merge(source, this.target);
 	}
 }

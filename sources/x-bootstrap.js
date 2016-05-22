@@ -13,31 +13,45 @@ if (!window.xtag) {
 import utils from "./utils/utils.js";
 import elementBase from "./base/element-base.js";
 import inputElementBase from "./base/input-element-base.js";
+import inputTextElementBase from "./base/input-text-element-base.js";
 
 import dropdownElement from "./elements/dropdown-option.js";
-utils.register('dropdown-option', utils
+var dropdownProto = utils
 	.extend(dropdownElement)
-	.from(elementBase));
+	.from(elementBase);
+utils.register('dropdown-option', dropdownProto);
 
 import additionaInfo from "./elements/additional-info.js";
-utils.register('additional-info', utils
+var additionaInfoProto = utils
 	.extend(additionaInfo)
-	.from(elementBase));
+	.from(elementBase);
+utils.register('additional-info', additionaInfoProto);
 
 import inputRadio from "./elements/input-radio.js";
-utils.register('input-radio', utils
+var radioProto = utils
 	.extend(inputRadio)
-	.from(elementBase));
+	.from(elementBase);
+utils.register('input-radio', radioProto);
 
 import inputRadioGroup from "./elements/input-radio-group.js";
-utils.register('input-radio-group', utils
+var inputGroupProto = utils
 	.extend(inputRadioGroup)
-	.from(inputElementBase));
+	.from(inputElementBase);
+utils.register('input-radio-group', inputGroupProto);
 
 import inputCheckbox from "./elements/input-checkbox.js";
-utils.register('input-checkbox', utils
+var checkboxProto = utils
 	.extend(inputCheckbox)
-	.from(inputElementBase));
+	.from(inputElementBase);
+utils.register('input-checkbox', checkboxProto);
+
+import inputText from "./elements/input-text.js";
+var textProto = utils
+	.extend(inputText)
+	.from(inputTextElementBase);
+utils.register('input-text', textProto);
+
+
 
 import TestElement from "./test-element.js";
 import Base from "./base.js";

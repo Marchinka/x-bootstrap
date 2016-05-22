@@ -204,7 +204,7 @@
 		    it("is rendered with inner <span/> with content equal to parent's 'error' attribute", function () {
 				var inputText = getTestElement("#withError");
 				var expectedSpan = inputText.querySelector(".help-block");
-				expect(expectedSpan.innerHTML).to.equal(inputText.error);
+				expect(expectedSpan.innerHTML).to.contain(inputText.error);
 		    });
 
 		    it("is rendered with 'has-error' and 'form-group' class on input group", function () {
@@ -294,7 +294,7 @@
 	        it("is rendered with inner <label/> with text content equal to parent's 'label' attribute", function() {
 				var inputText = getTestElement("#withLabel");
 				var expectedLabel = inputText.querySelector("label");
-				expect(expectedLabel.textContent).to.equal(inputText.label);
+				expect(expectedLabel.textContent).to.contain(inputText.label);
 	        });
 	    });
 
@@ -303,7 +303,10 @@
 		   	    it("throws error", function () {
 					var inputText = getTestElement("#withoutField");
 					var errorMessage = "Attribute 'field' must be defined";
-					expect(inputText.getData).to.throw(errorMessage);
+					var errorThrower = function () {
+						inputText.getData();
+					};
+					expect(errorThrower).to.throw(errorMessage);
 			    });	    
 	    	});
 		});
