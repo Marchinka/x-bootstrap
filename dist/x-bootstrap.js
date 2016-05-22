@@ -66,45 +66,45 @@
 
 	var _dropdownInputElementBase2 = _interopRequireDefault(_dropdownInputElementBase);
 
-	var _dropdownOption = __webpack_require__(7);
+	var _dropdownInputTextElementBase = __webpack_require__(7);
+
+	var _dropdownInputTextElementBase2 = _interopRequireDefault(_dropdownInputTextElementBase);
+
+	var _dropdownOption = __webpack_require__(8);
 
 	var _dropdownOption2 = _interopRequireDefault(_dropdownOption);
 
-	var _additionalInfo = __webpack_require__(8);
+	var _additionalInfo = __webpack_require__(9);
 
 	var _additionalInfo2 = _interopRequireDefault(_additionalInfo);
 
-	var _inputRadio = __webpack_require__(9);
+	var _inputRadio = __webpack_require__(10);
 
 	var _inputRadio2 = _interopRequireDefault(_inputRadio);
 
-	var _inputRadioGroup = __webpack_require__(10);
+	var _inputRadioGroup = __webpack_require__(11);
 
 	var _inputRadioGroup2 = _interopRequireDefault(_inputRadioGroup);
 
-	var _inputCheckbox = __webpack_require__(11);
+	var _inputCheckbox = __webpack_require__(12);
 
 	var _inputCheckbox2 = _interopRequireDefault(_inputCheckbox);
 
-	var _inputText = __webpack_require__(12);
+	var _inputText = __webpack_require__(13);
 
 	var _inputText2 = _interopRequireDefault(_inputText);
 
-	var _inputTextarea = __webpack_require__(13);
+	var _inputTextarea = __webpack_require__(14);
 
 	var _inputTextarea2 = _interopRequireDefault(_inputTextarea);
 
-	var _inputSelect = __webpack_require__(14);
+	var _inputSelect = __webpack_require__(15);
 
 	var _inputSelect2 = _interopRequireDefault(_inputSelect);
 
-	var _testElement = __webpack_require__(15);
+	var _inputAutocomplete = __webpack_require__(16);
 
-	var _testElement2 = _interopRequireDefault(_testElement);
-
-	var _base = __webpack_require__(16);
-
-	var _base2 = _interopRequireDefault(_base);
+	var _inputAutocomplete2 = _interopRequireDefault(_inputAutocomplete);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -144,8 +144,8 @@
 	var selectProto = _utils2.default.extend(_inputSelect2.default).from(_dropdownInputElementBase2.default);
 	_utils2.default.register('input-select', selectProto);
 
-	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
-	xtag.register('x-clock', protoTag);
+	var selectProto = _utils2.default.extend(_inputAutocomplete2.default).from(_dropdownInputTextElementBase2.default);
+	_utils2.default.register('input-autocomplete', selectProto);
 
 /***/ },
 /* 1 */
@@ -477,7 +477,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var dorpdownInputElementBase = {
+	var dropdownInputElementBase = {
 	    accessors: {
 	        url: {
 	            attribute: {},
@@ -498,6 +498,7 @@
 	                throw new Error("Data must be a collection.");
 	            }
 
+	            this.getDropdownMenu().innerHTML = '';
 	            _.each(data, function (optionData) {
 	                var dropdownOption = this.createDropdownOption(optionData);
 	                this.getDropdownMenu().appendChild(dropdownOption);
@@ -512,27 +513,23 @@
 	        },
 	        getDropdown: function getDropdown() {
 	            var dropdown = this.selectInRenderingRoot(".dropdown");
-	            if (!dropdown) {
-	                throw new Error("A .dropdown div must be defined inside autocomplete template");
-	            }
 	            return dropdown;
 	        },
 	        getDropdownMenu: function getDropdownMenu() {
 	            var dropdownMenu = this.selectInRenderingRoot(".dropdown-menu");
-	            if (!dropdownMenu) {
-	                throw new Error("A .dropdown-menu div must be defined inside autocomplete template");
-	            }
 	            return dropdownMenu;
 	        },
 	        showMenu: function showMenu() {
 	            if (this.disabled) {
 	                this.hideMenu();
 	            } else {
-	                this.getDropdown().className = "dropdown open";
+	                var dropdown = this.getDropdown();
+	                if (dropdown) dropdown.className = "dropdown open";
 	            }
 	        },
 	        hideMenu: function hideMenu() {
-	            this.getDropdown().className = "dropdown";
+	            var dropdown = this.getDropdown();
+	            if (dropdown) dropdown.className = "dropdown";
 	        }
 	    },
 	    events: {
@@ -551,10 +548,36 @@
 	    }
 	};
 
-	exports.default = _utils2.default.extend(dorpdownInputElementBase).from(_inputElementBase2.default);
+	exports.default = _utils2.default.extend(dropdownInputElementBase).from(_inputElementBase2.default);
 
 /***/ },
 /* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _dropdownInputElementBase = __webpack_require__(6);
+
+	var _dropdownInputElementBase2 = _interopRequireDefault(_dropdownInputElementBase);
+
+	var _inputTextElementBase = __webpack_require__(5);
+
+	var _inputTextElementBase2 = _interopRequireDefault(_inputTextElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _utils2.default.extend(_dropdownInputElementBase2.default).from(_inputTextElementBase2.default);
+
+/***/ },
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -606,7 +629,7 @@
 	};
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -670,7 +693,7 @@
 	};
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -760,7 +783,7 @@
 	};
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -905,7 +928,7 @@
 	};
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -971,7 +994,7 @@
 	};
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1133,7 +1156,7 @@
 	};
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1237,7 +1260,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1381,51 +1404,90 @@
 	};
 
 /***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = {
-	  lifecycle: {
-	    created: function created() {
-	      this.start();
-	    }
-	  },
-	  methods: {
-	    start: function start() {
-	      this.update();
-	      this.xtag.interval = setInterval(this.update.bind(this), 1000);
-	    }
-	  },
-	  events: {
-	    tap: function tap() {
-	      if (this.xtag.interval) this.stop();else this.start();
-	    }
-	  }
-	};
-
-/***/ },
 /* 16 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
+	var template = function template(data) {
+	    return "    \n\t<div class=\"" + data.errorClass + "\">\n\t\t<div class=\"dropdown\">\n\t\t\t<label for=\"" + data.field + "\">" + data.label + "</label>\n\t\t\t<input class=\"form-control\" type=\"text\"\n\t\t\t\tid=\"" + data.field + "\" \n                name=\"" + data.field + "\" \n                value=\"" + data.value + "\"\n                placeholder=\"" + data.placeholder + "\"\n                " + data.disabled + "/>\n            <ul class=\"dropdown-menu\" style=\"width: 100%\"></ul>\n        </div>\n        <span class=\"help-block\">" + data.error + "</span>\n    </div>";
+	};
+
 	exports.default = {
-	  methods: {
-	    stop: function stop() {
-	      this.xtag.interval = clearInterval(this.xtag.interval);
+	    lifecycle: {
+	        created: function created() {
+	            this.render();
+	        },
+	        inserted: function inserted() {
+	            this.fetchData();
+	        },
+	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
+	            if (attributeName === "error") {
+	                this.renderError();
+	            } else if (attributeName === "value") {
+	                this.getInput().value = newValue;
+	            } else {
+	                this.render();
+	            }
+
+	            if (this.optionData) {
+	                this.renderData(this.optionData);
+	            }
+	        }
 	    },
-	    update: function update() {
-	      this.textContent = new Date().toLocaleTimeString();
+	    methods: {
+	        render: function render() {
+	            var data = {
+	                placeholder: this.placeholder || '',
+	                disabled: this.disabled ? 'disabled' : '',
+	                error: this.error || '',
+	                errorClass: this.errorClass || '',
+	                field: this.field || '',
+	                label: this.label || '',
+	                value: this.value || ''
+	            };
+	            this.getRenderingRoot().innerHTML = template(data);
+	        },
+	        fetchData: function fetchData() {
+	            var self = this;
+	            if (!self.url) {
+	                return;
+	            }
+
+	            if (!window.restService) {
+	                throw new Error("'restService' must be assigned to main window for <input-autocomplete/> to work correctly");
+	            }
+
+	            window.restService.ajax({
+	                url: self.url,
+	                method: "GET",
+	                data: { search: this.value },
+	                success: function success(result) {
+	                    self.optionData = result;
+	                    self.getDropdownMenu().innerHTML = '';
+	                    self.renderData(self.optionData);
+	                }
+	            });
+	        },
+	        selectOption: function selectOption(dropdownOption) {
+	            if (!dropdownOption) {
+	                throw new Error("Not valid option for selection.");
+	            }
+
+	            this.value = dropdownOption.value;
+	            this.getInput().value = this.value;
+	            this.validate();
+	        }
+	    },
+	    events: {
+	        keyup: function keyup() {
+	            this.value = this.getInput().value;
+	            this.fetchData();
+	        }
 	    }
-	  }
 	};
 
 /***/ }

@@ -1,7 +1,7 @@
 import utils from "./../utils/utils.js";
 import inputElementBase from "./input-element-base.js";
 
-var dorpdownInputElementBase = {
+var dropdownInputElementBase = {
     accessors: {
         url: {
             attribute: { },
@@ -22,6 +22,7 @@ var dorpdownInputElementBase = {
                 throw new Error("Data must be a collection.");
             }
 
+            this.getDropdownMenu().innerHTML = '';
             _.each(data, function (optionData) {
                 var dropdownOption = this.createDropdownOption(optionData);
                 this.getDropdownMenu().appendChild(dropdownOption);
@@ -36,27 +37,23 @@ var dorpdownInputElementBase = {
         },
         getDropdown: function () {
             var dropdown = this.selectInRenderingRoot(".dropdown");
-            if (!dropdown) {
-                throw new Error("A .dropdown div must be defined inside autocomplete template");
-            }
             return dropdown;
         },
         getDropdownMenu: function () {
             var dropdownMenu = this.selectInRenderingRoot(".dropdown-menu");
-            if (!dropdownMenu) {
-                throw new Error("A .dropdown-menu div must be defined inside autocomplete template");
-            }
             return dropdownMenu;
         },
         showMenu: function () {
             if (this.disabled) {
                 this.hideMenu();
             } else {
-                this.getDropdown().className = "dropdown open";
+                var dropdown = this.getDropdown();
+                if(dropdown) dropdown.className = "dropdown open";
             }
         },
         hideMenu: function () {
-            this.getDropdown().className = "dropdown";
+            var dropdown = this.getDropdown();
+            if(dropdown) dropdown.className = "dropdown";
         }
     },
     events: {
@@ -75,4 +72,4 @@ var dorpdownInputElementBase = {
     }
 };
 
-export default utils.extend(dorpdownInputElementBase).from(inputElementBase);
+export default utils.extend(dropdownInputElementBase).from(inputElementBase);

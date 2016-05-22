@@ -185,7 +185,10 @@
 		   	    it("throws error", function () {
 					var inputAutocomplete = getTestElement("#withoutField");
 					var errorMessage = "Attribute 'field' must be defined";
-					expect(inputAutocomplete.getData).to.throw(errorMessage);
+					var errorThrower = function () {
+						inputAutocomplete.getData();
+					};
+					expect(errorThrower).to.throw(errorMessage);
 			    });	    
 	    	});
 		});
