@@ -14,6 +14,7 @@ import utils from "./utils/utils.js";
 import elementBase from "./base/element-base.js";
 import inputElementBase from "./base/input-element-base.js";
 import inputTextElementBase from "./base/input-text-element-base.js";
+import dropdownInputElementBase from "./base/dropdown-input-element-base.js";
 
 import dropdownElement from "./elements/dropdown-option.js";
 var dropdownProto = utils
@@ -56,6 +57,12 @@ var textareaProto = utils
 	.extend(inputTextarea)
 	.from(inputTextElementBase);
 utils.register('input-textarea', textareaProto);
+
+import inputSelect from "./elements/input-select.js";
+var selectProto = utils
+	.extend(inputSelect)
+	.from(dropdownInputElementBase);
+utils.register('input-select', selectProto);
 
 import TestElement from "./test-element.js";
 import Base from "./base.js";

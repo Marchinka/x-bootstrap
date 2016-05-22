@@ -193,7 +193,10 @@
 		   	    it("throws error", function () {
 					var inputSelect = getTestElement("#withoutField");
 					var errorMessage = "Attribute 'field' must be defined";
-					expect(inputSelect.getData).to.throw(errorMessage);
+					var errorThrower = function () {
+						inputSelect.getData();
+					};
+					expect(errorThrower).to.throw(errorMessage);
 			    });	    
 	    	});
 		});

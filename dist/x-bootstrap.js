@@ -62,39 +62,47 @@
 
 	var _inputTextElementBase2 = _interopRequireDefault(_inputTextElementBase);
 
-	var _dropdownOption = __webpack_require__(6);
+	var _dropdownInputElementBase = __webpack_require__(6);
+
+	var _dropdownInputElementBase2 = _interopRequireDefault(_dropdownInputElementBase);
+
+	var _dropdownOption = __webpack_require__(7);
 
 	var _dropdownOption2 = _interopRequireDefault(_dropdownOption);
 
-	var _additionalInfo = __webpack_require__(7);
+	var _additionalInfo = __webpack_require__(8);
 
 	var _additionalInfo2 = _interopRequireDefault(_additionalInfo);
 
-	var _inputRadio = __webpack_require__(8);
+	var _inputRadio = __webpack_require__(9);
 
 	var _inputRadio2 = _interopRequireDefault(_inputRadio);
 
-	var _inputRadioGroup = __webpack_require__(9);
+	var _inputRadioGroup = __webpack_require__(10);
 
 	var _inputRadioGroup2 = _interopRequireDefault(_inputRadioGroup);
 
-	var _inputCheckbox = __webpack_require__(10);
+	var _inputCheckbox = __webpack_require__(11);
 
 	var _inputCheckbox2 = _interopRequireDefault(_inputCheckbox);
 
-	var _inputText = __webpack_require__(11);
+	var _inputText = __webpack_require__(12);
 
 	var _inputText2 = _interopRequireDefault(_inputText);
 
-	var _inputTextarea = __webpack_require__(12);
+	var _inputTextarea = __webpack_require__(13);
 
 	var _inputTextarea2 = _interopRequireDefault(_inputTextarea);
 
-	var _testElement = __webpack_require__(13);
+	var _inputSelect = __webpack_require__(14);
+
+	var _inputSelect2 = _interopRequireDefault(_inputSelect);
+
+	var _testElement = __webpack_require__(15);
 
 	var _testElement2 = _interopRequireDefault(_testElement);
 
-	var _base = __webpack_require__(14);
+	var _base = __webpack_require__(16);
 
 	var _base2 = _interopRequireDefault(_base);
 
@@ -133,6 +141,9 @@
 	var textareaProto = _utils2.default.extend(_inputTextarea2.default).from(_inputTextElementBase2.default);
 	_utils2.default.register('input-textarea', textareaProto);
 
+	var selectProto = _utils2.default.extend(_inputSelect2.default).from(_dropdownInputElementBase2.default);
+	_utils2.default.register('input-select', selectProto);
+
 	var protoTag = _utils2.default.extend(_testElement2.default).from(_base2.default);
 	xtag.register('x-clock', protoTag);
 
@@ -169,6 +180,13 @@
 	  },
 	  register: function register(elementName, object) {
 	    return xtag.register(elementName, object);
+	  },
+	  createElement: function createElement(tagName, object) {
+	    var element = document.createElement(tagName);
+	    for (var attrname in object) {
+	      element[attrname] = object[attrname];
+	    }
+	    return element;
 	  }
 	};
 
@@ -441,6 +459,102 @@
 
 /***/ },
 /* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _inputElementBase = __webpack_require__(4);
+
+	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var dorpdownInputElementBase = {
+	    accessors: {
+	        url: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('url');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.url = data;
+	            }
+	        }
+	    },
+	    methods: {
+	        renderData: function renderData(data) {
+	            if (!data) {
+	                throw new Error("Data not defined.");
+	            }
+	            if (_.isEmpty(data)) {
+	                throw new Error("Data must be a collection.");
+	            }
+
+	            _.each(data, function (optionData) {
+	                var dropdownOption = this.createDropdownOption(optionData);
+	                this.getDropdownMenu().appendChild(dropdownOption);
+	            }, this);
+	        },
+	        createDropdownOption: function createDropdownOption(optionData) {
+	            var dropdownOption = _utils2.default.createElement("dropdown-option", {
+	                key: optionData.key,
+	                value: optionData.value
+	            });
+	            return dropdownOption;
+	        },
+	        getDropdown: function getDropdown() {
+	            var dropdown = this.selectInRenderingRoot(".dropdown");
+	            if (!dropdown) {
+	                throw new Error("A .dropdown div must be defined inside autocomplete template");
+	            }
+	            return dropdown;
+	        },
+	        getDropdownMenu: function getDropdownMenu() {
+	            var dropdownMenu = this.selectInRenderingRoot(".dropdown-menu");
+	            if (!dropdownMenu) {
+	                throw new Error("A .dropdown-menu div must be defined inside autocomplete template");
+	            }
+	            return dropdownMenu;
+	        },
+	        showMenu: function showMenu() {
+	            if (this.disabled) {
+	                this.hideMenu();
+	            } else {
+	                this.getDropdown().className = "dropdown open";
+	            }
+	        },
+	        hideMenu: function hideMenu() {
+	            this.getDropdown().className = "dropdown";
+	        }
+	    },
+	    events: {
+	        focus: function focus() {
+	            this.showMenu();
+	        },
+	        blur: function blur() {
+	            this.hideMenu();
+	        },
+	        mousedown: function mousedown(e) {
+	            if (e.target.parentElement.parentElement.nodeName === "DROPDOWN-OPTION") {
+	                var dropdownOption = e.target.parentElement.parentElement;
+	                this.selectOption(dropdownOption);
+	            }
+	        }
+	    }
+	};
+
+	exports.default = _utils2.default.extend(dorpdownInputElementBase).from(_inputElementBase2.default);
+
+/***/ },
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -492,7 +606,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -556,7 +670,7 @@
 	};
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -646,7 +760,7 @@
 	};
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -791,7 +905,7 @@
 	};
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -857,7 +971,7 @@
 	};
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1019,7 +1133,7 @@
 	};
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1123,7 +1237,151 @@
 	};
 
 /***/ },
-/* 13 */
+/* 14 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var template = function template(data) {
+	    return '    \n\t<div class="' + data.errorClass + '">\n        <div class="dropdown">\n            <label for="' + data.field + '">' + data.label + '</label>\n            <button class="' + data.buttonClass + '" id="' + data.field + '" type="button">\n                <span class="pull-left">' + data.buttonContent + '</span>\n                <span class="pull-right">\n                    <span class="caret"></span>\n                </span>\n            </button>\n            <ul class="dropdown-menu" style="width: 100%">' + data.innerContent + '</ul>\n        </div>\n        <span class="help-block">' + data.error + '</span>\n    </div>';
+	};
+
+	exports.default = {
+	    accessors: {
+	        placeholder: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('placeholder') || '';
+	            },
+	            set: function set(value) {
+	                this.xtag.data.placeholder = value;
+	            }
+	        },
+	        buttonClass: {
+	            attribute: {},
+	            get: function get() {
+	                if (this.disabled) {
+	                    return "btn btn-default form-control disabled";
+	                } else {
+	                    return "btn btn-default form-control";
+	                }
+	            }
+	        },
+	        selectedValue: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('selected-value') || '';
+	            },
+	            set: function set(value) {
+	                this.xtag.data.selectedValue = value;
+	            }
+	        },
+	        required: {
+	            attribute: { boolean: true },
+	            get: function get() {
+	                return this.hasAttribute('required');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.required = data;
+	            }
+	        },
+	        requiredMessage: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('required-message') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.requiredMessage = data;
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        created: function created() {
+	            this.innerContent = this.innerHTML;
+	            this.render();
+	        },
+	        inserted: function inserted() {
+	            this.fetchData();
+	        },
+	        attributeChanged: function attributeChanged(attributeName) {
+	            if (attributeName === "value") {
+	                this.selectedValue = "";
+	            }
+	            this.render();
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            var data = {
+	                error: this.error,
+	                errorClass: this.errorClass,
+	                label: this.label,
+	                buttonContent: this.selectedValue || this.value || this.placeholder,
+	                field: this.field,
+	                buttonClass: this.buttonClass,
+	                innerContent: this.innerContent
+	            };
+	            this.innerHTML = template(data);
+	        },
+	        validate: function validate() {
+	            if (!this.required) {
+	                this.error = '';
+	                return true;
+	            }
+	            if (!this.value) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+	            if (!this.value.trim()) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+	            this.error = '';
+	            return true;
+	        },
+	        fetchData: function fetchData() {
+	            var self = this;
+	            if (!self.url) {
+	                return;
+	            }
+
+	            if (!window.restService) {
+	                throw new Error("'restService' must be assigned to main window for <input-select/> to work correctly");
+	            }
+
+	            window.restService.ajax({
+	                url: self.url,
+	                method: "GET",
+	                success: function success(result) {
+	                    self.renderData(result);
+	                }
+	            });
+	        },
+	        selectOption: function selectOption(dropdownOption) {
+	            if (!dropdownOption) {
+	                throw new Error("Not valid option for selection.");
+	            }
+
+	            this.value = dropdownOption.key || dropdownOption.value;
+	            this.selectedValue = dropdownOption.value;
+	            this.validate();
+	        }
+	    },
+	    events: {
+	        focus: function focus() {
+	            this.showMenu();
+	        },
+	        blur: function blur() {
+	            this.hideMenu();
+	        }
+	    }
+	};
+
+/***/ },
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1151,7 +1409,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports) {
 
 	"use strict";

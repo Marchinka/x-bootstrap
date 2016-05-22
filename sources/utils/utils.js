@@ -17,5 +17,12 @@ export default {
   },
   register: function(elementName, object) {
     return xtag.register(elementName, object);
+  },
+  createElement: function (tagName, object) {
+    var element = document.createElement(tagName);
+    for (var attrname in object) { 
+      element[attrname] = object[attrname];
+    }
+    return element;
   }
 };
