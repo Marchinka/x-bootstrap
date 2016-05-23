@@ -13,6 +13,7 @@ const template = data => `
         <span class="help-block">
             ${data.error}
         </span>
+        <input-text-content></input-text-content>
     </div>`;
 
 const templateWithAddOn = data => `
@@ -29,7 +30,9 @@ const templateWithAddOn = data => `
                     value="${data.value}"
                     ${data.disabled}/>
             <span class="input-group-addon">
-                ${data.innerContent}
+                <input-text-content>
+                    ${data.innerContent}
+                </input-text-content>
             </span>
         </div>                    
         <span class="help-block">
@@ -96,18 +99,23 @@ export default {
     },        
     lifecycle: {
         created: function() {
-            this.innerContent = this.innerHTML;
+            this.innerContent = this.getInnerContent("input-text-content");
             this.render();
         },
-        attributeChanged: function(attributeName) {
-            if (attributeName === "error") {
-                this.renderError();
-            } else if (attributeName !== "value") {
-                this.render();                
-            }
+        attributeChanged: function(attributeName, oldValue, newValue) {
+            this.changeCallback(attributeName, oldValue, newValue);
         }
     },
     methods: {
+        changeCallback: function(attributeName, oldValue, newValue) {
+            if (attributeName === "error") {
+                this.renderError();
+            } else if (attributeName === "value" && oldValue != newValue) {
+                this.getInput().value = newValue;   
+            } else {
+                this.render();
+            }
+        },
         render: function() {
             var data = {
                 field: this.field,

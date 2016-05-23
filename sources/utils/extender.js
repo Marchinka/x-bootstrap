@@ -6,17 +6,32 @@ export default class Extender {
 	from (baseElement) {
 		var source =_.clone(baseElement);
 		var target =_.clone(this.elementToExtend);
-		var lifecycle = _(source.lifecycle || {}).extend(target.lifecycle || {});
-		var accessors = _(source.accessors || {}).extend(target.accessors || {});
-		var methods = _(source.methods || {}).extend(target.methods || {});
-		var events = _(source.events || {}).extend(target.events || {});
+		var lifecycle = _
+			(_(source.lifecycle).clone() || {})
+			.extend
+			(_(target.lifecycle).clone() || {});
+
+		var accessors = _
+			(_(source.accessors).clone() || {})
+			.extend
+			(_(target.accessors).clone() || {});
+
+		var methods = _
+			(_(source.methods).clone() || {})
+			.extend
+			(_(target.methods).clone() || {});
+
+		var events = _
+			(_(source.events).clone() || {})
+			.extend
+			(_(target.events).clone() || {});
+
 		var result = {
-			lifecycle: _(lifecycle).clone(),
-			accessors: _(accessors).clone(),
-			methods: _(methods).clone(),
-			events: _(events).clone()
+			lifecycle: lifecycle,
+			accessors: accessors,
+			methods: methods,
+			events: events
 		};
 		return result;
-		return xtag.merge(source, this.target);
 	}
 }

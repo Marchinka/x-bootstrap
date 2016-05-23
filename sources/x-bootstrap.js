@@ -16,6 +16,7 @@ import inputElementBase from "./base/input-element-base.js";
 import inputTextElementBase from "./base/input-text-element-base.js";
 import dropdownInputElementBase from "./base/dropdown-input-element-base.js";
 import dropdownInputTextElementBase from "./base/dropdown-input-text-element-base.js";
+import formElementBase from "./base/form-element-base.js";
 
 import dropdownElement from "./elements/dropdown-option.js";
 var dropdownProto = utils
@@ -64,6 +65,12 @@ var selectProto = utils
 	.extend(inputSelect)
 	.from(dropdownInputElementBase);
 utils.register('input-select', selectProto);
+
+import formAjax from "./elements/form-ajax.js";
+var formProto = utils
+	.extend(formAjax)
+	.from(formElementBase);
+utils.register('form-ajax', formProto);
 
 import inputAutocomplete from "./elements/input-autocomplete.js";
 var selectProto = utils

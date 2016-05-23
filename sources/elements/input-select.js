@@ -8,7 +8,11 @@ const template = data => `
                     <span class="caret"></span>
                 </span>
             </button>
-            <ul class="dropdown-menu" style="width: 100%">${data.innerContent}</ul>
+            <ul class="dropdown-menu" style="width: 100%">
+                <input-select-content>
+                    ${data.innerContent}
+                </input-select-content>
+            </ul>
         </div>
         <span class="help-block">${data.error}</span>
     </div>`;
@@ -64,20 +68,23 @@ export default {
     },
     lifecycle: {
         created: function() {
-            this.innerContent = this.innerHTML;
+            this.innerContent = this.getInnerContent("input-select-content");
             this.render();
         },
         inserted: function() {
             this.fetchData();                
         },
         attributeChanged: function(attributeName) {
+            this.changeCallback(attributeName);
+        }
+    },
+    methods: {
+        changeCallback: function (attributeName) {
             if (attributeName === "value") {
                 this.selectedValue = "";
             }
             this.render();
-        }
-    },
-    methods: {
+        },
         render: function() {
             var data = {
                 error: this.error,

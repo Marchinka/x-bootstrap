@@ -29,12 +29,15 @@ export default {
         }
     },
     methods: {
+        changeCallback: function(attributeName) {
+            return;
+        },        
         getData: function () {
             if (!this.field) {
                 throw new Error("Attribute 'field' must be defined");
             }
             var data = {};
-            if (this.valueOf) {
+            if (_(this.valueOf).isString()) {
             	data[this.field] = this.executeFromWindow();
             } else {
                 data[this.field] = this.value;
@@ -43,12 +46,16 @@ export default {
         },
         executeFromWindow: function () {
             var functionInWindow = window[this.valueOf];
-            if (functionInWindow) {
+            if (_(functionInWindow).isFunction()) {
                 var result = functionInWindow();
                 return result;
             } else {
-                throw new Error("Not valid function name in 'value-of' property");
+                var message = 
+                    "Not valid function name " + 
+                    this.valueOf +
+                    " in 'value-of' property";
+                throw new Error();
             }
-        }     
+        }
     }
 };

@@ -22,17 +22,7 @@ export default {
             this.fetchData();
         },
         attributeChanged: function(attributeName, oldValue, newValue) {
-            if (attributeName === "error") {
-                this.renderError();
-            } else if (attributeName === "value") {
-				this.getInput().value = newValue;                
-            } else {
-            	this.render();
-            }
-
-            if (this.optionData) {
-                this.renderData(this.optionData);
-            }            
+            this.changeCallback(attributeName, oldValue, newValue);
         }
     },	
     methods: {
@@ -47,6 +37,20 @@ export default {
                 value: this.value || '',
             };
             this.getRenderingRoot().innerHTML = template(data);
+        },
+        changeCallback: function(attributeName, oldValue, newValue) {
+            if (attributeName === "error") {
+                this.renderError();
+            } else if (attributeName === "value") {
+                this.getInput().value = newValue;
+                this.fetchData();
+            } else {
+                this.render();
+            }
+
+            if (this.optionData) {
+                this.renderData(this.optionData);
+            }            
         },
         fetchData: function () {
             var self = this;
@@ -73,9 +77,10 @@ export default {
             if (!dropdownOption) {
                 throw new Error("Not valid option for selection.");
             }
-
+            this.hideMenu();
             this.value = dropdownOption.value;
             this.getInput().value = this.value;
+            this.getInput().blur();
             this.validate();
         }                        
     },

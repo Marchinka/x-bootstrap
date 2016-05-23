@@ -50,15 +50,18 @@ export default {
         created: function() {
             this.render();
         },
-        attributeChanged: function(attributeName) {
+        attributeChanged: function(attributeName, oldValue, newValue) {
+            this.changeCallback(attributeName, oldValue, newValue);
+        }
+    },
+    methods: {
+        changeCallback: function(attributeName) {
             if (attributeName === "error") {
                 this.renderError();
             } else if (attributeName !== "value") {
                 this.render();                
             }
-        }
-    },
-    methods: {
+        },
         render: function() {
             var data = {
                 field: this.field,

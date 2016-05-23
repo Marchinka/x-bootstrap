@@ -27,7 +27,9 @@ export default {
                 return this.getAttribute('value');
             },
             set: function(data) {
+                var old = this.xtag.data.value;
                 this.xtag.data.value = data;
+                this.raiseAttributeChanged("value", old, data);
             }
         },
         label: {
@@ -63,10 +65,13 @@ export default {
             this.render();
         },
         attributeChanged: function(attributeName) {
-            this.render();
+            this.changeCallback(attributeName);
         }
     },
     methods: {
+        changeCallback: function () {
+            this.render();
+        },
         render: function () {
         	var data = {
         		field: this.field,

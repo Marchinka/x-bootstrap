@@ -70,39 +70,47 @@
 
 	var _dropdownInputTextElementBase2 = _interopRequireDefault(_dropdownInputTextElementBase);
 
-	var _dropdownOption = __webpack_require__(8);
+	var _formElementBase = __webpack_require__(8);
+
+	var _formElementBase2 = _interopRequireDefault(_formElementBase);
+
+	var _dropdownOption = __webpack_require__(9);
 
 	var _dropdownOption2 = _interopRequireDefault(_dropdownOption);
 
-	var _additionalInfo = __webpack_require__(9);
+	var _additionalInfo = __webpack_require__(10);
 
 	var _additionalInfo2 = _interopRequireDefault(_additionalInfo);
 
-	var _inputRadio = __webpack_require__(10);
+	var _inputRadio = __webpack_require__(11);
 
 	var _inputRadio2 = _interopRequireDefault(_inputRadio);
 
-	var _inputRadioGroup = __webpack_require__(11);
+	var _inputRadioGroup = __webpack_require__(12);
 
 	var _inputRadioGroup2 = _interopRequireDefault(_inputRadioGroup);
 
-	var _inputCheckbox = __webpack_require__(12);
+	var _inputCheckbox = __webpack_require__(13);
 
 	var _inputCheckbox2 = _interopRequireDefault(_inputCheckbox);
 
-	var _inputText = __webpack_require__(13);
+	var _inputText = __webpack_require__(14);
 
 	var _inputText2 = _interopRequireDefault(_inputText);
 
-	var _inputTextarea = __webpack_require__(14);
+	var _inputTextarea = __webpack_require__(15);
 
 	var _inputTextarea2 = _interopRequireDefault(_inputTextarea);
 
-	var _inputSelect = __webpack_require__(15);
+	var _inputSelect = __webpack_require__(16);
 
 	var _inputSelect2 = _interopRequireDefault(_inputSelect);
 
-	var _inputAutocomplete = __webpack_require__(16);
+	var _formAjax = __webpack_require__(17);
+
+	var _formAjax2 = _interopRequireDefault(_formAjax);
+
+	var _inputAutocomplete = __webpack_require__(18);
 
 	var _inputAutocomplete2 = _interopRequireDefault(_inputAutocomplete);
 
@@ -143,6 +151,9 @@
 
 	var selectProto = _utils2.default.extend(_inputSelect2.default).from(_dropdownInputElementBase2.default);
 	_utils2.default.register('input-select', selectProto);
+
+	var formProto = _utils2.default.extend(_formAjax2.default).from(_formElementBase2.default);
+	_utils2.default.register('form-ajax', formProto);
 
 	var selectProto = _utils2.default.extend(_inputAutocomplete2.default).from(_dropdownInputTextElementBase2.default);
 	_utils2.default.register('input-autocomplete', selectProto);
@@ -216,18 +227,21 @@
 			value: function from(baseElement) {
 				var source = _.clone(baseElement);
 				var target = _.clone(this.elementToExtend);
-				var lifecycle = _(source.lifecycle || {}).extend(target.lifecycle || {});
-				var accessors = _(source.accessors || {}).extend(target.accessors || {});
-				var methods = _(source.methods || {}).extend(target.methods || {});
-				var events = _(source.events || {}).extend(target.events || {});
+				var lifecycle = _(_(source.lifecycle).clone() || {}).extend(_(target.lifecycle).clone() || {});
+
+				var accessors = _(_(source.accessors).clone() || {}).extend(_(target.accessors).clone() || {});
+
+				var methods = _(_(source.methods).clone() || {}).extend(_(target.methods).clone() || {});
+
+				var events = _(_(source.events).clone() || {}).extend(_(target.events).clone() || {});
+
 				var result = {
-					lifecycle: _(lifecycle).clone(),
-					accessors: _(accessors).clone(),
-					methods: _(methods).clone(),
-					events: _(events).clone()
+					lifecycle: lifecycle,
+					accessors: accessors,
+					methods: methods,
+					events: events
 				};
 				return result;
-				return xtag.merge(source, this.target);
 			}
 		}]);
 
@@ -265,9 +279,18 @@
 				if (_utils2.default.isBrowserSupportingMo()) {
 					return;
 				} else if (!this.changeCallback) {
-					console.log("You should implement a 'changeCallback' for browsers not supporting mutation observers.");
+					var message = "You should implement a 'changeCallback' for element " + this.nodeName + ". It's a support for browsers not supporting mutation observers.";
+					console.log();
 				} else {
-					this.changeCallback(attributeName, oldValue, newValue);
+					if (oldValue != newValue) this.changeCallback(attributeName, oldValue, newValue);
+				}
+			},
+			getInnerContent: function getInnerContent(selector) {
+				var content = this.querySelector(selector);
+				if (content) {
+					return content.innerHTML;
+				} else {
+					return this.innerHTML;
 				}
 			}
 		}
@@ -339,7 +362,9 @@
 	                return this.getAttribute('value') || '';
 	            },
 	            set: function set(data) {
+	                var old = this.xtag.data.value;
 	                this.xtag.data.value = data;
+	                this.raiseAttributeChanged("value", old, data);
 	            }
 	        },
 	        disabled: {
@@ -494,11 +519,12 @@
 	            if (!data) {
 	                throw new Error("Data not defined.");
 	            }
-	            if (_.isEmpty(data)) {
-	                throw new Error("Data must be a collection.");
-	            }
 
 	            this.getDropdownMenu().innerHTML = '';
+	            if (_.isEmpty(data)) {
+	                return;
+	            }
+
 	            _.each(data, function (optionData) {
 	                var dropdownOption = this.createDropdownOption(optionData);
 	                this.getDropdownMenu().appendChild(dropdownOption);
@@ -578,6 +604,91 @@
 
 /***/ },
 /* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(3);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var formElementBase = {
+	    methods: {
+	        getInputElements: function getInputElements() {
+	            var inputElements = this.getRenderingRoot().querySelector("form").querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
+	            return inputElements;
+	        },
+	        getEditableElements: function getEditableElements() {
+	            var inputElements = this.getRenderingRoot().querySelector("form").querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
+	            return inputElements;
+	        },
+	        getData: function getData() {
+	            var inputElements = this.getInputElements();
+	            if (inputElements.length === 0) {
+	                return null;
+	            }
+
+	            var data = {};
+	            _.each(inputElements, function (currentInput) {
+	                var inputData = currentInput.getData();
+	                _.extend(data, inputData);
+	            });
+	            return data;
+	        },
+	        setData: function setData(object) {
+	            for (var attributeName in object) {
+	                var innerInput = this.selectInRenderingRoot("[field=" + attributeName + "]");
+	                if (!innerInput) {
+	                    continue;
+	                } else if (innerInput.nodeName === "INPUT-CHECKBOX") {
+	                    var fieldValue = object[attributeName];
+	                    innerInput.checked = fieldValue === true;
+	                } else {
+	                    var fieldValue = object[attributeName];
+	                    innerInput.value = fieldValue;
+	                }
+	            }
+	        },
+	        clearForm: function clearForm() {
+	            var inputElements = this.getEditableElements();
+	            _.each(inputElements, function (inputElement) {
+	                if (inputElement.nodeName === "INPUT-CHECKBOX") {
+	                    inputElement.checked = false;
+	                } else {
+	                    inputElement.value = "";
+	                }
+	            });
+	        },
+	        validate: function validate() {
+	            var inputElements = this.getEditableElements();
+	            var isFormValid = true;
+	            _.each(inputElements, function (currentInput) {
+	                var inputData = currentInput.getData();
+	                if (_(currentInput.validate).isFunction()) {
+	                    var isInputValid = currentInput.validate();
+	                    isFormValid = isFormValid && isInputValid;
+	                }
+	            });
+	            return isFormValid;
+	        }
+	    }
+	};
+
+	var formBase = _utils2.default.extend(formElementBase).from(_elementBase2.default);
+	exports.default = formBase;
+
+/***/ },
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -614,11 +725,17 @@
 	        created: function created() {
 	            this.render();
 	        },
-	        attributeChanged: function attributeChanged(attributeName) {
+	        inserted: function inserted() {
 	            this.render();
+	        },
+	        attributeChanged: function attributeChanged(attributeName) {
+	            this.changeCallback(attributeName);
 	        }
 	    },
 	    methods: {
+	        changeCallback: function changeCallback(attributeName) {
+	            this.render();
+	        },
 	        render: function render() {
 	            var data = {
 	                value: this.value
@@ -629,7 +746,7 @@
 	};
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -668,12 +785,15 @@
 	        }
 	    },
 	    methods: {
+	        changeCallback: function changeCallback(attributeName) {
+	            return;
+	        },
 	        getData: function getData() {
 	            if (!this.field) {
 	                throw new Error("Attribute 'field' must be defined");
 	            }
 	            var data = {};
-	            if (this.valueOf) {
+	            if (_(this.valueOf).isString()) {
 	                data[this.field] = this.executeFromWindow();
 	            } else {
 	                data[this.field] = this.value;
@@ -682,18 +802,19 @@
 	        },
 	        executeFromWindow: function executeFromWindow() {
 	            var functionInWindow = window[this.valueOf];
-	            if (functionInWindow) {
+	            if (_(functionInWindow).isFunction()) {
 	                var result = functionInWindow();
 	                return result;
 	            } else {
-	                throw new Error("Not valid function name in 'value-of' property");
+	                var message = "Not valid function name " + this.valueOf + " in 'value-of' property";
+	                throw new Error();
 	            }
 	        }
 	    }
 	};
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -722,7 +843,9 @@
 	                return this.getAttribute('value');
 	            },
 	            set: function set(data) {
+	                var old = this.xtag.data.value;
 	                this.xtag.data.value = data;
+	                this.raiseAttributeChanged("value", old, data);
 	            }
 	        },
 	        label: {
@@ -758,10 +881,13 @@
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
-	            this.render();
+	            this.changeCallback(attributeName);
 	        }
 	    },
 	    methods: {
+	        changeCallback: function changeCallback() {
+	            this.render();
+	        },
 	        render: function render() {
 	            var data = {
 	                field: this.field,
@@ -783,7 +909,7 @@
 	};
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -792,7 +918,7 @@
 	    value: true
 	});
 	var template = function template(data) {
-	    return '    \n\t<div class="' + data.errorClass + '">\n        <label>' + data.label + '</label>\n        <div class="inner-content">\n        \t' + data.innerContent + '\n        </div>\n        <span class="help-block">\n        \t' + data.error + '\n        </span>\n    </div>';
+	    return '    \n\t<div class="' + data.errorClass + '">\n        <label>' + data.label + '</label>\n        <radio-group-content class="inner-content">\n            ' + data.innerContent + '\n        </radio-group-content>\n        </div>\n        <span class="help-block">\n        \t' + data.error + '\n        </span>\n    </div>';
 	};
 
 	exports.default = {
@@ -818,7 +944,7 @@
 	    },
 	    lifecycle: {
 	        created: function created() {
-	            this.innerContent = this.innerHTML;
+	            this.innerContent = this.getInnerContent("radio-group-content");
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
@@ -928,16 +1054,16 @@
 	};
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	var template = function template(data) {
-	    return '\n    <div class="' + data.errorClass + ' checkbox">\n        <label for="' + data.field + '">\n            <input  type="checkbox"\n                    id="' + data.field + '"\n                    name="' + data.field + '"\n                    ' + data.checked + '\n                    ' + data.disabled + '/>\n            <span class="label-text">' + data.label + '</span>\n        </label>            \n        <span class="help-block">' + data.error + '</span>\n    </div>';
+	    return "\n    <div class=\"" + data.errorClass + " checkbox\">\n        <label for=\"" + data.field + "\">\n            <input  type=\"checkbox\"\n                    id=\"" + data.field + "\"\n                    name=\"" + data.field + "\"\n                    " + data.checked + "\n                    " + data.disabled + "/>\n            <span class=\"label-text\">" + data.label + "</span>\n        </label>            \n        <span class=\"help-block\">" + data.error + "</span>\n    </div>";
 	};
 
 	exports.default = {
@@ -952,7 +1078,7 @@
 	            },
 	            set: function set(data) {
 	                if (this.input) {
-	                    this.input.checked = data;
+	                    this.input.checked = data === true;
 	                }
 	            }
 	        }
@@ -962,11 +1088,21 @@
 	            this.render();
 	            this.input = this.selectInRenderingRoot("input");
 	        },
-	        attributeChanged: function attributeChanged(attributeName) {
+	        inserted: function inserted() {
 	            this.render();
+	            this.input = this.selectInRenderingRoot("input");
+	        },
+	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
+	            this.changeCallback(attributeName, oldValue, newValue);
 	        }
 	    },
 	    methods: {
+	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
+	            if (attributeName === "checked" && oldValue != newValue) {
+	                this.input.checked = newValue === true;
+	            }
+	            this.render();
+	        },
 	        render: function render() {
 	            var data = {
 	                checked: this.checked ? 'checked' : '',
@@ -994,7 +1130,7 @@
 	};
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1003,11 +1139,11 @@
 	    value: true
 	});
 	var template = function template(data) {
-	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <input  type="text" \n                class="form-control"\n                id="' + data.field + '"\n                name="' + data.field + '"\n                placeholder="' + data.placeholder + '"\n                value="' + data.value + '"\n                ' + data.disabled + '/>\n        <span class="help-block">\n            ' + data.error + '\n        </span>\n    </div>';
+	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <input  type="text" \n                class="form-control"\n                id="' + data.field + '"\n                name="' + data.field + '"\n                placeholder="' + data.placeholder + '"\n                value="' + data.value + '"\n                ' + data.disabled + '/>\n        <span class="help-block">\n            ' + data.error + '\n        </span>\n        <input-text-content></input-text-content>\n    </div>';
 	};
 
 	var templateWithAddOn = function templateWithAddOn(data) {
-	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <div class=\'input-group\'>\n            <input  type="text" \n                    class="form-control"\n                    id="' + data.field + '"\n                    name="' + data.field + '"\n                    placeholder="' + data.placeholder + '"\n                    value="' + data.value + '"\n                    ' + data.disabled + '/>\n            <span class="input-group-addon">\n                ' + data.innerContent + '\n            </span>\n        </div>                    \n        <span class="help-block">\n            ' + data.error + '\n        </span>\n    </div>';
+	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <div class=\'input-group\'>\n            <input  type="text" \n                    class="form-control"\n                    id="' + data.field + '"\n                    name="' + data.field + '"\n                    placeholder="' + data.placeholder + '"\n                    value="' + data.value + '"\n                    ' + data.disabled + '/>\n            <span class="input-group-addon">\n                <input-text-content>\n                    ' + data.innerContent + '\n                </input-text-content>\n            </span>\n        </div>                    \n        <span class="help-block">\n            ' + data.error + '\n        </span>\n    </div>';
 	};
 
 	exports.default = {
@@ -1069,18 +1205,23 @@
 	    },
 	    lifecycle: {
 	        created: function created() {
-	            this.innerContent = this.innerHTML;
+	            this.innerContent = this.getInnerContent("input-text-content");
 	            this.render();
 	        },
-	        attributeChanged: function attributeChanged(attributeName) {
-	            if (attributeName === "error") {
-	                this.renderError();
-	            } else if (attributeName !== "value") {
-	                this.render();
-	            }
+	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
+	            this.changeCallback(attributeName, oldValue, newValue);
 	        }
 	    },
 	    methods: {
+	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
+	            if (attributeName === "error") {
+	                this.renderError();
+	            } else if (attributeName === "value" && oldValue != newValue) {
+	                this.getInput().value = newValue;
+	            } else {
+	                this.render();
+	            }
+	        },
 	        render: function render() {
 	            var data = {
 	                field: this.field,
@@ -1156,7 +1297,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1202,15 +1343,18 @@
 	        created: function created() {
 	            this.render();
 	        },
-	        attributeChanged: function attributeChanged(attributeName) {
+	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
+	            this.changeCallback(attributeName, oldValue, newValue);
+	        }
+	    },
+	    methods: {
+	        changeCallback: function changeCallback(attributeName) {
 	            if (attributeName === "error") {
 	                this.renderError();
 	            } else if (attributeName !== "value") {
 	                this.render();
 	            }
-	        }
-	    },
-	    methods: {
+	        },
 	        render: function render() {
 	            var data = {
 	                field: this.field,
@@ -1260,7 +1404,7 @@
 	};
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1269,7 +1413,7 @@
 	    value: true
 	});
 	var template = function template(data) {
-	    return '    \n\t<div class="' + data.errorClass + '">\n        <div class="dropdown">\n            <label for="' + data.field + '">' + data.label + '</label>\n            <button class="' + data.buttonClass + '" id="' + data.field + '" type="button">\n                <span class="pull-left">' + data.buttonContent + '</span>\n                <span class="pull-right">\n                    <span class="caret"></span>\n                </span>\n            </button>\n            <ul class="dropdown-menu" style="width: 100%">' + data.innerContent + '</ul>\n        </div>\n        <span class="help-block">' + data.error + '</span>\n    </div>';
+	    return '    \n\t<div class="' + data.errorClass + '">\n        <div class="dropdown">\n            <label for="' + data.field + '">' + data.label + '</label>\n            <button class="' + data.buttonClass + '" id="' + data.field + '" type="button">\n                <span class="pull-left">' + data.buttonContent + '</span>\n                <span class="pull-right">\n                    <span class="caret"></span>\n                </span>\n            </button>\n            <ul class="dropdown-menu" style="width: 100%">\n                <input-select-content>\n                    ' + data.innerContent + '\n                </input-select-content>\n            </ul>\n        </div>\n        <span class="help-block">' + data.error + '</span>\n    </div>';
 	};
 
 	exports.default = {
@@ -1323,20 +1467,23 @@
 	    },
 	    lifecycle: {
 	        created: function created() {
-	            this.innerContent = this.innerHTML;
+	            this.innerContent = this.getInnerContent("input-select-content");
 	            this.render();
 	        },
 	        inserted: function inserted() {
 	            this.fetchData();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
+	            this.changeCallback(attributeName);
+	        }
+	    },
+	    methods: {
+	        changeCallback: function changeCallback(attributeName) {
 	            if (attributeName === "value") {
 	                this.selectedValue = "";
 	            }
 	            this.render();
-	        }
-	    },
-	    methods: {
+	        },
 	        render: function render() {
 	            var data = {
 	                error: this.error,
@@ -1404,16 +1551,206 @@
 	};
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _accessors;
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var template = function template(data) {
+	    return '    \n    <form>\n        <form-ajax-content class="inner-content">\n            ' + data.innerContent + '\n        </form-ajax-content>\n    </form>';
+	};
+
+	exports.default = {
+	    accessors: (_accessors = {
+	        postUrl: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('post-url') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.postUrl = data;
+	            }
+	        },
+	        getUrl: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('get-url') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.getUrl = data;
+	            }
+	        },
+	        redirectUrl: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('redirect-url') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.redirectUrl = data;
+	            }
+	        },
+	        redirectHash: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('redirect-hash') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.redirectHash = data;
+	            }
+	        },
+	        redirectToId: {
+	            attribute: { boolean: true },
+	            get: function get() {
+	                return this.hasAttribute('redirect-to-id') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.redirectToId = data;
+	            }
+	        }
+	    }, _defineProperty(_accessors, 'redirectUrl', {
+	        attribute: {},
+	        get: function get() {
+	            return this.getAttribute('redirect-url') || '';
+	        },
+	        set: function set(data) {
+	            this.xtag.data.redirectUrl = data;
+	        }
+	    }), _defineProperty(_accessors, 'clearOnSuccess', {
+	        attribute: { boolean: true },
+	        get: function get() {
+	            return this.hasAttribute('clear-on-success') || '';
+	        },
+	        set: function set(data) {
+	            this.xtag.data.clearOnSuccess = data;
+	        }
+	    }), _accessors),
+	    lifecycle: {
+	        created: function created() {
+	            this.innerContent = this.getInnerContent("form-ajax-content");
+	            this.render();
+	        },
+	        inserted: function inserted() {
+	            if (false) {
+	                // bisogna aspettare che tutto il document sia correttamente caricato
+	                this.fetchInitialData();
+	            }
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            var data = { innerContent: this.innerContent };
+	            this.getRenderingRoot().innerHTML = template(data);
+	        },
+	        submitForm: function submitForm() {
+	            var self = this;
+
+	            if (!self.postUrl) {
+	                throw new Error("Post url is not defined");
+	            }
+
+	            var formData = self.getData();
+	            window.restService.ajax({
+	                url: self.postUrl,
+	                method: "POST",
+	                data: formData,
+	                success: function success(result) {
+	                    if (result.validationResult.isValid) {
+	                        self.clearingProcedure(self);
+	                        self.redirectProcedure(self);
+	                    } else {
+	                        self.bindErrors(result.validationResult.errors);
+	                    }
+	                }
+	            });
+	        },
+	        fetchInitialData: function fetchInitialData() {
+	            var self = this;
+	            window.restService.ajax({
+	                url: self.getUrl,
+	                method: "GET",
+	                data: {},
+	                success: function success(result) {
+	                    self.setData(result);
+	                }
+	            });
+	        },
+	        removeErrors: function removeErrors() {
+	            var inputElements = this.getInputElements();
+	            _.each(inputElements, function (inputElement) {
+	                inputElement.error = "";
+	            });
+	        },
+	        bindErrors: function bindErrors(errors) {
+	            _.each(errors, function (error) {
+	                var field = error.field;
+	                var errorMessage = error.message;
+	                var inputElement = this.selectInRenderingRoot("[field=" + field + "]");
+	                inputElement.error = errorMessage;
+	            }, this);
+	        },
+	        clearingProcedure: function clearingProcedure(self) {
+	            if (self.clearOnSuccess) {
+	                self.clearForm();
+	                return;
+	            }
+	        },
+	        redirectProcedure: function redirectProcedure(self) {
+	            if (self.redirectUrl) {
+	                var redirectUrl = self.redirectUrl;
+	                if (self.redirectToId) {
+	                    redirectUrl += "/" + result.resultId;
+	                }
+
+	                if (self.redirectHash) {
+	                    var newUrl = window.location.origin + "/" + redirectUrl + "/#" + self.redirectHash;
+	                    window.location.href = newUrl;
+	                } else {
+	                    window.location.pathname = redirectUrl;
+	                }
+	                return;
+	            }
+
+	            if (self.redirectHash) {
+	                var redirectHash = self.redirectHash;
+	                if (self.redirectToId) {
+	                    redirectHash += "/" + result.resultId;
+	                }
+	                window.location.hash = redirectHash;
+	                return;
+	            }
+	        }
+	    },
+	    events: {
+	        submit: function submit(e) {
+	            e.preventDefault();
+	            var isFormValid = this.validate();
+	            if (isFormValid) {
+	                this.removeErrors();
+	                this.submitForm();
+	            }
+	        }
+	    }
+	};
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	var template = function template(data) {
-	    return "    \n\t<div class=\"" + data.errorClass + "\">\n\t\t<div class=\"dropdown\">\n\t\t\t<label for=\"" + data.field + "\">" + data.label + "</label>\n\t\t\t<input class=\"form-control\" type=\"text\"\n\t\t\t\tid=\"" + data.field + "\" \n                name=\"" + data.field + "\" \n                value=\"" + data.value + "\"\n                placeholder=\"" + data.placeholder + "\"\n                " + data.disabled + "/>\n            <ul class=\"dropdown-menu\" style=\"width: 100%\"></ul>\n        </div>\n        <span class=\"help-block\">" + data.error + "</span>\n    </div>";
+	    return '    \n\t<div class="' + data.errorClass + '">\n\t\t<div class="dropdown">\n\t\t\t<label for="' + data.field + '">' + data.label + '</label>\n\t\t\t<input class="form-control" type="text"\n\t\t\t\tid="' + data.field + '" \n                name="' + data.field + '" \n                value="' + data.value + '"\n                placeholder="' + data.placeholder + '"\n                ' + data.disabled + '/>\n            <ul class="dropdown-menu" style="width: 100%"></ul>\n        </div>\n        <span class="help-block">' + data.error + '</span>\n    </div>';
 	};
 
 	exports.default = {
@@ -1425,17 +1762,7 @@
 	            this.fetchData();
 	        },
 	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
-	            if (attributeName === "error") {
-	                this.renderError();
-	            } else if (attributeName === "value") {
-	                this.getInput().value = newValue;
-	            } else {
-	                this.render();
-	            }
-
-	            if (this.optionData) {
-	                this.renderData(this.optionData);
-	            }
+	            this.changeCallback(attributeName, oldValue, newValue);
 	        }
 	    },
 	    methods: {
@@ -1450,6 +1777,20 @@
 	                value: this.value || ''
 	            };
 	            this.getRenderingRoot().innerHTML = template(data);
+	        },
+	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
+	            if (attributeName === "error") {
+	                this.renderError();
+	            } else if (attributeName === "value") {
+	                this.getInput().value = newValue;
+	                this.fetchData();
+	            } else {
+	                this.render();
+	            }
+
+	            if (this.optionData) {
+	                this.renderData(this.optionData);
+	            }
 	        },
 	        fetchData: function fetchData() {
 	            var self = this;
@@ -1476,9 +1817,10 @@
 	            if (!dropdownOption) {
 	                throw new Error("Not valid option for selection.");
 	            }
-
+	            this.hideMenu();
 	            this.value = dropdownOption.value;
 	            this.getInput().value = this.value;
+	            this.getInput().blur();
 	            this.validate();
 	        }
 	    },

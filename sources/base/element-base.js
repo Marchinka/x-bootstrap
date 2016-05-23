@@ -13,10 +13,22 @@ export default {
 			if (utils.isBrowserSupportingMo()) {
 				return;
 			} else if (!this.changeCallback) {
-				console.log("You should implement a 'changeCallback' for browsers not supporting mutation observers.")
+				var message = 
+					"You should implement a 'changeCallback' for element " +
+					this.nodeName + 
+					". It's a support for browsers not supporting mutation observers."
+				console.log()
 			} else {
-				this.changeCallback(attributeName, oldValue, newValue);
+				if(oldValue != newValue) this.changeCallback(attributeName, oldValue, newValue);
 			}
 		},
+		getInnerContent: function (selector) {
+			var content = this.querySelector(selector);
+			if (content) {
+				return content.innerHTML;
+			} else {
+				return this.innerHTML;
+			}
+		}
 	}
 };

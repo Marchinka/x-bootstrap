@@ -34,7 +34,7 @@ window.restService = {
 		    	for (var i = 0; i < superheroList.length; i++) {
 		    		var superhero = superheroList[i];
 		    		var searchTextIsIncluded = superhero.value.toLowerCase()
-		    			.includes(options.data.search.toLowerCase());
+		    			.indexOf(options.data.search.toLowerCase()) > - 1;
 		    		if (searchTextIsIncluded) {
 		    			filteredSuperheroes.push(superhero);
 		    		}

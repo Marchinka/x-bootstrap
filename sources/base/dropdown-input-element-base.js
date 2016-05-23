@@ -18,11 +18,12 @@ var dropdownInputElementBase = {
             if (!data) {
                 throw new Error("Data not defined.");
             }
-            if (_.isEmpty(data)) {
-                throw new Error("Data must be a collection.");
-            }
 
             this.getDropdownMenu().innerHTML = '';
+            if (_.isEmpty(data)) {
+                return;
+            }
+            
             _.each(data, function (optionData) {
                 var dropdownOption = this.createDropdownOption(optionData);
                 this.getDropdownMenu().appendChild(dropdownOption);

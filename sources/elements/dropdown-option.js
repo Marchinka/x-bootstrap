@@ -25,11 +25,17 @@ export default {
         created: function() {
             this.render();
         },
-        attributeChanged: function(attributeName) {
+        inserted: function() {
             this.render();
+        },        
+        attributeChanged: function(attributeName) {
+            this.changeCallback(attributeName);
         }
     },
     methods: {
+        changeCallback: function(attributeName) {
+            this.render();
+        },
         render: function () {
         	var data = {
         		value: this.value

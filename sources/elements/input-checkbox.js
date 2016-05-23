@@ -23,7 +23,7 @@ export default {
             },
             set: function(data) {
                 if (this.input) {
-                    this.input.checked = data;
+                    this.input.checked = data === true;
                 }
             }
         }
@@ -33,11 +33,21 @@ export default {
             this.render();
             this.input = this.selectInRenderingRoot("input");
         },
-        attributeChanged: function(attributeName) {
+        inserted: function() {
             this.render();
+            this.input = this.selectInRenderingRoot("input");
+        },        
+        attributeChanged: function(attributeName, oldValue, newValue) {
+            this.changeCallback(attributeName, oldValue, newValue);
         }
     },
     methods: {
+        changeCallback: function(attributeName, oldValue, newValue) {
+            if (attributeName === "checked" && oldValue != newValue) {
+                this.input.checked = newValue === true;
+            }
+            this.render();
+        },
         render: function() {
             var data = {
                 checked: this.checked ? 'checked' : '',

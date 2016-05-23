@@ -1,8 +1,9 @@
 const template = data => `    
 	<div class="${data.errorClass}">
         <label>${data.label}</label>
-        <div class="inner-content">
-        	${data.innerContent}
+        <radio-group-content class="inner-content">
+            ${data.innerContent}
+        </radio-group-content>
         </div>
         <span class="help-block">
         	${data.error}
@@ -32,7 +33,7 @@ export default {
     },
     lifecycle: {
         created: function() {
-        	this.innerContent = this.innerHTML;
+        	this.innerContent = this.getInnerContent("radio-group-content");
             this.render();
         },
         attributeChanged: function(attributeName) {
