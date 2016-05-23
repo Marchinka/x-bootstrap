@@ -1,3 +1,6 @@
+import utils from "./../../utils/utils.js";
+import inputElementBase from "./../../base/input-element-base.js";
+
 const template = data => `
     <div class="${data.errorClass} checkbox">
         <label for="${data.field}">
@@ -11,7 +14,7 @@ const template = data => `
         <span class="help-block">${data.error}</span>
     </div>`;
 
-export default {
+var inputCheckbox = {
     accessors: {
         checked: {
             attribute: { boolean: true },
@@ -73,3 +76,7 @@ export default {
         }
     }
 };
+
+export default utils
+    .extend(inputCheckbox)
+    .from(inputElementBase);

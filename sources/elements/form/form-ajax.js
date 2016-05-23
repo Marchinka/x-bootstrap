@@ -1,3 +1,6 @@
+import utils from "./../../utils/utils.js";
+import formElementBase from "./../../base/form-element-base.js";
+
 const template = data => `    
     <form>
         <form-ajax-content class="inner-content">
@@ -5,7 +8,7 @@ const template = data => `
         </form-ajax-content>
     </form>`;
 
-export default {
+var formAjax = {
     accessors: {
         postUrl: {
             attribute: {},
@@ -178,3 +181,7 @@ export default {
         }
     }
 };
+
+export default utils
+    .extend(formAjax)
+    .from(formElementBase);

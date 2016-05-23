@@ -1,3 +1,6 @@
+import utils from "./../../utils/utils.js";
+import dropdownInputElementBase from "./../../base/dropdown-input-element-base.js";
+
 const template = data => `    
 	<div class="${data.errorClass}">
         <div class="dropdown">
@@ -17,7 +20,7 @@ const template = data => `
         <span class="help-block">${data.error}</span>
     </div>`;
 
-export default {
+var inputSelect = {
     accessors: {
         placeholder: {
             attribute: {},
@@ -150,3 +153,7 @@ export default {
         }            
     }
 };
+
+export default utils
+    .extend(inputSelect)
+    .from(dropdownInputElementBase);

@@ -11,87 +11,60 @@ if (!window.xtag) {
 }
 
 import utils from "./utils/utils.js";
-import elementBase from "./base/element-base.js";
-import inputElementBase from "./base/input-element-base.js";
-import inputTextElementBase from "./base/input-text-element-base.js";
-import dropdownInputElementBase from "./base/dropdown-input-element-base.js";
-import dropdownInputTextElementBase from "./base/dropdown-input-text-element-base.js";
-import formElementBase from "./base/form-element-base.js";
 
 import dropdownElement from "./elements/form/dropdown-option.js";
-var dropdownProto = utils
-	.extend(dropdownElement)
-	.from(elementBase);
-utils.register('dropdown-option', dropdownProto);
-
-import additionaInfo from "./elements/form/additional-info.js";
-var additionaInfoProto = utils
-	.extend(additionaInfo)
-	.from(elementBase);
-utils.register('additional-info', additionaInfoProto);
-
-import inputRadio from "./elements/form/input-radio.js";
-var radioProto = utils
-	.extend(inputRadio)
-	.from(elementBase);
-utils.register('input-radio', radioProto);
-
+import additionalInfo from "./elements/form/additional-info.js";
+import radioInput from "./elements/form/input-radio.js";
 import inputRadioGroup from "./elements/form/input-radio-group.js";
-var inputGroupProto = utils
-	.extend(inputRadioGroup)
-	.from(inputElementBase);
-utils.register('input-radio-group', inputGroupProto);
-
 import inputCheckbox from "./elements/form/input-checkbox.js";
-var checkboxProto = utils
-	.extend(inputCheckbox)
-	.from(inputElementBase);
-utils.register('input-checkbox', checkboxProto);
-
 import inputText from "./elements/form/input-text.js";
-var textProto = utils
-	.extend(inputText)
-	.from(inputTextElementBase);
-utils.register('input-text', textProto);
-
 import inputTextarea from "./elements/form/input-textarea.js";
-var textareaProto = utils
-	.extend(inputTextarea)
-	.from(inputTextElementBase);
-utils.register('input-textarea', textareaProto);
-
 import inputSelect from "./elements/form/input-select.js";
-var selectProto = utils
-	.extend(inputSelect)
-	.from(dropdownInputElementBase);
-utils.register('input-select', selectProto);
-
 import inputAutocomplete from "./elements/form/input-autocomplete.js";
-var selectProto = utils
-	.extend(inputAutocomplete)
-	.from(dropdownInputTextElementBase);
-utils.register('input-autocomplete', selectProto);
-
 import formAjax from "./elements/form/form-ajax.js";
-var formProto = utils
-	.extend(formAjax)
-	.from(formElementBase);
-utils.register('form-ajax', formProto);
-
 import collectionSearchForm from "./elements/collection/collection-search-form.js";
-var searchFormProto = utils
-	.extend(collectionSearchForm)
-	.from(formElementBase);
-utils.register('collection-search-form', searchFormProto);
-
 import collectionElements from "./elements/collection/collection-elements.js";
-var elementsProto = utils
-	.extend(collectionElements)
-	.from(elementBase);
-utils.register('collection-elements', elementsProto);
-
 import collectionContainer from "./elements/collection/collection-container.js";
-var collectionContainerProto = utils
-	.extend(collectionContainer)
-	.from(elementBase);
-utils.register('collection-container', collectionContainerProto);
+import collectionFeedback from "./elements/collection/collection-feedback.js";
+import feedbackToken from "./elements/collection/feedback-token.js";
+
+var baseElements = {
+	form: {
+		dropdownElement: dropdownElement,
+		additionalInfo: additionalInfo,
+		radioInput: radioInput,
+		inputRadioGroup: inputRadioGroup,
+		inputCheckbox: inputCheckbox,
+		inputText: inputText,
+		inputTextarea: inputTextarea,
+		inputSelect: inputSelect,
+		inputAutocomplete: inputAutocomplete,
+		formAjax: formAjax
+	},
+	collection: {
+		collectionSearchForm: collectionSearchForm,
+		collectionElements: collectionElements,
+		collectionContainer: collectionContainer,
+		feedbackToken: feedbackToken,
+		collectionFeedback: collectionFeedback
+	}
+};
+
+// Form Elements
+utils.register('dropdown-option', dropdownElement);
+utils.register('additional-info', additionalInfo);
+utils.register('input-radio', radioInput);
+utils.register('input-radio-group', inputRadioGroup);
+utils.register('input-checkbox', inputCheckbox);
+utils.register('input-text', inputText);
+utils.register('input-textarea', inputTextarea);
+utils.register('input-select', inputSelect);
+utils.register('input-autocomplete', inputAutocomplete);
+utils.register('form-ajax', formAjax);
+
+// Collection Elements
+utils.register('collection-search-form', collectionSearchForm);
+utils.register('collection-elements', collectionElements);
+utils.register('collection-container', collectionContainer);
+utils.register('collection-feedback', collectionFeedback);
+utils.register('feedback-token', feedbackToken);

@@ -50,67 +50,43 @@
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _elementBase = __webpack_require__(3);
-
-	var _elementBase2 = _interopRequireDefault(_elementBase);
-
-	var _inputElementBase = __webpack_require__(4);
-
-	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
-
-	var _inputTextElementBase = __webpack_require__(5);
-
-	var _inputTextElementBase2 = _interopRequireDefault(_inputTextElementBase);
-
-	var _dropdownInputElementBase = __webpack_require__(6);
-
-	var _dropdownInputElementBase2 = _interopRequireDefault(_dropdownInputElementBase);
-
-	var _dropdownInputTextElementBase = __webpack_require__(7);
-
-	var _dropdownInputTextElementBase2 = _interopRequireDefault(_dropdownInputTextElementBase);
-
-	var _formElementBase = __webpack_require__(8);
-
-	var _formElementBase2 = _interopRequireDefault(_formElementBase);
-
-	var _dropdownOption = __webpack_require__(9);
+	var _dropdownOption = __webpack_require__(3);
 
 	var _dropdownOption2 = _interopRequireDefault(_dropdownOption);
 
-	var _additionalInfo = __webpack_require__(10);
+	var _additionalInfo = __webpack_require__(5);
 
 	var _additionalInfo2 = _interopRequireDefault(_additionalInfo);
 
-	var _inputRadio = __webpack_require__(11);
+	var _inputRadio = __webpack_require__(6);
 
 	var _inputRadio2 = _interopRequireDefault(_inputRadio);
 
-	var _inputRadioGroup = __webpack_require__(12);
+	var _inputRadioGroup = __webpack_require__(7);
 
 	var _inputRadioGroup2 = _interopRequireDefault(_inputRadioGroup);
 
-	var _inputCheckbox = __webpack_require__(13);
+	var _inputCheckbox = __webpack_require__(9);
 
 	var _inputCheckbox2 = _interopRequireDefault(_inputCheckbox);
 
-	var _inputText = __webpack_require__(14);
+	var _inputText = __webpack_require__(10);
 
 	var _inputText2 = _interopRequireDefault(_inputText);
 
-	var _inputTextarea = __webpack_require__(15);
+	var _inputTextarea = __webpack_require__(12);
 
 	var _inputTextarea2 = _interopRequireDefault(_inputTextarea);
 
-	var _inputSelect = __webpack_require__(16);
+	var _inputSelect = __webpack_require__(13);
 
 	var _inputSelect2 = _interopRequireDefault(_inputSelect);
 
-	var _inputAutocomplete = __webpack_require__(17);
+	var _inputAutocomplete = __webpack_require__(15);
 
 	var _inputAutocomplete2 = _interopRequireDefault(_inputAutocomplete);
 
-	var _formAjax = __webpack_require__(18);
+	var _formAjax = __webpack_require__(17);
 
 	var _formAjax2 = _interopRequireDefault(_formAjax);
 
@@ -126,6 +102,14 @@
 
 	var _collectionContainer2 = _interopRequireDefault(_collectionContainer);
 
+	var _collectionFeedback = __webpack_require__(22);
+
+	var _collectionFeedback2 = _interopRequireDefault(_collectionFeedback);
+
+	var _feedbackToken = __webpack_require__(23);
+
+	var _feedbackToken2 = _interopRequireDefault(_feedbackToken);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	if (!window.$) {
@@ -140,44 +124,46 @@
 		throw new Error("x-tag-core.js must be loaded as a dependency, as long as JQuery, Underscore.js and Bootstrap.js.");
 	}
 
-	var dropdownProto = _utils2.default.extend(_dropdownOption2.default).from(_elementBase2.default);
-	_utils2.default.register('dropdown-option', dropdownProto);
+	var baseElements = {
+		form: {
+			dropdownElement: _dropdownOption2.default,
+			additionalInfo: _additionalInfo2.default,
+			radioInput: _inputRadio2.default,
+			inputRadioGroup: _inputRadioGroup2.default,
+			inputCheckbox: _inputCheckbox2.default,
+			inputText: _inputText2.default,
+			inputTextarea: _inputTextarea2.default,
+			inputSelect: _inputSelect2.default,
+			inputAutocomplete: _inputAutocomplete2.default,
+			formAjax: _formAjax2.default
+		},
+		collection: {
+			collectionSearchForm: _collectionSearchForm2.default,
+			collectionElements: _collectionElements2.default,
+			collectionContainer: _collectionContainer2.default,
+			feedbackToken: _feedbackToken2.default,
+			collectionFeedback: _collectionFeedback2.default
+		}
+	};
 
-	var additionaInfoProto = _utils2.default.extend(_additionalInfo2.default).from(_elementBase2.default);
-	_utils2.default.register('additional-info', additionaInfoProto);
+	// Form Elements
+	_utils2.default.register('dropdown-option', _dropdownOption2.default);
+	_utils2.default.register('additional-info', _additionalInfo2.default);
+	_utils2.default.register('input-radio', _inputRadio2.default);
+	_utils2.default.register('input-radio-group', _inputRadioGroup2.default);
+	_utils2.default.register('input-checkbox', _inputCheckbox2.default);
+	_utils2.default.register('input-text', _inputText2.default);
+	_utils2.default.register('input-textarea', _inputTextarea2.default);
+	_utils2.default.register('input-select', _inputSelect2.default);
+	_utils2.default.register('input-autocomplete', _inputAutocomplete2.default);
+	_utils2.default.register('form-ajax', _formAjax2.default);
 
-	var radioProto = _utils2.default.extend(_inputRadio2.default).from(_elementBase2.default);
-	_utils2.default.register('input-radio', radioProto);
-
-	var inputGroupProto = _utils2.default.extend(_inputRadioGroup2.default).from(_inputElementBase2.default);
-	_utils2.default.register('input-radio-group', inputGroupProto);
-
-	var checkboxProto = _utils2.default.extend(_inputCheckbox2.default).from(_inputElementBase2.default);
-	_utils2.default.register('input-checkbox', checkboxProto);
-
-	var textProto = _utils2.default.extend(_inputText2.default).from(_inputTextElementBase2.default);
-	_utils2.default.register('input-text', textProto);
-
-	var textareaProto = _utils2.default.extend(_inputTextarea2.default).from(_inputTextElementBase2.default);
-	_utils2.default.register('input-textarea', textareaProto);
-
-	var selectProto = _utils2.default.extend(_inputSelect2.default).from(_dropdownInputElementBase2.default);
-	_utils2.default.register('input-select', selectProto);
-
-	var selectProto = _utils2.default.extend(_inputAutocomplete2.default).from(_dropdownInputTextElementBase2.default);
-	_utils2.default.register('input-autocomplete', selectProto);
-
-	var formProto = _utils2.default.extend(_formAjax2.default).from(_formElementBase2.default);
-	_utils2.default.register('form-ajax', formProto);
-
-	var searchFormProto = _utils2.default.extend(_collectionSearchForm2.default).from(_formElementBase2.default);
-	_utils2.default.register('collection-search-form', searchFormProto);
-
-	var elementsProto = _utils2.default.extend(_collectionElements2.default).from(_elementBase2.default);
-	_utils2.default.register('collection-elements', elementsProto);
-
-	var collectionContainerProto = _utils2.default.extend(_collectionContainer2.default).from(_elementBase2.default);
-	_utils2.default.register('collection-container', collectionContainerProto);
+	// Collection Elements
+	_utils2.default.register('collection-search-form', _collectionSearchForm2.default);
+	_utils2.default.register('collection-elements', _collectionElements2.default);
+	_utils2.default.register('collection-container', _collectionContainer2.default);
+	_utils2.default.register('collection-feedback', _collectionFeedback2.default);
+	_utils2.default.register('feedback-token', _feedbackToken2.default);
 
 /***/ },
 /* 1 */
@@ -278,79 +264,6 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _utils = __webpack_require__(1);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = {
-		methods: {
-			getRenderingRoot: function getRenderingRoot() {
-				// Could be used for shadow dom
-				return this;
-			},
-			selectInRenderingRoot: function selectInRenderingRoot(selector) {
-				return this.getRenderingRoot().querySelector(selector);
-			},
-			raiseAttributeChanged: function raiseAttributeChanged(attributeName, oldValue, newValue) {
-				if (_utils2.default.isBrowserSupportingMo()) {
-					return;
-				} else if (!this.changeCallback) {
-					var message = "You should implement a 'changeCallback' for element " + this.nodeName + ". It's a support for browsers not supporting mutation observers.";
-					console.log();
-				} else {
-					if (oldValue != newValue) this.changeCallback(attributeName, oldValue, newValue);
-				}
-			},
-			getInnerContent: function getInnerContent(selector) {
-				var content = this.querySelector(selector);
-				if (content) {
-					return content;
-				} else {
-					return this;
-				}
-			},
-			onComponentsReady: function onComponentsReady(func) {
-				var firstTryTime = 200;
-				var secondTryTime = 1000;
-				var thirdTryTime = 3000;
-
-				var thirdTry = function thirdTry() {
-					setTimeout(function () {
-						func();
-					}, thirdTryTime);
-				};
-				var seconTry = function seconTry() {
-					try {
-						func();
-					} catch (e) {
-						thirdTry();
-					}
-				};
-				var firstTry = function firstTry() {
-					try {
-						func();
-					} catch (e) {
-						seconTry();
-					}
-				};
-
-				setTimeout(firstTry, firstTryTime);
-			}
-		}
-	};
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
@@ -358,397 +271,17 @@
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _elementBase = __webpack_require__(3);
+	var _elementBase = __webpack_require__(4);
 
 	var _elementBase2 = _interopRequireDefault(_elementBase);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var inputElementBase = {
-	    accessors: {
-	        field: {
-	            attribute: {},
-	            get: function get() {
-	                return this.getAttribute('field');
-	            },
-	            set: function set(value) {
-	                this.xtag.data.field = value;
-	            }
-	        },
-	        label: {
-	            attribute: {},
-	            get: function get() {
-	                return this.getAttribute('label');
-	            },
-	            set: function set(value) {
-	                this.xtag.data.label = value;
-	            }
-	        },
-	        error: {
-	            attribute: {},
-	            get: function get() {
-	                return this.getAttribute('error') || '';
-	            },
-	            set: function set(value) {
-	                var old = this.xtag.data.error;
-	                this.xtag.data.error = value;
-	                this.raiseAttributeChanged("error", old, value);
-	            }
-	        },
-	        errorClass: {
-	            attribute: {},
-	            get: function get() {
-	                if (this.error) {
-	                    return "form-group has-error";
-	                }
-	                return "form-group";
-	            }
-	        },
-	        value: {
-	            attribute: {},
-	            get: function get() {
-	                return this.getAttribute('value') || '';
-	            },
-	            set: function set(data) {
-	                var old = this.xtag.data.value;
-	                this.xtag.data.value = data;
-	                this.raiseAttributeChanged("value", old, data);
-	            }
-	        },
-	        disabled: {
-	            attribute: {},
-	            get: function get() {
-	                return this.hasAttribute('disabled');
-	            },
-	            set: function set(data) {
-	                this.xtag.data.disabled = data;
-	            }
-	        }
-	    },
-	    methods: {
-	        getData: function getData() {
-	            if (!this.field) {
-	                throw new Error("Attribute 'field' must be defined");
-	            }
-	            var data = {};
-	            data[this.field] = this.value;
-	            return data;
-	        },
-	        renderError: function renderError() {
-	            var container = this.selectInRenderingRoot(".form-group");
-	            container.className = this.errorClass;
-	            var messageSpan = this.selectInRenderingRoot(".help-block");
-	            messageSpan.textContent = this.error;
-	        }
-	    }
-	};
-
-	exports.default = _utils2.default.extend(inputElementBase).from(_elementBase2.default);
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _utils = __webpack_require__(1);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	var _inputElementBase = __webpack_require__(4);
-
-	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var inputTextElementBase = {
-	    accessors: {
-	        placeholder: {
-	            attribute: {},
-	            get: function get() {
-	                return this.getAttribute('placeholder') || '';
-	            },
-	            set: function set(value) {
-	                this.xtag.data.placeholder = value;
-	            }
-	        },
-	        required: {
-	            attribute: { boolean: true },
-	            get: function get() {
-	                return this.hasAttribute('required');
-	            },
-	            set: function set(data) {
-	                this.xtag.data.required = data;
-	            }
-	        },
-	        requiredMessage: {
-	            attribute: {},
-	            get: function get() {
-	                return this.getAttribute('required-message') || '';
-	            },
-	            set: function set(data) {
-	                this.xtag.data.requiredMessage = data;
-	            }
-	        }
-	    },
-	    methods: {
-	        getInput: function getInput() {
-	            var input = this.selectInRenderingRoot("input");
-	            if (!input) {
-	                throw new Error("A input must be defined inside input text template");
-	            }
-	            return input;
-	        },
-	        validate: function validate() {
-	            if (!this.required) {
-	                this.error = '';
-	                return true;
-	            }
-	            if (!this.getInput().value) {
-	                this.error = this.requiredMessage;
-	                return false;
-	            }
-	            if (!this.getInput().value.trim()) {
-	                this.error = this.requiredMessage;
-	                return false;
-	            }
-	            this.error = '';
-	            return true;
-	        }
-	    },
-	    events: {
-	        keyup: function keyup(e) {
-	            this.value = this.getInput().value;
-	            this.validate();
-	        }
-	    }
-	};
-
-	exports.default = _utils2.default.extend(inputTextElementBase).from(_inputElementBase2.default);
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _utils = __webpack_require__(1);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	var _inputElementBase = __webpack_require__(4);
-
-	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var dropdownInputElementBase = {
-	    accessors: {
-	        url: {
-	            attribute: {},
-	            get: function get() {
-	                return this.getAttribute('url');
-	            },
-	            set: function set(data) {
-	                this.xtag.data.url = data;
-	            }
-	        }
-	    },
-	    methods: {
-	        renderData: function renderData(data) {
-	            if (!data) {
-	                throw new Error("Data not defined.");
-	            }
-
-	            this.getDropdownMenu().innerHTML = '';
-	            if (_.isEmpty(data)) {
-	                return;
-	            }
-
-	            _.each(data, function (optionData) {
-	                var dropdownOption = this.createDropdownOption(optionData);
-	                this.getDropdownMenu().appendChild(dropdownOption);
-	            }, this);
-	        },
-	        createDropdownOption: function createDropdownOption(optionData) {
-	            var dropdownOption = _utils2.default.createElement("dropdown-option", {
-	                key: optionData.key,
-	                value: optionData.value
-	            });
-	            return dropdownOption;
-	        },
-	        getDropdown: function getDropdown() {
-	            var dropdown = this.selectInRenderingRoot(".dropdown");
-	            return dropdown;
-	        },
-	        getDropdownMenu: function getDropdownMenu() {
-	            var dropdownMenu = this.selectInRenderingRoot(".dropdown-menu");
-	            return dropdownMenu;
-	        },
-	        showMenu: function showMenu() {
-	            if (this.disabled) {
-	                this.hideMenu();
-	            } else {
-	                var dropdown = this.getDropdown();
-	                if (dropdown) dropdown.className = "dropdown open";
-	            }
-	        },
-	        hideMenu: function hideMenu() {
-	            var dropdown = this.getDropdown();
-	            if (dropdown) dropdown.className = "dropdown";
-	        }
-	    },
-	    events: {
-	        focus: function focus() {
-	            this.showMenu();
-	        },
-	        blur: function blur() {
-	            this.hideMenu();
-	        },
-	        mousedown: function mousedown(e) {
-	            if (e.target.parentElement.parentElement.nodeName === "DROPDOWN-OPTION") {
-	                var dropdownOption = e.target.parentElement.parentElement;
-	                this.selectOption(dropdownOption);
-	            }
-	        }
-	    }
-	};
-
-	exports.default = _utils2.default.extend(dropdownInputElementBase).from(_inputElementBase2.default);
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _utils = __webpack_require__(1);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	var _dropdownInputElementBase = __webpack_require__(6);
-
-	var _dropdownInputElementBase2 = _interopRequireDefault(_dropdownInputElementBase);
-
-	var _inputTextElementBase = __webpack_require__(5);
-
-	var _inputTextElementBase2 = _interopRequireDefault(_inputTextElementBase);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _utils2.default.extend(_dropdownInputElementBase2.default).from(_inputTextElementBase2.default);
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _utils = __webpack_require__(1);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	var _elementBase = __webpack_require__(3);
-
-	var _elementBase2 = _interopRequireDefault(_elementBase);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var formElementBase = {
-	    methods: {
-	        getInputElements: function getInputElements() {
-	            var inputElements = this.getRenderingRoot().querySelector("form").querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
-	            return inputElements;
-	        },
-	        getEditableElements: function getEditableElements() {
-	            var inputElements = this.getRenderingRoot().querySelector("form").querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
-	            return inputElements;
-	        },
-	        getData: function getData() {
-	            var inputElements = this.getInputElements();
-	            if (inputElements.length === 0) {
-	                return null;
-	            }
-
-	            var data = {};
-	            _.each(inputElements, function (currentInput) {
-	                var inputData = currentInput.getData();
-	                _.extend(data, inputData);
-	            });
-	            return data;
-	        },
-	        setData: function setData(object) {
-	            for (var attributeName in object) {
-	                var innerInput = this.selectInRenderingRoot("[field=" + attributeName + "]");
-	                if (!innerInput) {
-	                    continue;
-	                } else if (innerInput.nodeName === "INPUT-CHECKBOX") {
-	                    var fieldValue = object[attributeName];
-	                    innerInput.checked = fieldValue === true;
-	                } else {
-	                    var fieldValue = object[attributeName];
-	                    innerInput.value = fieldValue;
-	                }
-	            }
-	        },
-	        clearForm: function clearForm() {
-	            var inputElements = this.getEditableElements();
-	            _.each(inputElements, function (inputElement) {
-	                if (inputElement.nodeName === "INPUT-CHECKBOX") {
-	                    inputElement.checked = false;
-	                } else {
-	                    inputElement.value = "";
-	                }
-	            });
-	        },
-	        validate: function validate() {
-	            var inputElements = this.getEditableElements();
-	            var isFormValid = true;
-	            _.each(inputElements, function (currentInput) {
-	                var inputData = currentInput.getData();
-	                if (_(currentInput.validate).isFunction()) {
-	                    var isInputValid = currentInput.validate();
-	                    isFormValid = isFormValid && isInputValid;
-	                }
-	            });
-	            return isFormValid;
-	        }
-	    }
-	};
-
-	var formBase = _utils2.default.extend(formElementBase).from(_elementBase2.default);
-	exports.default = formBase;
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
 	var template = function template(data) {
-	    return '<li><a class="selectable">' + data.value + '</a></li>';
+	    return "<li><a class=\"selectable\">" + data.value + "</a></li>";
 	};
 
-	exports.default = {
+	var dropdownElement = {
 	    accessors: {
 	        key: {
 	            attribute: {},
@@ -793,16 +326,91 @@
 	    }
 	};
 
+	exports.default = _utils2.default.extend(dropdownElement).from(_elementBase2.default);
+
 /***/ },
-/* 10 */
-/***/ function(module, exports) {
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+		methods: {
+			getRenderingRoot: function getRenderingRoot() {
+				// Could be used for shadow dom
+				return this;
+			},
+			selectInRenderingRoot: function selectInRenderingRoot(selector) {
+				return this.getRenderingRoot().querySelector(selector);
+			},
+			insertHtmlInRenderingRoot: function insertHtmlInRenderingRoot(html) {
+				this.getRenderingRoot().innerHTML = html;
+			},
+			appendHtmlInRenderingRoot: function appendHtmlInRenderingRoot(html) {
+				var div = document.createElement('div');
+				div.innerHTML = html ? html.trim() : '';
+				var elements = div.childNodes;
+				_(elements).each(function (element) {
+					this.getRenderingRoot().appendChild(element);
+				}, this);
+			},
+			raiseAttributeChanged: function raiseAttributeChanged(attributeName, oldValue, newValue) {
+				if (_utils2.default.isBrowserSupportingMo()) {
+					return;
+				} else if (!this.changeCallback) {
+					var message = "You should implement a 'changeCallback' for element " + this.nodeName + ". It's a support for browsers not supporting mutation observers.";
+					console.log();
+				} else {
+					if (oldValue != newValue) this.changeCallback(attributeName, oldValue, newValue);
+				}
+			},
+			getInnerContent: function getInnerContent(selector) {
+				var content = this.querySelector(selector);
+				if (content) {
+					return content;
+				} else {
+					return this;
+				}
+			},
+			onComponentsReady: function onComponentsReady(func) {
+				setTimeout(function () {
+					func();
+				}, 200);
+			}
+		}
+	};
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = {
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var additionalInfo = {
 	    accessors: {
 	        field: {
 	            attribute: {},
@@ -861,20 +469,33 @@
 	    }
 	};
 
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
+	exports.default = _utils2.default.extend(additionalInfo).from(_elementBase2.default);
 
-	'use strict';
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var template = function template(data) {
-	    return '    \n\t<div class="radio">\n      <label>\n      \t<input \tname="' + data.field + '"\n      \t\t\tvalue="' + data.value + '"\n      \t\t\ttype="radio"\n      \t\t\t' + data.disabled + '\n      \t\t\t' + data.checked + '/>\n      \t\t<span class="radio-label">' + data.label + '</span>\n      \t</label>\n    </div>';
+	    return "    \n\t<div class=\"radio\">\n      <label>\n      \t<input \tname=\"" + data.field + "\"\n      \t\t\tvalue=\"" + data.value + "\"\n      \t\t\ttype=\"radio\"\n      \t\t\t" + data.disabled + "\n      \t\t\t" + data.checked + "/>\n      \t\t<span class=\"radio-label\">" + data.label + "</span>\n      \t</label>\n    </div>";
 	};
 
-	exports.default = {
+	var inputRadio = {
 	    accessors: {
 	        field: {
 	            attribute: {},
@@ -956,20 +577,33 @@
 	    }
 	};
 
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
+	exports.default = _utils2.default.extend(inputRadio).from(_elementBase2.default);
 
-	'use strict';
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _inputElementBase = __webpack_require__(8);
+
+	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var template = function template(data) {
-	    return '    \n\t<div class="' + data.errorClass + '">\n        <label>' + data.label + '</label>\n        <radio-group-content class="inner-content">\n            ' + data.innerContent + '\n        </radio-group-content>\n        </div>\n        <span class="help-block">\n        \t' + data.error + '\n        </span>\n    </div>';
+	    return "    \n\t<div class=\"" + data.errorClass + "\">\n        <label>" + data.label + "</label>\n        <radio-group-content class=\"inner-content\">\n            " + data.innerContent + "\n        </radio-group-content>\n        </div>\n        <span class=\"help-block\">\n        \t" + data.error + "\n        </span>\n    </div>";
 	};
 
-	exports.default = {
+	var inputRadioGroup = {
 	    accessors: {
 	        required: {
 	            attribute: { boolean: true },
@@ -1101,20 +735,134 @@
 	    }
 	};
 
+	exports.default = _utils2.default.extend(inputRadioGroup).from(_inputElementBase2.default);
+
 /***/ },
-/* 13 */
-/***/ function(module, exports) {
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var inputElementBase = {
+	    accessors: {
+	        field: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('field');
+	            },
+	            set: function set(value) {
+	                this.xtag.data.field = value;
+	            }
+	        },
+	        label: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('label');
+	            },
+	            set: function set(value) {
+	                this.xtag.data.label = value;
+	            }
+	        },
+	        error: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('error') || '';
+	            },
+	            set: function set(value) {
+	                var old = this.xtag.data.error;
+	                this.xtag.data.error = value;
+	                this.raiseAttributeChanged("error", old, value);
+	            }
+	        },
+	        errorClass: {
+	            attribute: {},
+	            get: function get() {
+	                if (this.error) {
+	                    return "form-group has-error";
+	                }
+	                return "form-group";
+	            }
+	        },
+	        value: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('value') || '';
+	            },
+	            set: function set(data) {
+	                var old = this.xtag.data.value;
+	                this.xtag.data.value = data;
+	                this.raiseAttributeChanged("value", old, data);
+	            }
+	        },
+	        disabled: {
+	            attribute: {},
+	            get: function get() {
+	                return this.hasAttribute('disabled');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.disabled = data;
+	            }
+	        }
+	    },
+	    methods: {
+	        getData: function getData() {
+	            if (!this.field) {
+	                throw new Error("Attribute 'field' must be defined");
+	            }
+	            var data = {};
+	            data[this.field] = this.value;
+	            return data;
+	        },
+	        renderError: function renderError() {
+	            var container = this.selectInRenderingRoot(".form-group");
+	            container.className = this.errorClass;
+	            var messageSpan = this.selectInRenderingRoot(".help-block");
+	            messageSpan.textContent = this.error;
+	        }
+	    }
+	};
+
+	exports.default = _utils2.default.extend(inputElementBase).from(_elementBase2.default);
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _inputElementBase = __webpack_require__(8);
+
+	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var template = function template(data) {
 	    return "\n    <div class=\"" + data.errorClass + " checkbox\">\n        <label for=\"" + data.field + "\">\n            <input  type=\"checkbox\"\n                    id=\"" + data.field + "\"\n                    name=\"" + data.field + "\"\n                    " + data.checked + "\n                    " + data.disabled + "/>\n            <span class=\"label-text\">" + data.label + "</span>\n        </label>            \n        <span class=\"help-block\">" + data.error + "</span>\n    </div>";
 	};
 
-	exports.default = {
+	var inputCheckbox = {
 	    accessors: {
 	        checked: {
 	            attribute: { boolean: true },
@@ -1177,24 +925,37 @@
 	    }
 	};
 
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
+	exports.default = _utils2.default.extend(inputCheckbox).from(_inputElementBase2.default);
 
-	'use strict';
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _inputTextElementBase = __webpack_require__(11);
+
+	var _inputTextElementBase2 = _interopRequireDefault(_inputTextElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var template = function template(data) {
-	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <input  type="text" \n                class="form-control"\n                id="' + data.field + '"\n                name="' + data.field + '"\n                placeholder="' + data.placeholder + '"\n                value="' + data.value + '"\n                ' + data.disabled + '/>\n        <span class="help-block">\n            ' + data.error + '\n        </span>\n        <input-text-content></input-text-content>\n    </div>';
+	    return "\n    <div class=\"" + data.errorClass + "\">\n        <label for=\"" + data.field + "\">\n            " + data.label + "\n        </label>\n        <input  type=\"text\" \n                class=\"form-control\"\n                id=\"" + data.field + "\"\n                name=\"" + data.field + "\"\n                placeholder=\"" + data.placeholder + "\"\n                value=\"" + data.value + "\"\n                " + data.disabled + "/>\n        <span class=\"help-block\">\n            " + data.error + "\n        </span>\n        <input-text-content></input-text-content>\n    </div>";
 	};
 
 	var templateWithAddOn = function templateWithAddOn(data) {
-	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <div class=\'input-group\'>\n            <input  type="text" \n                    class="form-control"\n                    id="' + data.field + '"\n                    name="' + data.field + '"\n                    placeholder="' + data.placeholder + '"\n                    value="' + data.value + '"\n                    ' + data.disabled + '/>\n            <span class="input-group-addon">\n                <input-text-content>\n                    ' + data.innerContent + '\n                </input-text-content>\n            </span>\n        </div>                    \n        <span class="help-block">\n            ' + data.error + '\n        </span>\n    </div>';
+	    return "\n    <div class=\"" + data.errorClass + "\">\n        <label for=\"" + data.field + "\">\n            " + data.label + "\n        </label>\n        <div class='input-group'>\n            <input  type=\"text\" \n                    class=\"form-control\"\n                    id=\"" + data.field + "\"\n                    name=\"" + data.field + "\"\n                    placeholder=\"" + data.placeholder + "\"\n                    value=\"" + data.value + "\"\n                    " + data.disabled + "/>\n            <span class=\"input-group-addon\">\n                <input-text-content>\n                    " + data.innerContent + "\n                </input-text-content>\n            </span>\n        </div>                    \n        <span class=\"help-block\">\n            " + data.error + "\n        </span>\n    </div>";
 	};
 
-	exports.default = {
+	var inputText = {
 	    accessors: {
 	        jquery: {
 	            attribute: {},
@@ -1344,20 +1105,118 @@
 	    }
 	};
 
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
+	exports.default = _utils2.default.extend(inputText).from(_inputTextElementBase2.default);
 
-	'use strict';
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var template = function template(data) {
-	    return '\n    <div class="' + data.errorClass + '">\n        <label for="' + data.field + '">\n            ' + data.label + '\n        </label>\n        <textarea   class="form-control"\n                    id="' + data.field + '"\n                    name="' + data.field + '"\n                    placeholder="' + data.placeholder + '"\n                    value="' + data.value + '"\n                    rows="' + data.rows + '"\n                    ' + data.disabled + '>' + data.value + '</textarea>\n        <span class="help-block">\n            ' + data.error + '\n        </span>\n    </div>';
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _inputElementBase = __webpack_require__(8);
+
+	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var inputTextElementBase = {
+	    accessors: {
+	        placeholder: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('placeholder') || '';
+	            },
+	            set: function set(value) {
+	                this.xtag.data.placeholder = value;
+	            }
+	        },
+	        required: {
+	            attribute: { boolean: true },
+	            get: function get() {
+	                return this.hasAttribute('required');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.required = data;
+	            }
+	        },
+	        requiredMessage: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('required-message') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.requiredMessage = data;
+	            }
+	        }
+	    },
+	    methods: {
+	        getInput: function getInput() {
+	            var input = this.selectInRenderingRoot("input");
+	            if (!input) {
+	                throw new Error("A input must be defined inside input text template");
+	            }
+	            return input;
+	        },
+	        validate: function validate() {
+	            if (!this.required) {
+	                this.error = '';
+	                return true;
+	            }
+	            if (!this.getInput().value) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+	            if (!this.getInput().value.trim()) {
+	                this.error = this.requiredMessage;
+	                return false;
+	            }
+	            this.error = '';
+	            return true;
+	        }
+	    },
+	    events: {
+	        keyup: function keyup(e) {
+	            this.value = this.getInput().value;
+	            this.validate();
+	        }
+	    }
 	};
 
-	exports.default = {
+	exports.default = _utils2.default.extend(inputTextElementBase).from(_inputElementBase2.default);
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _inputTextElementBase = __webpack_require__(11);
+
+	var _inputTextElementBase2 = _interopRequireDefault(_inputTextElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var template = function template(data) {
+	    return "\n    <div class=\"" + data.errorClass + "\">\n        <label for=\"" + data.field + "\">\n            " + data.label + "\n        </label>\n        <textarea   class=\"form-control\"\n                    id=\"" + data.field + "\"\n                    name=\"" + data.field + "\"\n                    placeholder=\"" + data.placeholder + "\"\n                    value=\"" + data.value + "\"\n                    rows=\"" + data.rows + "\"\n                    " + data.disabled + ">" + data.value + "</textarea>\n        <span class=\"help-block\">\n            " + data.error + "\n        </span>\n    </div>";
+	};
+
+	var inputTextarea = {
 	    accessors: {
 	        rows: {
 	            attribute: {},
@@ -1453,20 +1312,33 @@
 	    }
 	};
 
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
+	exports.default = _utils2.default.extend(inputTextarea).from(_inputTextElementBase2.default);
 
-	'use strict';
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _dropdownInputElementBase = __webpack_require__(14);
+
+	var _dropdownInputElementBase2 = _interopRequireDefault(_dropdownInputElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var template = function template(data) {
-	    return '    \n\t<div class="' + data.errorClass + '">\n        <div class="dropdown">\n            <label for="' + data.field + '">' + data.label + '</label>\n            <button class="' + data.buttonClass + '" id="' + data.field + '" type="button">\n                <span class="pull-left">' + data.buttonContent + '</span>\n                <span class="pull-right">\n                    <span class="caret"></span>\n                </span>\n            </button>\n            <ul class="dropdown-menu" style="width: 100%">\n                <input-select-content>\n                    ' + data.innerContent + '\n                </input-select-content>\n            </ul>\n        </div>\n        <span class="help-block">' + data.error + '</span>\n    </div>';
+	    return "    \n\t<div class=\"" + data.errorClass + "\">\n        <div class=\"dropdown\">\n            <label for=\"" + data.field + "\">" + data.label + "</label>\n            <button class=\"" + data.buttonClass + "\" id=\"" + data.field + "\" type=\"button\">\n                <span class=\"pull-left\">" + data.buttonContent + "</span>\n                <span class=\"pull-right\">\n                    <span class=\"caret\"></span>\n                </span>\n            </button>\n            <ul class=\"dropdown-menu\" style=\"width: 100%\">\n                <input-select-content>\n                    " + data.innerContent + "\n                </input-select-content>\n            </ul>\n        </div>\n        <span class=\"help-block\">" + data.error + "</span>\n    </div>";
 	};
 
-	exports.default = {
+	var inputSelect = {
 	    accessors: {
 	        placeholder: {
 	            attribute: {},
@@ -1600,20 +1472,127 @@
 	    }
 	};
 
-/***/ },
-/* 17 */
-/***/ function(module, exports) {
+	exports.default = _utils2.default.extend(inputSelect).from(_dropdownInputElementBase2.default);
 
-	'use strict';
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var template = function template(data) {
-	    return '    \n\t<div class="' + data.errorClass + '">\n\t\t<div class="dropdown">\n\t\t\t<label for="' + data.field + '">' + data.label + '</label>\n\t\t\t<input class="form-control" type="text"\n\t\t\t\tid="' + data.field + '" \n                name="' + data.field + '" \n                value="' + data.value + '"\n                placeholder="' + data.placeholder + '"\n                ' + data.disabled + '/>\n            <ul class="dropdown-menu" style="width: 100%"></ul>\n        </div>\n        <span class="help-block">' + data.error + '</span>\n    </div>';
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _inputElementBase = __webpack_require__(8);
+
+	var _inputElementBase2 = _interopRequireDefault(_inputElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var dropdownInputElementBase = {
+	    accessors: {
+	        url: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('url');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.url = data;
+	            }
+	        }
+	    },
+	    methods: {
+	        renderData: function renderData(data) {
+	            if (!data) {
+	                throw new Error("Data not defined.");
+	            }
+
+	            this.getDropdownMenu().innerHTML = '';
+	            if (_.isEmpty(data)) {
+	                return;
+	            }
+
+	            _.each(data, function (optionData) {
+	                var dropdownOption = this.createDropdownOption(optionData);
+	                this.getDropdownMenu().appendChild(dropdownOption);
+	            }, this);
+	        },
+	        createDropdownOption: function createDropdownOption(optionData) {
+	            var dropdownOption = _utils2.default.createElement("dropdown-option", {
+	                key: optionData.key,
+	                value: optionData.value
+	            });
+	            return dropdownOption;
+	        },
+	        getDropdown: function getDropdown() {
+	            var dropdown = this.selectInRenderingRoot(".dropdown");
+	            return dropdown;
+	        },
+	        getDropdownMenu: function getDropdownMenu() {
+	            var dropdownMenu = this.selectInRenderingRoot(".dropdown-menu");
+	            return dropdownMenu;
+	        },
+	        showMenu: function showMenu() {
+	            if (this.disabled) {
+	                this.hideMenu();
+	            } else {
+	                var dropdown = this.getDropdown();
+	                if (dropdown) dropdown.className = "dropdown open";
+	            }
+	        },
+	        hideMenu: function hideMenu() {
+	            var dropdown = this.getDropdown();
+	            if (dropdown) dropdown.className = "dropdown";
+	        }
+	    },
+	    events: {
+	        focus: function focus() {
+	            this.showMenu();
+	        },
+	        blur: function blur() {
+	            this.hideMenu();
+	        },
+	        mousedown: function mousedown(e) {
+	            if (e.target.parentElement.parentElement.nodeName === "DROPDOWN-OPTION") {
+	                var dropdownOption = e.target.parentElement.parentElement;
+	                this.selectOption(dropdownOption);
+	            }
+	        }
+	    }
 	};
 
-	exports.default = {
+	exports.default = _utils2.default.extend(dropdownInputElementBase).from(_inputElementBase2.default);
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _dropdownInputTextElementBase = __webpack_require__(16);
+
+	var _dropdownInputTextElementBase2 = _interopRequireDefault(_dropdownInputTextElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var template = function template(data) {
+	    return "    \n\t<div class=\"" + data.errorClass + "\">\n\t\t<div class=\"dropdown\">\n\t\t\t<label for=\"" + data.field + "\">" + data.label + "</label>\n\t\t\t<input class=\"form-control\" type=\"text\"\n\t\t\t\tid=\"" + data.field + "\" \n                name=\"" + data.field + "\" \n                value=\"" + data.value + "\"\n                placeholder=\"" + data.placeholder + "\"\n                " + data.disabled + "/>\n            <ul class=\"dropdown-menu\" style=\"width: 100%\"></ul>\n        </div>\n        <span class=\"help-block\">" + data.error + "</span>\n    </div>";
+	};
+
+	var inputAutocomplete = {
 	    lifecycle: {
 	        created: function created() {
 	            this.render();
@@ -1692,11 +1671,39 @@
 	    }
 	};
 
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
+	exports.default = _utils2.default.extend(inputAutocomplete).from(_dropdownInputTextElementBase2.default);
 
-	'use strict';
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _dropdownInputElementBase = __webpack_require__(14);
+
+	var _dropdownInputElementBase2 = _interopRequireDefault(_dropdownInputElementBase);
+
+	var _inputTextElementBase = __webpack_require__(11);
+
+	var _inputTextElementBase2 = _interopRequireDefault(_inputTextElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _utils2.default.extend(_dropdownInputElementBase2.default).from(_inputTextElementBase2.default);
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -1704,13 +1711,23 @@
 
 	var _accessors;
 
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _formElementBase = __webpack_require__(18);
+
+	var _formElementBase2 = _interopRequireDefault(_formElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	var template = function template(data) {
-	    return '    \n    <form>\n        <form-ajax-content class="inner-content">\n            ' + data.innerContent + '\n        </form-ajax-content>\n    </form>';
+	    return "    \n    <form>\n        <form-ajax-content class=\"inner-content\">\n            " + data.innerContent + "\n        </form-ajax-content>\n    </form>";
 	};
 
-	exports.default = {
+	var formAjax = {
 	    accessors: (_accessors = {
 	        postUrl: {
 	            attribute: {},
@@ -1757,7 +1774,7 @@
 	                this.xtag.data.redirectToId = data;
 	            }
 	        }
-	    }, _defineProperty(_accessors, 'redirectUrl', {
+	    }, _defineProperty(_accessors, "redirectUrl", {
 	        attribute: {},
 	        get: function get() {
 	            return this.getAttribute('redirect-url') || '';
@@ -1765,7 +1782,7 @@
 	        set: function set(data) {
 	            this.xtag.data.redirectUrl = data;
 	        }
-	    }), _defineProperty(_accessors, 'clearOnSuccess', {
+	    }), _defineProperty(_accessors, "clearOnSuccess", {
 	        attribute: { boolean: true },
 	        get: function get() {
 	            return this.hasAttribute('clear-on-success') || '';
@@ -1882,20 +1899,118 @@
 	    }
 	};
 
+	exports.default = _utils2.default.extend(formAjax).from(_formElementBase2.default);
+
 /***/ },
-/* 19 */
-/***/ function(module, exports) {
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var formElementBase = {
+	    methods: {
+	        getInputElements: function getInputElements() {
+	            var inputElements = this.getRenderingRoot().querySelector("form").querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
+	            return inputElements;
+	        },
+	        getEditableElements: function getEditableElements() {
+	            var inputElements = this.getRenderingRoot().querySelector("form").querySelectorAll("input-text,input-textarea,input-select,input-autocomplete,input-checkbox,input-datetime,input-radio-group,additional-info");
+	            return inputElements;
+	        },
+	        getData: function getData() {
+	            var inputElements = this.getInputElements();
+	            if (inputElements.length === 0) {
+	                return null;
+	            }
+
+	            var data = {};
+	            _.each(inputElements, function (currentInput) {
+	                var inputData = currentInput.getData();
+	                _.extend(data, inputData);
+	            });
+	            return data;
+	        },
+	        setData: function setData(object) {
+	            for (var attributeName in object) {
+	                var innerInput = this.selectInRenderingRoot("[field=" + attributeName + "]");
+	                if (!innerInput) {
+	                    continue;
+	                } else if (innerInput.nodeName === "INPUT-CHECKBOX") {
+	                    var fieldValue = object[attributeName];
+	                    innerInput.checked = fieldValue === true;
+	                } else {
+	                    var fieldValue = object[attributeName];
+	                    innerInput.value = fieldValue;
+	                }
+	            }
+	        },
+	        clearForm: function clearForm() {
+	            var inputElements = this.getEditableElements();
+	            _.each(inputElements, function (inputElement) {
+	                if (inputElement.nodeName === "INPUT-CHECKBOX") {
+	                    inputElement.checked = false;
+	                } else {
+	                    inputElement.value = "";
+	                }
+	            });
+	        },
+	        validate: function validate() {
+	            var inputElements = this.getEditableElements();
+	            var isFormValid = true;
+	            _.each(inputElements, function (currentInput) {
+	                var inputData = currentInput.getData();
+	                if (_(currentInput.validate).isFunction()) {
+	                    var isInputValid = currentInput.validate();
+	                    isFormValid = isFormValid && isInputValid;
+	                }
+	            });
+	            return isFormValid;
+	        }
+	    }
+	};
+
+	var formBase = _utils2.default.extend(formElementBase).from(_elementBase2.default);
+	exports.default = formBase;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _formElementBase = __webpack_require__(18);
+
+	var _formElementBase2 = _interopRequireDefault(_formElementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var template = function template(data) {
 	    return "\n    <form>\n        <collection-search-form-content>\n            " + data.innerContent + "\n        </collection-search-form-content>\n    </form>";
 	};
 
-	exports.default = {
+	var collectionSearchForm = {
 	    lifecycle: {
 	        created: function created() {
 	            this.innerContent = this.getInnerContent("collection-search-form-content").innerHTML;
@@ -1911,30 +2026,43 @@
 	        }
 	    },
 	    events: {
-	        submit: function submit(e) {
-	            e.preventDefault();
-	            var isFormValid = this.validate();
-	            if (!isFormValid) {
-	                e.stopPropagation();
-	                //var formData = this.getData();
-	                //alert(JSON.stringify(formData));
-	            }
-	        }
+	        // submit: function (e) {
+	        //     e.preventDefault();
+	        //     var isFormValid = this.validate();
+	        //     if (!isFormValid) {
+	        //         e.stopPropagation();
+	        //         //var formData = this.getData();
+	        //         //alert(JSON.stringify(formData));
+	        //     }
+	        // }
 	    }
 	};
 
+	exports.default = _utils2.default.extend(collectionSearchForm).from(_formElementBase2.default);
+
 /***/ },
 /* 20 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var template = '\n    <p id="number-of-result"></p>\n    <collection-elements-content id="inner-container"></collection-elements-content>\n    <collection-elements-template style="display: none;"></collection-elements-template>';
 
-	exports.default = {
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var template = "\n    <collection-elements-content id=\"inner-container\"></collection-elements-content>\n    <collection-elements-template style=\"display: none;\"></collection-elements-template>";
+
+	var collectionElements = {
 	    accessors: {
 	        type: {
 	            attribute: {},
@@ -1944,78 +2072,30 @@
 	            set: function set(value) {
 	                this.xtag.data.type = value;
 	            }
-	        },
-	        numberOfResultsMessage: {
-	            attribute: {},
-	            get: function get() {
-	                return this.getAttribute('number-of-results-message');
-	            },
-	            set: function set(value) {
-	                this.xtag.data.numberOfResultsMessage = value;
-	            }
-	        },
-	        numberOfResults: {
-	            attribute: {},
-	            get: function get() {
-	                return this.getAttribute('number-of-results');
-	            },
-	            set: function set(value) {
-	                this.xtag.data.numberOfResults = value;
-	            }
 	        }
 	    },
 	    lifecycle: {
 	        created: function created() {
 	            var firstChild = this.getInnerContent("collection-elements-template").firstElementChild;
 	            this.getRenderingRoot().innerHTML = template;
-	            this.p = this.selectInRenderingRoot('#number-of-result');
 	            this.templateTagContainer = this.selectInRenderingRoot('collection-elements-template');
 	            this.innerContainer = this.selectInRenderingRoot("collection-elements-content");
 	            if (firstChild) {
 	                this.listItemTemplate = firstChild.cloneNode(true);
 	                this.templateTagContainer.appendChild(this.listItemTemplate);
 	            }
-
-	            this.render();
-	        },
-	        attributeChanged: function attributeChanged(attributeName) {
-	            this.render();
 	        }
 	    },
 	    methods: {
-	        render: function render() {
-	            if (!this.numberOfResultsMessage) {
-	                console.log("number-of-results-message property should be defined in order to visualize the number of results from server");
-	                return;
-	            }
-	            if (this.numberOfResults) {
-	                this.p.innerHTML = this.numberOfResultsMessage.replace("{0}", this.numberOfResults);
-	            }
-	        },
-	        addResults: function addResults(dataFromServer) {
-	            this.checkDataFormat(dataFromServer);
-	            this.numberOfResults = dataFromServer.numberOfResults;
-	            this.appendData(dataFromServer.collection);
-	        },
-	        checkDataFormat: function checkDataFormat(dataFromServer) {
-	            if (!_(dataFromServer.numberOfResults).isNumber()) {
-	                throw new Error("Result json from server is expected to have a numberOfResults property of type number");
-	            }
-
-	            if (!_(dataFromServer.collection).isArray()) {
+	        appendData: function appendData(data) {
+	            if (!_(data).isArray()) {
 	                throw new Error("Result json from server is expected to have a collection property of type array");
 	            }
-	        },
-	        appendData: function appendData(data) {
-	            if (!data) {
-	                throw new Error("Data not defined.");
-	            }
 
-	            for (var i = 0; i < data.length; i++) {
-	                var elementData = data[i];
+	            _(data).each(function (elementData) {
 	                var domElement = this.getChildElement(elementData);
 	                this.innerContainer.appendChild(domElement);
-	            }
+	            }, this);
 	        },
 	        renderData: function renderData(data) {
 	            this.emptyCollection();
@@ -2041,20 +2121,35 @@
 	    }
 	};
 
+	exports.default = _utils2.default.extend(collectionElements).from(_elementBase2.default);
+
 /***/ },
 /* 21 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var template = function template(data) {
-	    return '\n    <collection-container-content id="inner-content"></collection-container-content>\n    <div hidden class="show-more">\n        <button id="show-more-button" class="btn btn-default">Show More</button>\n    </div>\n    <ul hidden class="pager">\n        <li><a id="previous-button">Previous</a></li>\n        <li><a id="next-button">Next</a></li>\n    </ul>';
-	};
 
-	exports.default = {
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var template = "\n    <collection-container-content \n        id=\"inner-content\">\n    </collection-container-content>";
+
+	var pagerHtml = "\n    <ul class=\"pager\">\n        <li><a id=\"previous-button\">Previous</a></li>\n        <li><a id=\"next-button\">Next</a></li>\n    </ul>";
+
+	var showMoreButtonHtml = "\n    <button id=\"show-more-button\" class=\"btn btn-default\">Show More</button>";
+
+	var collectionContainer = {
 	    accessors: {
 	        url: {
 	            attribute: {},
@@ -2123,30 +2218,31 @@
 	    lifecycle: {
 	        created: function created() {
 	            this.innerContent = this.getInnerContent("collection-container-content").innerHTML;
-	            this.getRenderingRoot().innerHTML = template({});
+	            this.getRenderingRoot().innerHTML = template;
 	            this.selectInRenderingRoot("#inner-content").innerHTML = this.innerContent;
-	            this.collectionElementTag = this.selectInRenderingRoot("collection-elements");
-	            this.searchForm = this.selectInRenderingRoot("collection-search-form");
-	            this.showMoreButtonTag = this.selectInRenderingRoot("#show-more-button");
-	            this.nextButton = this.selectInRenderingRoot("#next-button");
-	            this.previousButton = this.selectInRenderingRoot("#previous-button");
-	            this.currentPage = this.currentPage || 1;
+	            this.initializeComponents();
 	        },
 	        inserted: function inserted() {
-	            this.renderInfiniteScrolling();
-	            this.renderShowMoreButton();
-	            this.renderPager();
 	            var self = this;
-	            this.onComponentsReady(function (event) {
+	            self.activateInfiniteScrolling();
+	            self.renderShowMoreButton();
+	            self.renderPager();
+	            self.onComponentsReady(function (event) {
 	                self.fetchData();
 	            });
-	            this.activateRefreshing();
+	            self.fetchData();
+	            self.activateRefreshing();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
 	            this.activateRefreshing();
 	        }
 	    },
 	    methods: {
+	        initializeComponents: function initializeComponents() {
+	            this.collectionElementTag = this.selectInRenderingRoot("collection-elements");
+	            this.searchForm = this.selectInRenderingRoot("collection-search-form");
+	            this.currentPage = this.currentPage || 1;
+	        },
 	        fetchData: function fetchData() {
 	            var self = this;
 
@@ -2206,10 +2302,7 @@
 	                this.resultCounter = result.numberOfResults;
 	                this.collectionElementTag.emptyCollection();
 	            }
-	            this.collectionElementTag.addResults({
-	                collection: result.collection,
-	                numberOfResults: this.resultCounter
-	            });
+	            this.collectionElementTag.appendData(result.collection);
 	        },
 	        appendNextPageData: function appendNextPageData() {
 	            this.currentPage++;
@@ -2228,38 +2321,44 @@
 	        },
 	        renderShowMoreButton: function renderShowMoreButton() {
 	            var self = this;
-	            if (self.showMoreButton) {
-	                self.selectInRenderingRoot(".show-more").hidden = false;
-	                self.showMoreButtonTag.onclick = function () {
-	                    self.appendNextPageData();
-	                };
+	            if (!self.showMoreButton) {
+	                return;
 	            }
+	            self.appendHtmlInRenderingRoot(showMoreButtonHtml);
+	            var showMoreButton = this.selectInRenderingRoot("#show-more-button");
+	            showMoreButton.onclick = function () {
+	                self.appendNextPageData();
+	            };
 	        },
 	        renderPager: function renderPager() {
 	            var self = this;
-	            if (self.pager) {
-	                self.selectInRenderingRoot(".pager").hidden = false;
-	                self.nextButton.onclick = function () {
-	                    self.fetchNextPageData();
-	                };
-	                self.previousButton.onclick = function () {
-	                    self.fetchPreviousPageData();
-	                };
+	            if (!self.pager) {
+	                return;
 	            }
+	            self.appendHtmlInRenderingRoot(pagerHtml);
+	            var nextButton = this.selectInRenderingRoot("#next-button");
+	            var previousButton = this.selectInRenderingRoot("#previous-button");
+	            nextButton.onclick = function () {
+	                self.fetchNextPageData();
+	            };
+	            previousButton.onclick = function () {
+	                self.fetchPreviousPageData();
+	            };
 	        },
-	        renderInfiniteScrolling: function renderInfiniteScrolling() {
+	        activateInfiniteScrolling: function activateInfiniteScrolling() {
 	            var self = this;
-	            if (self.infiniteScrolling) {
-	                var scrollCallback = function scrollCallback() {
-	                    var positionOffset = window.outerHeight + (window.scrollY || pageYOffset) - document.body.offsetHeight;
-	                    console.log(positionOffset);
-	                    if (positionOffset >= 0) {
-	                        self.appendNextPageData();
-	                    }
-	                };
-	                var throttledFunction = _.throttle(scrollCallback, 300);
-	                window.addEventListener("scroll", throttledFunction, false);
+	            if (!self.infiniteScrolling) {
+	                return;
 	            }
+	            var scrollCallback = function scrollCallback() {
+	                var positionOffset = window.outerHeight + (window.scrollY || pageYOffset) - document.body.offsetHeight;
+	                //console.log(positionOffset);
+	                if (positionOffset >= 0) {
+	                    self.appendNextPageData();
+	                }
+	            };
+	            var throttledFunction = _.throttle(scrollCallback, 300);
+	            window.addEventListener("scroll", throttledFunction, false);
 	        },
 	        activateRefreshing: function activateRefreshing() {
 	            var self = this;
@@ -2286,10 +2385,95 @@
 	            this.resultCounter = 0;
 	            this.collectionElementTag.emptyCollection();
 	            this.fetchData();
-	        },
-	        tap: function tap() {}
+	        }
 	    }
 	};
+
+	exports.default = _utils2.default.extend(collectionContainer).from(_elementBase2.default);
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var collectionFeedback = {};
+
+	exports.default = _utils2.default.extend(collectionFeedback).from(_elementBase2.default);
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var template = function template(data) {
+	    return "<span>" + data.value + "</span>";
+	};
+
+	var feedbackToken = {
+	    accessors: {
+	        key: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('key') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.key = data;
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        created: function created() {
+	            var data = { value: null };
+	            this.getRenderingRoot().textContent = template(data);
+	        }
+	    },
+	    methods: {
+	        renderFrom: function renderFrom(object) {
+	            if (!object) {
+	                throw new Error("Falsy object in renderFrom of <feedback-token/>");
+	            }
+
+	            if (!this.key) {
+	                throw new Error("Falsy key in <feedback-token/>");
+	            }
+
+	            var data = { value: object[this.key] || '' };
+	            this.getRenderingRoot().innerHTML = template(data);
+	        }
+	    }
+	};
+
+	exports.default = _utils2.default.extend(feedbackToken).from(_elementBase2.default);
 
 /***/ }
 /******/ ]);

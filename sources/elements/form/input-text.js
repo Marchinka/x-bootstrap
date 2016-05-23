@@ -1,3 +1,6 @@
+import utils from "./../../utils/utils.js";
+import inputTextElementBase from "./../../base/input-text-element-base.js";
+
 const template = data => `
     <div class="${data.errorClass}">
         <label for="${data.field}">
@@ -40,7 +43,7 @@ const templateWithAddOn = data => `
         </span>
     </div>`;
 
-export default {
+var inputText = {
     accessors: {
         jquery: {
             attribute: {},
@@ -189,3 +192,7 @@ export default {
         }
     }
 };
+
+export default utils
+    .extend(inputText)
+    .from(inputTextElementBase);

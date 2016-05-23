@@ -1,3 +1,6 @@
+import utils from "./../../utils/utils.js";
+import inputTextElementBase from "./../../base/input-text-element-base.js";
+
 const template = data => `
     <div class="${data.errorClass}">
         <label for="${data.field}">
@@ -16,7 +19,7 @@ const template = data => `
     </div>`;
 
 
-export default {
+var inputTextarea = {
     accessors: {               
         rows: {
             attribute: {},
@@ -111,3 +114,7 @@ export default {
         }
     }
 };
+
+export default utils
+    .extend(inputTextarea)
+    .from(inputTextElementBase);

@@ -1,4 +1,7 @@
-export default {
+import utils from "./../../utils/utils.js";
+import elementBase from "./../../base/element-base.js";
+
+var additionalInfo = {
     accessors: {
         field: {
             attribute: {},
@@ -59,3 +62,7 @@ export default {
         }
     }
 };
+
+export default utils
+    .extend(additionalInfo)
+    .from(elementBase);

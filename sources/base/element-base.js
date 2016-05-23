@@ -9,6 +9,17 @@ export default {
 		selectInRenderingRoot: function (selector) {
 			return this.getRenderingRoot().querySelector(selector);
 		},
+		insertHtmlInRenderingRoot: function (html) {
+			this.getRenderingRoot().innerHTML = html;
+		},		
+		appendHtmlInRenderingRoot: function (html) {
+			var div = document.createElement('div');
+			div.innerHTML = html ? html.trim() : '';
+			var elements = div.childNodes;			
+			_(elements).each(function (element) {
+				this.getRenderingRoot().appendChild(element);
+			}, this);
+		},
 		raiseAttributeChanged: function (attributeName, oldValue, newValue) {
 			if (utils.isBrowserSupportingMo()) {
 				return;
@@ -31,31 +42,9 @@ export default {
 			}
 		},
 		onComponentsReady: function (func) {
-			var firstTryTime = 200;
-			var secondTryTime = 1000;
-			var thirdTryTime = 3000;
-
-			var thirdTry = function () {
-				setTimeout(function () {
-					func();
-				}, thirdTryTime);
-			};
-			var seconTry = function () {
-				try {
-					func();
-				} catch (e) {
-					thirdTry();
-				}
-			};			
-			var firstTry = function () {
-				try {
-					func();
-				} catch (e) {
-					seconTry();
-				}
-			};
-
-			setTimeout(firstTry, firstTryTime);
+			setTimeout(function () {
+				func();
+			}, 200);
 		}
 	}
 };

@@ -107,23 +107,6 @@
 			});
 		}); 
 
-		describe("with 'number-of-results-message' attribute", function() {
-			it("is rendered with inner 'p' with text equal to message", function() {
-				var testElement = getTestElement("#with-number-of-results-message");
-				var p = testElement.querySelector("p");
-				expect(p.textContent).to.equal(testElement.numberOfResultsMessage);
-			});
-
-			describe("and 'number-of-results' attribute", function() {
-				it("is rendered with inner 'p' with text equal to message with number", function() {
-					var testElement = getTestElement("#with-number-of-results-message-and-number");
-					var p = testElement.querySelector("p");
-					var expectedText = "Number of Results: 12";
-					expect(p.textContent).to.equal(expectedText);
-				});
-			});			
-		});
-
 		describe("with inner element", function() {
 			describe("'renderData' method", function() {
 				it("renders data in tags of type 'type'", function() {
@@ -201,11 +184,10 @@
 			describe("with undefined input", function() {
 			    it("throws error", function() {
 			    	var testElement = getTestElement("#base");
-			    	var expectedError = "Data not defined.";
 			    	var errorThrower = function () {
 			    		testElement.renderData(undefined);
 			    	};
-					expect(errorThrower).to.throw(expectedError);
+					expect(errorThrower).to.throw();
 			    }); 
 		    });
 	    }); 
@@ -214,11 +196,10 @@
 			describe("with undefined input", function() {
 			    it("throws error", function() {
 			    	var testElement = getTestElement("#base");
-			    	var expectedError = "Data not defined.";
 			    	var errorThrower = function () {
 			    		testElement.appendData(undefined);
 			    	};
-					expect(errorThrower).to.throw(expectedError);
+					expect(errorThrower).to.throw();
 			    }); 
 		    });
 	    }); 	

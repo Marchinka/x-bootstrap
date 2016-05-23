@@ -1,14 +1,21 @@
-const template = data => `
-    <collection-container-content id="inner-content"></collection-container-content>
-    <div hidden class="show-more">
-        <button id="show-more-button" class="btn btn-default">Show More</button>
-    </div>
-    <ul hidden class="pager">
+import utils from "./../../utils/utils.js";
+import elementBase from "./../../base/element-base.js";
+
+const template = `
+    <collection-container-content 
+        id="inner-content">
+    </collection-container-content>`;
+
+const pagerHtml = `
+    <ul class="pager">
         <li><a id="previous-button">Previous</a></li>
         <li><a id="next-button">Next</a></li>
     </ul>`;
 
-export default {
+const showMoreButtonHtml = `
+    <button id="show-more-button" class="btn btn-default">Show More</button>`;
+
+var collectionContainer = {
     accessors: {
         url: {
             attribute: { },
@@ -77,30 +84,31 @@ export default {
     lifecycle: {
         created: function () {
             this.innerContent = this.getInnerContent("collection-container-content").innerHTML;
-            this.getRenderingRoot().innerHTML = template({});
+            this.getRenderingRoot().innerHTML = template;
             this.selectInRenderingRoot("#inner-content").innerHTML = this.innerContent;
-            this.collectionElementTag = this.selectInRenderingRoot("collection-elements");
-            this.searchForm = this.selectInRenderingRoot("collection-search-form");
-            this.showMoreButtonTag = this.selectInRenderingRoot("#show-more-button");
-            this.nextButton = this.selectInRenderingRoot("#next-button");
-            this.previousButton = this.selectInRenderingRoot("#previous-button");
-            this.currentPage = this.currentPage || 1;
+            this.initializeComponents();
         },
         inserted: function () {
-            this.renderInfiniteScrolling();
-            this.renderShowMoreButton();
-            this.renderPager();
             var self = this;
-            this.onComponentsReady(function(event) { 
+            self.activateInfiniteScrolling();
+            self.renderShowMoreButton();
+            self.renderPager();
+            self.onComponentsReady(function(event) { 
                 self.fetchData();
             });
-            this.activateRefreshing();
+            self.fetchData();
+            self.activateRefreshing();
         },
         attributeChanged: function(attributeName) {
             this.activateRefreshing();
         }
     },
     methods: {
+        initializeComponents: function () {
+            this.collectionElementTag = this.selectInRenderingRoot("collection-elements");
+            this.searchForm = this.selectInRenderingRoot("collection-search-form");
+            this.currentPage = this.currentPage || 1;
+        },
         fetchData: function() {
             var self = this;
 
@@ -164,10 +172,7 @@ export default {
                 this.resultCounter = result.numberOfResults;
                 this.collectionElementTag.emptyCollection();
             }
-            this.collectionElementTag.addResults({
-                collection: result.collection,
-                numberOfResults: this.resultCounter
-            });
+            this.collectionElementTag.appendData(result.collection);
         },
         appendNextPageData: function () {
             this.currentPage++;
@@ -186,38 +191,45 @@ export default {
         },
         renderShowMoreButton: function () {
             var self = this;
-            if (self.showMoreButton) {
-                self.selectInRenderingRoot(".show-more").hidden = false;
-                self.showMoreButtonTag.onclick = function() {
-                    self.appendNextPageData();
-                };
-            }                
+            if (!self.showMoreButton) {
+                return;
+            }
+            self.appendHtmlInRenderingRoot(showMoreButtonHtml);
+            var showMoreButton = this.selectInRenderingRoot("#show-more-button");
+            showMoreButton.onclick = function() {
+                self.appendNextPageData();
+            };
         },
         renderPager: function () {
             var self = this;
-            if (self.pager) {
-                self.selectInRenderingRoot(".pager").hidden = false;
-                self.nextButton.onclick = function() {
-                    self.fetchNextPageData();
-                };
-                self.previousButton.onclick = function() {
-                    self.fetchPreviousPageData();
-                };                    
+            if (!self.pager) {
+                return;
             }
+            self.appendHtmlInRenderingRoot(pagerHtml);
+            var nextButton = this.selectInRenderingRoot("#next-button");
+            var previousButton = this.selectInRenderingRoot("#previous-button");    
+            nextButton.onclick = function() {
+                self.fetchNextPageData();
+            };
+            previousButton.onclick = function() {
+                self.fetchPreviousPageData();
+            };
         },
-        renderInfiniteScrolling: function () {
+        activateInfiniteScrolling: function () {
             var self = this;
-            if (self.infiniteScrolling) {
-                var scrollCallback =  function () {                    
-                    var positionOffset = window.outerHeight + (window.scrollY || pageYOffset) - document.body.offsetHeight;
-                    console.log(positionOffset);
-                    if (positionOffset >= 0) {
-                        self.appendNextPageData();
-                    }                    
-                };
-                var throttledFunction = _.throttle(scrollCallback, 300);
-                window.addEventListener("scroll", throttledFunction, false);
-            }                
+            if (!self.infiniteScrolling)
+            {
+                return;
+            }
+            var scrollCallback =  function () {                    
+                var positionOffset = window.outerHeight + (window.scrollY || pageYOffset) - document.body.offsetHeight;
+                //console.log(positionOffset);
+                if (positionOffset >= 0) {
+                    self.appendNextPageData();
+                }                    
+            };
+            var throttledFunction = _.throttle(scrollCallback, 300);
+            window.addEventListener("scroll", throttledFunction, false);
         },
         activateRefreshing: function() {
             var self = this;
@@ -244,9 +256,10 @@ export default {
             this.resultCounter = 0;
             this.collectionElementTag.emptyCollection();
             this.fetchData();
-        },
-        tap: function () {
-
         }
     }
 };
+
+export default utils
+    .extend(collectionContainer)
+    .from(elementBase);

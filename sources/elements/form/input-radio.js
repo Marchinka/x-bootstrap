@@ -1,3 +1,6 @@
+import utils from "./../../utils/utils.js";
+import elementBase from "./../../base/element-base.js";
+
 const template = data => `    
 	<div class="radio">
       <label>
@@ -10,7 +13,7 @@ const template = data => `
       	</label>
     </div>`;
 
-export default {
+var inputRadio = {
     accessors: {
         field: {
             attribute: {},
@@ -91,3 +94,7 @@ export default {
         }
     }
 };
+
+export default utils
+    .extend(inputRadio)
+    .from(elementBase);

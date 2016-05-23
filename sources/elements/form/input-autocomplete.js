@@ -1,3 +1,6 @@
+import utils from "./../../utils/utils.js";
+import dropdownInputTextElementBase from "./../../base/dropdown-input-text-element-base.js";
+
 const template = data => `    
 	<div class="${data.errorClass}">
 		<div class="dropdown">
@@ -13,7 +16,7 @@ const template = data => `
         <span class="help-block">${data.error}</span>
     </div>`;
 
-export default {
+var inputAutocomplete = {
     lifecycle: {
         created: function() {
             this.render();
@@ -91,3 +94,7 @@ export default {
         }
     }    
 };
+
+export default utils
+    .extend(inputAutocomplete)
+    .from(dropdownInputTextElementBase);

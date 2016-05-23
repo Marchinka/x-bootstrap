@@ -1,3 +1,6 @@
+import utils from "./../../utils/utils.js";
+import inputElementBase from "./../../base/input-element-base.js";
+
 const template = data => `    
 	<div class="${data.errorClass}">
         <label>${data.label}</label>
@@ -10,7 +13,7 @@ const template = data => `
         </span>
     </div>`;
 
-export default {
+var inputRadioGroup = {
     accessors: {
         required: {
             attribute: { boolean: true },
@@ -143,3 +146,7 @@ export default {
         }
     }        
 };
+
+export default utils
+    .extend(inputRadioGroup)
+    .from(inputElementBase);

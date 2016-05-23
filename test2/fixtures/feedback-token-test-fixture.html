@@ -1,0 +1,66 @@
+<div id="with-no-key">
+	<feedback-token></feedback-token>
+</div>
+
+<div id="with-key">
+	<feedback-token key="fieldName"></feedback-token>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector("feedback-token");
+		return sut.getRenderingRoot();
+	};	
+
+	describe("<feedback-token/>", function() {
+		describe("renderFrom", function() {
+			describe("with undefined input", function() {
+				it("throws error", function() {
+					var testElement = getTestElement("#with-key");
+					var expectedError = "Falsy object in renderFrom of <feedback-token/>";
+					var errorThrower = function () {
+						testElement.renderFrom(undefined);
+					};					
+					expect(errorThrower).to.throw(expectedError);
+				});
+			});
+		});
+
+		describe("without key attribute", function() {
+			describe("renderFrom", function() {
+				it("throws error", function() {
+					var testElement = getTestElement("#with-no-key");
+					var expectedError = "Falsy key in <feedback-token/>";
+					var errorThrower = function () {
+						testElement.renderFrom({});
+					};					
+					expect(errorThrower).to.throw(expectedError);
+				});
+			});
+		});
+
+		describe("with key attribute", function() {
+			describe("renderFrom with object with no key as one of the fields", function() {
+				it("is renderd with empty content", function() {
+					var testElement = getTestElement("#with-key");
+					testElement.renderFrom({ otherField: "other value" });
+					var innerSpan = testElement.selectInRenderingRoot("span");
+					expect(innerSpan.textContent).to.be.equal("");
+				});
+			});
+
+			describe("renderFrom with object with key as one of the fields", function() {
+				it("throws error", function() {
+					var testElement = getTestElement("#with-key");
+					var obj = { fieldName: "value" };
+					testElement.renderFrom(obj);
+					var innerSpan = testElement.selectInRenderingRoot("span");
+					expect(innerSpan.textContent).to.be.equal(obj.fieldName);
+				});
+			});			
+		});		
+	});
+})(document._currentScript.ownerDocument);
+</script>
