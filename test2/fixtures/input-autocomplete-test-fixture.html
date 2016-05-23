@@ -315,17 +315,6 @@
 		    	});
 		    });
 
-			describe("with input not being a collection", function () {
-		   	    it("throws error", function () {
-					var inputAutocomplete = getTestElement("#withField");
-					var expectedError = "Data must be a collection."
-					var exceptionThrower = function () {
-						inputAutocomplete.renderData({});
-					};
-					expect(exceptionThrower).to.throw(expectedError);
-		    	});
-		    });	  
-
 			describe("with valid input", function () {
 		   	    it("renders two <dropdown-option/>", function () {
 					var data = [

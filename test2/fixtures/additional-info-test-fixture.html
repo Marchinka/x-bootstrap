@@ -82,8 +82,7 @@
 						var errorThrower = function () {
 							testElement.getData();
 						};
-						var errorMessage = "Not valid function name in 'value-of' property";
-						expect(errorThrower).to.throw(errorMessage);
+						expect(errorThrower).to.throw();
 					});
 				});
 			});										

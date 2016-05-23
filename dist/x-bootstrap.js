@@ -1348,10 +1348,12 @@
 	        }
 	    },
 	    methods: {
-	        changeCallback: function changeCallback(attributeName) {
+	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
 	            if (attributeName === "error") {
 	                this.renderError();
-	            } else if (attributeName !== "value") {
+	            } else if (attributeName === "value" && oldValue != newValue) {
+	                this.selectInRenderingRoot("textarea").value = newValue;
+	            } else {
 	                this.render();
 	            }
 	        },

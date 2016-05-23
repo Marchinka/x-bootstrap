@@ -47,7 +47,11 @@
                         var result = functionInWindow();
                         data[this.field] = result;
                     } else {
-                        throw new Error("Not valid function name in 'value-of' property");
+                        var message = 
+                            "Not valid function name " +
+                            this.valueOf + 
+                            " in 'value-of' property";
+                        throw new Error(message);
                     }
                 } else {
                     data[this.field] = this.value;

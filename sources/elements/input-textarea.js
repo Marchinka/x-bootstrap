@@ -55,11 +55,13 @@ export default {
         }
     },
     methods: {
-        changeCallback: function(attributeName) {
+        changeCallback: function(attributeName, oldValue, newValue) {
             if (attributeName === "error") {
                 this.renderError();
-            } else if (attributeName !== "value") {
-                this.render();                
+            } else if (attributeName === "value" && oldValue != newValue) {
+                this.selectInRenderingRoot("textarea").value = newValue;   
+            } else {
+                this.render();
             }
         },
         render: function() {
