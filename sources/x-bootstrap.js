@@ -66,14 +66,20 @@ var selectProto = utils
 	.from(dropdownInputElementBase);
 utils.register('input-select', selectProto);
 
+import inputAutocomplete from "./elements/input-autocomplete.js";
+var selectProto = utils
+	.extend(inputAutocomplete)
+	.from(dropdownInputTextElementBase);
+utils.register('input-autocomplete', selectProto);
+
 import formAjax from "./elements/form-ajax.js";
 var formProto = utils
 	.extend(formAjax)
 	.from(formElementBase);
 utils.register('form-ajax', formProto);
 
-import inputAutocomplete from "./elements/input-autocomplete.js";
-var selectProto = utils
-	.extend(inputAutocomplete)
-	.from(dropdownInputTextElementBase);
-utils.register('input-autocomplete', selectProto);
+import collectionSearchForm from "./elements/collection-search-form.js";
+var searchFormProto = utils
+	.extend(collectionSearchForm)
+	.from(formElementBase);
+utils.register('collection-search-form', searchFormProto);

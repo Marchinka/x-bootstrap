@@ -106,13 +106,17 @@
 
 	var _inputSelect2 = _interopRequireDefault(_inputSelect);
 
-	var _formAjax = __webpack_require__(17);
+	var _inputAutocomplete = __webpack_require__(17);
+
+	var _inputAutocomplete2 = _interopRequireDefault(_inputAutocomplete);
+
+	var _formAjax = __webpack_require__(18);
 
 	var _formAjax2 = _interopRequireDefault(_formAjax);
 
-	var _inputAutocomplete = __webpack_require__(18);
+	var _collectionSearchForm = __webpack_require__(19);
 
-	var _inputAutocomplete2 = _interopRequireDefault(_inputAutocomplete);
+	var _collectionSearchForm2 = _interopRequireDefault(_collectionSearchForm);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -152,11 +156,14 @@
 	var selectProto = _utils2.default.extend(_inputSelect2.default).from(_dropdownInputElementBase2.default);
 	_utils2.default.register('input-select', selectProto);
 
+	var selectProto = _utils2.default.extend(_inputAutocomplete2.default).from(_dropdownInputTextElementBase2.default);
+	_utils2.default.register('input-autocomplete', selectProto);
+
 	var formProto = _utils2.default.extend(_formAjax2.default).from(_formElementBase2.default);
 	_utils2.default.register('form-ajax', formProto);
 
-	var selectProto = _utils2.default.extend(_inputAutocomplete2.default).from(_dropdownInputTextElementBase2.default);
-	_utils2.default.register('input-autocomplete', selectProto);
+	var searchFormProto = _utils2.default.extend(_collectionSearchForm2.default).from(_formElementBase2.default);
+	_utils2.default.register('collection-search-form', searchFormProto);
 
 /***/ },
 /* 1 */
@@ -1561,6 +1568,98 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	var template = function template(data) {
+	    return '    \n\t<div class="' + data.errorClass + '">\n\t\t<div class="dropdown">\n\t\t\t<label for="' + data.field + '">' + data.label + '</label>\n\t\t\t<input class="form-control" type="text"\n\t\t\t\tid="' + data.field + '" \n                name="' + data.field + '" \n                value="' + data.value + '"\n                placeholder="' + data.placeholder + '"\n                ' + data.disabled + '/>\n            <ul class="dropdown-menu" style="width: 100%"></ul>\n        </div>\n        <span class="help-block">' + data.error + '</span>\n    </div>';
+	};
+
+	exports.default = {
+	    lifecycle: {
+	        created: function created() {
+	            this.render();
+	        },
+	        inserted: function inserted() {
+	            this.fetchData();
+	        },
+	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
+	            this.changeCallback(attributeName, oldValue, newValue);
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            var data = {
+	                placeholder: this.placeholder || '',
+	                disabled: this.disabled ? 'disabled' : '',
+	                error: this.error || '',
+	                errorClass: this.errorClass || '',
+	                field: this.field || '',
+	                label: this.label || '',
+	                value: this.value || ''
+	            };
+	            this.getRenderingRoot().innerHTML = template(data);
+	        },
+	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
+	            if (attributeName === "error") {
+	                this.renderError();
+	            } else if (attributeName === "value") {
+	                this.getInput().value = newValue;
+	                this.fetchData();
+	            } else {
+	                this.render();
+	            }
+
+	            if (this.optionData) {
+	                this.renderData(this.optionData);
+	            }
+	        },
+	        fetchData: function fetchData() {
+	            var self = this;
+	            if (!self.url) {
+	                return;
+	            }
+
+	            if (!window.restService) {
+	                throw new Error("'restService' must be assigned to main window for <input-autocomplete/> to work correctly");
+	            }
+
+	            window.restService.ajax({
+	                url: self.url,
+	                method: "GET",
+	                data: { search: this.value },
+	                success: function success(result) {
+	                    self.optionData = result;
+	                    self.getDropdownMenu().innerHTML = '';
+	                    self.renderData(self.optionData);
+	                }
+	            });
+	        },
+	        selectOption: function selectOption(dropdownOption) {
+	            if (!dropdownOption) {
+	                throw new Error("Not valid option for selection.");
+	            }
+	            this.hideMenu();
+	            this.value = dropdownOption.value;
+	            this.getInput().value = this.value;
+	            this.getInput().blur();
+	            this.validate();
+	        }
+	    },
+	    events: {
+	        keyup: function keyup() {
+	            this.value = this.getInput().value;
+	            this.fetchData();
+	        }
+	    }
+	};
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 
 	var _accessors;
 
@@ -1743,93 +1842,42 @@
 	};
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	var template = function template(data) {
-	    return '    \n\t<div class="' + data.errorClass + '">\n\t\t<div class="dropdown">\n\t\t\t<label for="' + data.field + '">' + data.label + '</label>\n\t\t\t<input class="form-control" type="text"\n\t\t\t\tid="' + data.field + '" \n                name="' + data.field + '" \n                value="' + data.value + '"\n                placeholder="' + data.placeholder + '"\n                ' + data.disabled + '/>\n            <ul class="dropdown-menu" style="width: 100%"></ul>\n        </div>\n        <span class="help-block">' + data.error + '</span>\n    </div>';
+	    return "\n    <form>\n        <collection-search-form-content>\n            " + data.innerContent + "\n        </collection-search-form-content>\n    </form>";
 	};
 
 	exports.default = {
 	    lifecycle: {
 	        created: function created() {
+	            this.innerContent = this.getInnerContent("collection-search-form-content");
 	            this.render();
-	        },
-	        inserted: function inserted() {
-	            this.fetchData();
-	        },
-	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
-	            this.changeCallback(attributeName, oldValue, newValue);
 	        }
 	    },
 	    methods: {
 	        render: function render() {
 	            var data = {
-	                placeholder: this.placeholder || '',
-	                disabled: this.disabled ? 'disabled' : '',
-	                error: this.error || '',
-	                errorClass: this.errorClass || '',
-	                field: this.field || '',
-	                label: this.label || '',
-	                value: this.value || ''
+	                innerContent: this.innerContent
 	            };
-	            this.getRenderingRoot().innerHTML = template(data);
-	        },
-	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
-	            if (attributeName === "error") {
-	                this.renderError();
-	            } else if (attributeName === "value") {
-	                this.getInput().value = newValue;
-	                this.fetchData();
-	            } else {
-	                this.render();
-	            }
-
-	            if (this.optionData) {
-	                this.renderData(this.optionData);
-	            }
-	        },
-	        fetchData: function fetchData() {
-	            var self = this;
-	            if (!self.url) {
-	                return;
-	            }
-
-	            if (!window.restService) {
-	                throw new Error("'restService' must be assigned to main window for <input-autocomplete/> to work correctly");
-	            }
-
-	            window.restService.ajax({
-	                url: self.url,
-	                method: "GET",
-	                data: { search: this.value },
-	                success: function success(result) {
-	                    self.optionData = result;
-	                    self.getDropdownMenu().innerHTML = '';
-	                    self.renderData(self.optionData);
-	                }
-	            });
-	        },
-	        selectOption: function selectOption(dropdownOption) {
-	            if (!dropdownOption) {
-	                throw new Error("Not valid option for selection.");
-	            }
-	            this.hideMenu();
-	            this.value = dropdownOption.value;
-	            this.getInput().value = this.value;
-	            this.getInput().blur();
-	            this.validate();
+	            this.innerHTML = template(data);
 	        }
 	    },
 	    events: {
-	        keyup: function keyup() {
-	            this.value = this.getInput().value;
-	            this.fetchData();
+	        submit: function submit(e) {
+	            e.preventDefault();
+	            var isFormValid = this.validate();
+	            if (!isFormValid) {
+	                e.stopPropagation();
+	                //var formData = this.getData();
+	                //alert(JSON.stringify(formData));
+	            }
 	        }
 	    }
 	};
