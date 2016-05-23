@@ -89,3 +89,9 @@ var elementsProto = utils
 	.extend(collectionElements)
 	.from(elementBase);
 utils.register('collection-elements', elementsProto);
+
+import collectionContainer from "./elements/collection/collection-container.js";
+var collectionContainerProto = utils
+	.extend(collectionContainer)
+	.from(elementBase);
+utils.register('collection-container', collectionContainerProto);
