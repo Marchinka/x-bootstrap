@@ -16,6 +16,25 @@ var superheroList = [
 	{ key: 15, value: "Rocket Racoon"}
 ];
 
+var superVillans = [
+	{ name: "Joker" },
+	{ name: "Bane" },
+	{ name: "Killer Croc" },
+	{ name: "The Riddler" },
+	{ name: "Dr. Strange" },
+	{ name: "Penguin" },
+	{ name: "Two Faces" },
+	{ name: "Mr Freeze" },
+	{ name: "Harley Queen" },
+	{ name: "Deadshot" },
+	{ name: "Solomon Grundy" },
+	{ name: "Deathstroke" },
+	{ name: "Manbat" },
+	{ name: "Poison Ivy" },
+	{ name: "Scarecrow" },
+	{ name: "Black Mask" },	
+];
+
 var ValidationError = function (field, message) {
 	this.field = field;
 	this.message = message;
@@ -52,7 +71,7 @@ window.restService = {
 		        } else {
 					validationResult = {
 		        		isValid: true
-		        	}		        	
+		        	}
 		        }
 		        var result = { resultId: 666, validationResult: validationResult };
 		        options.success(result);
@@ -61,6 +80,22 @@ window.restService = {
 		        var result = { denomination: "Initial Value From Server" };
 		        options.success(result);
 		    	break;
+		    case "/SuperVillans/":
+		    	var searchText = options.data.searchText.toLowerCase();
+		    	var elementsPerPage = Number(options.data.elementsPerPage);
+		    	var page = Number(options.data.page);
+		    	console.log("fetching super villains with search text " + (searchText || "empty") + ", elements per pafe " + elementsPerPage + " and page " + page);
+		    	var filteredCollection = _.filter(superVillans, function(item) { 
+		    		return item.name.toLowerCase().indexOf(searchText) > -1;
+		    	});
+		    	var start = elementsPerPage * (page - 1);
+		    	var end = (elementsPerPage * page);
+		    	var collection = filteredCollection.slice(start, end);
+		    	var result = {
+		    		numberOfResults: collection.length,
+		    		collection: collection
+		    	};
+		    	options.success(result);
 		    default:
 		        break;
 		}

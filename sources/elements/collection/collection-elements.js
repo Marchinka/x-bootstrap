@@ -1,6 +1,7 @@
 const template = `
     <p id="number-of-result"></p>
-    <collection-elements-content id="inner-container"></collection-elements-content>`;
+    <collection-elements-content id="inner-container"></collection-elements-content>
+    <collection-elements-template style="display: none;"></collection-elements-template>`;
 
 export default {
     accessors: {
@@ -34,13 +35,16 @@ export default {
     },
     lifecycle: {
         created: function() {
-            var firstChild = this.getRenderingRoot().firstElementChild;
-            if (firstChild) {
-                this.listItemTemplate = firstChild.cloneNode(true);    
-            }
+            var firstChild = this.getInnerContent("collection-elements-template").firstElementChild;
             this.getRenderingRoot().innerHTML = template;
             this.p = this.selectInRenderingRoot('#number-of-result');
+            this.templateTagContainer = this.selectInRenderingRoot('collection-elements-template');
             this.innerContainer = this.selectInRenderingRoot("collection-elements-content");
+            if (firstChild) {
+                this.listItemTemplate = firstChild.cloneNode(true);
+                this.templateTagContainer.appendChild(this.listItemTemplate);
+            }
+
             this.render();
         },
         attributeChanged: function(attributeName) {
@@ -49,21 +53,31 @@ export default {
     },
     methods: {
         render: function () {
-            if (this.numberOfResults && this.numberOfResultsMessage) {
-                this.p.textContent = this.numberOfResultsMessage.replace("{0}", this.numberOfResults);
+            if (!this.numberOfResultsMessage) {
+                console.log("number-of-results-message property should be defined in order to visualize the number of results from server");
+                return;
+            }
+            if (this.numberOfResults) {
+                this.p.innerHTML = this.numberOfResultsMessage.replace("{0}", this.numberOfResults);
             }
         },
         addResults: function (dataFromServer) {
+            this.checkDataFormat(dataFromServer);
             this.numberOfResults = dataFromServer.numberOfResults;
             this.appendData(dataFromServer.collection);
+        },
+        checkDataFormat: function(dataFromServer) {
+            if (!_(dataFromServer.numberOfResults).isNumber()) {
+                throw new Error("Result json from server is expected to have a numberOfResults property of type number");
+            }
+
+            if (!_(dataFromServer.collection).isArray()) {
+                throw new Error("Result json from server is expected to have a collection property of type array");
+            }
         },
         appendData: function (data) {
             if (!data) {
                 throw new Error("Data not defined.");
-            }
-
-            if (!data.length && data.length != 0) {
-                throw new Error("Data must be a collection.");   
             }
 
             for (var i = 0; i < data.length; i++) {
@@ -77,7 +91,9 @@ export default {
             this.appendData(data);
         },
         emptyCollection: function () {
-            this.innerContainer.innerHTML = '';
+            if (this.innerContainer) {
+                this.innerContainer.innerHTML = '';
+            }
         },
         getChildElement: function (elementData) {
             var domElement;

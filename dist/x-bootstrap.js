@@ -313,6 +313,33 @@
 				} else {
 					return this;
 				}
+			},
+			onComponentsReady: function onComponentsReady(func) {
+				var firstTryTime = 200;
+				var secondTryTime = 1000;
+				var thirdTryTime = 3000;
+
+				var thirdTry = function thirdTry() {
+					setTimeout(function () {
+						func();
+					}, thirdTryTime);
+				};
+				var seconTry = function seconTry() {
+					try {
+						func();
+					} catch (e) {
+						thirdTry();
+					}
+				};
+				var firstTry = function firstTry() {
+					try {
+						func();
+					} catch (e) {
+						seconTry();
+					}
+				};
+
+				setTimeout(firstTry, firstTryTime);
 			}
 		}
 	};
@@ -1905,7 +1932,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var template = '\n    <p id="number-of-result"></p>\n    <collection-elements-content id="inner-container"></collection-elements-content>';
+	var template = '\n    <p id="number-of-result"></p>\n    <collection-elements-content id="inner-container"></collection-elements-content>\n    <collection-elements-template style="display: none;"></collection-elements-template>';
 
 	exports.default = {
 	    accessors: {
@@ -1939,13 +1966,16 @@
 	    },
 	    lifecycle: {
 	        created: function created() {
-	            var firstChild = this.getRenderingRoot().firstElementChild;
-	            if (firstChild) {
-	                this.listItemTemplate = firstChild.cloneNode(true);
-	            }
+	            var firstChild = this.getInnerContent("collection-elements-template").firstElementChild;
 	            this.getRenderingRoot().innerHTML = template;
 	            this.p = this.selectInRenderingRoot('#number-of-result');
+	            this.templateTagContainer = this.selectInRenderingRoot('collection-elements-template');
 	            this.innerContainer = this.selectInRenderingRoot("collection-elements-content");
+	            if (firstChild) {
+	                this.listItemTemplate = firstChild.cloneNode(true);
+	                this.templateTagContainer.appendChild(this.listItemTemplate);
+	            }
+
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
@@ -1954,21 +1984,31 @@
 	    },
 	    methods: {
 	        render: function render() {
-	            if (this.numberOfResults && this.numberOfResultsMessage) {
-	                this.p.textContent = this.numberOfResultsMessage.replace("{0}", this.numberOfResults);
+	            if (!this.numberOfResultsMessage) {
+	                console.log("number-of-results-message property should be defined in order to visualize the number of results from server");
+	                return;
+	            }
+	            if (this.numberOfResults) {
+	                this.p.innerHTML = this.numberOfResultsMessage.replace("{0}", this.numberOfResults);
 	            }
 	        },
 	        addResults: function addResults(dataFromServer) {
+	            this.checkDataFormat(dataFromServer);
 	            this.numberOfResults = dataFromServer.numberOfResults;
 	            this.appendData(dataFromServer.collection);
+	        },
+	        checkDataFormat: function checkDataFormat(dataFromServer) {
+	            if (!_(dataFromServer.numberOfResults).isNumber()) {
+	                throw new Error("Result json from server is expected to have a numberOfResults property of type number");
+	            }
+
+	            if (!_(dataFromServer.collection).isArray()) {
+	                throw new Error("Result json from server is expected to have a collection property of type array");
+	            }
 	        },
 	        appendData: function appendData(data) {
 	            if (!data) {
 	                throw new Error("Data not defined.");
-	            }
-
-	            if (!data.length && data.length != 0) {
-	                throw new Error("Data must be a collection.");
 	            }
 
 	            for (var i = 0; i < data.length; i++) {
@@ -1982,7 +2022,9 @@
 	            this.appendData(data);
 	        },
 	        emptyCollection: function emptyCollection() {
-	            this.innerContainer.innerHTML = '';
+	            if (this.innerContainer) {
+	                this.innerContainer.innerHTML = '';
+	            }
 	        },
 	        getChildElement: function getChildElement(elementData) {
 	            var domElement;
@@ -2094,7 +2136,10 @@
 	            this.renderInfiniteScrolling();
 	            this.renderShowMoreButton();
 	            this.renderPager();
-	            this.fetchData();
+	            var self = this;
+	            this.onComponentsReady(function (event) {
+	                self.fetchData();
+	            });
 	            this.activateRefreshing();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
@@ -2133,8 +2178,37 @@
 	                method: "GET",
 	                data: formData,
 	                success: function success(result) {
-	                    self.collectionElementTag.addResults(result);
+	                    self.checkDataFormat(result);
+	                    self.handleDataRendering(result);
 	                }
+	            });
+	        },
+	        checkDataFormat: function checkDataFormat(dataFromServer) {
+	            if (!_(dataFromServer.numberOfResults).isNumber()) {
+	                throw new Error("Result json from server is expected to have a numberOfResults property of type number");
+	            }
+
+	            if (!_(dataFromServer.collection).isArray()) {
+	                throw new Error("Result json from server is expected to have a collection property of type array");
+	            }
+	        },
+	        handleDataRendering: function handleDataRendering(result) {
+	            if (this.showMoreButton) {
+	                this.resultCounter = (this.resultCounter || 0) + result.numberOfResults;
+	            } else if (this.infiniteScrolling) {
+	                this.resultCounter = (this.resultCounter || 0) + result.numberOfResults;
+	            } else if (this.pager) {
+	                this.resultCounter = result.numberOfResults;
+	                this.collectionElementTag.emptyCollection();
+	            } else {
+	                var message = "Neither show-more-button, infinite-scrolling or pager are defined. " + "Showing the top " + this.elementsPerPage + " elements of collection.";
+	                console.log(message);
+	                this.resultCounter = result.numberOfResults;
+	                this.collectionElementTag.emptyCollection();
+	            }
+	            this.collectionElementTag.addResults({
+	                collection: result.collection,
+	                numberOfResults: this.resultCounter
 	            });
 	        },
 	        appendNextPageData: function appendNextPageData() {
@@ -2142,7 +2216,6 @@
 	            this.fetchData();
 	        },
 	        fetchNextPageData: function fetchNextPageData() {
-	            this.collectionElementTag.emptyCollection();
 	            this.currentPage++;
 	            this.fetchData();
 	        },
@@ -2150,7 +2223,6 @@
 	            if (this.currentPage == 1) {
 	                return;
 	            }
-	            this.collectionElementTag.emptyCollection();
 	            this.currentPage--;
 	            this.fetchData();
 	        },
@@ -2178,12 +2250,15 @@
 	        renderInfiniteScrolling: function renderInfiniteScrolling() {
 	            var self = this;
 	            if (self.infiniteScrolling) {
-	                window.addEventListener("scroll", function () {
-	                    var positionOffset = window.innerHeight + window.scrollY - thatDoc.body.offsetHeight;
+	                var scrollCallback = function scrollCallback() {
+	                    var positionOffset = window.outerHeight + (window.scrollY || pageYOffset) - document.body.offsetHeight;
+	                    console.log(positionOffset);
 	                    if (positionOffset >= 0) {
 	                        self.appendNextPageData();
 	                    }
-	                }, false);
+	                };
+	                var throttledFunction = _.throttle(scrollCallback, 300);
+	                window.addEventListener("scroll", throttledFunction, false);
 	            }
 	        },
 	        activateRefreshing: function activateRefreshing() {
@@ -2208,6 +2283,8 @@
 	        submit: function submit(e) {
 	            e.preventDefault();
 	            this.currentPage = 1;
+	            this.resultCounter = 0;
+	            this.collectionElementTag.emptyCollection();
 	            this.fetchData();
 	        },
 	        tap: function tap() {}

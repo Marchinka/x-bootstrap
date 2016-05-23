@@ -29,6 +29,33 @@ export default {
 			} else {
 				return this;
 			}
+		},
+		onComponentsReady: function (func) {
+			var firstTryTime = 200;
+			var secondTryTime = 1000;
+			var thirdTryTime = 3000;
+
+			var thirdTry = function () {
+				setTimeout(function () {
+					func();
+				}, thirdTryTime);
+			};
+			var seconTry = function () {
+				try {
+					func();
+				} catch (e) {
+					thirdTry();
+				}
+			};			
+			var firstTry = function () {
+				try {
+					func();
+				} catch (e) {
+					seconTry();
+				}
+			};
+
+			setTimeout(firstTry, firstTryTime);
 		}
 	}
 };

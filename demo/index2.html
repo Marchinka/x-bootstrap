@@ -7,7 +7,9 @@
   </head>
   <body>
     <style type="text/css">
-
+        a {
+            cursor: pointer;
+        }
         button.disabled {
             background-color: rgb(238, 238, 238);
             color: rgb(85, 85, 85);
@@ -36,7 +38,6 @@
         }
     </style>
     <div class="container">
-
       <h1>
         One form-idable form
       </h1>
@@ -126,6 +127,84 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form-ajax>
 
+      <hr/>
+
+      <h1>
+        One awesome collection with pager
+      </h1>
+
+      <collection-container url="/SuperVillans/" elements-per-page="3" pager>
+
+        <collection-search-form>
+          <input-text field="searchText" 
+                      label="Search Text" 
+                      placeholder="Type something here and see how the collection changes">
+          </input-text>
+          <button type="submit" class="btn btn-default">Search</button>
+        </collection-search-form>
+
+        <br/>
+
+        <collection-elements 
+          number-of-results-message=
+          "Your query has found <span class='badge'>{0}</span> results.">
+          <comincbook-character type="Villain"></comincbook-character>
+        </collection-elements>
+
+      </collection-container>
+
+      <hr/>
+
+      <h1>
+        One awesome collection with show more button
+      </h1>
+
+      <collection-container url="/SuperVillans/" elements-per-page="3" show-more-button>
+
+        <collection-search-form>
+          <input-text field="searchText" 
+                      label="Search Text" 
+                      placeholder="Type something here and see how the collection changes">
+          </input-text>
+          <button type="submit" class="btn btn-default">Search</button>
+        </collection-search-form>
+
+        <br/>
+
+        <collection-elements 
+          number-of-results-message=
+          "Your query has found <span class='badge'>{0}</span> results.">
+          <comincbook-character type="Villain"></comincbook-character>
+        </collection-elements>
+
+      </collection-container>
+
+      <hr/>
+
+      <h1>
+        One awesome collection with infinite scrolling
+      </h1>
+
+      <collection-container url="/SuperVillans/" elements-per-page="3" infinite-scrolling>
+
+        <collection-search-form>
+          <input-text field="searchText" 
+                      label="Search Text" 
+                      placeholder="Type something here and see how the collection changes">
+          </input-text>
+          <button type="submit" class="btn btn-default">Search</button>
+        </collection-search-form>
+
+        <br/>
+
+        <collection-elements 
+          number-of-results-message=
+          "Your query has found <span class='badge'>{0}</span> results.">
+          <comincbook-character type="Villain"></comincbook-character>
+        </collection-elements>
+
+      </collection-container>
+
     </div>
 
     <script type="text/javascript" src="./dummy-ajax-service.js"></script>
@@ -134,6 +213,34 @@
     <script type="text/javascript" src="./../node_modules/x-tag/dist/x-tag-core.js"></script>
     <script type="text/javascript" src="./../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./../dist/x-bootstrap.js"></script>
-    
+    <script type="text/javascript">
+      xtag.register("comincbook-character", {
+        accessors: {
+          name: {
+              attribute: {},
+              get: function() {
+                  return this.getAttribute('name');
+              },
+              set: function(value) {
+                  this.xtag.data.name = value;
+              }
+          },
+          type: {
+              attribute: {},
+              get: function() {
+                  return this.getAttribute('type');
+              },
+              set: function(value) {
+                  this.xtag.data.type = value;
+              }
+          }          
+        },
+        lifecycle: {
+          inserted: function () {
+            this.innerHTML = "<p>" + "<span class='label label-danger'>" + this.type + "</span> " + this.name + "</p>";
+          }
+        }
+      });
+    </script>
     </body>
 </html>

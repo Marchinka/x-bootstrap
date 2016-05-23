@@ -90,7 +90,10 @@ export default {
             this.renderInfiniteScrolling();
             this.renderShowMoreButton();
             this.renderPager();
-            this.fetchData();
+            var self = this;
+            this.onComponentsReady(function(event) { 
+                self.fetchData();
+            });
             this.activateRefreshing();
         },
         attributeChanged: function(attributeName) {
@@ -129,16 +132,48 @@ export default {
                 method: "GET",
                 data: formData,
                 success: function (result) {
-                    self.collectionElementTag.addResults(result);
+                    self.checkDataFormat(result);
+                    self.handleDataRendering(result);
                 }
             });                
+        },
+        checkDataFormat: function(dataFromServer) {
+            if (!_(dataFromServer.numberOfResults).isNumber()) {
+                throw new Error("Result json from server is expected to have a numberOfResults property of type number");
+            }
+
+            if (!_(dataFromServer.collection).isArray()) {
+                throw new Error("Result json from server is expected to have a collection property of type array");
+            }
+        },        
+        handleDataRendering: function (result) {
+            if (this.showMoreButton) {
+                this.resultCounter = (this.resultCounter || 0) + result.numberOfResults;
+            } else if (this.infiniteScrolling) {
+                this.resultCounter = (this.resultCounter || 0) + result.numberOfResults;
+            } else if (this.pager) {
+                this.resultCounter = result.numberOfResults;
+                this.collectionElementTag.emptyCollection();
+            } else {
+                var message = 
+                    "Neither show-more-button, infinite-scrolling or pager are defined. " + 
+                    "Showing the top " + 
+                    this.elementsPerPage + 
+                    " elements of collection."
+                console.log(message)
+                this.resultCounter = result.numberOfResults;
+                this.collectionElementTag.emptyCollection();
+            }
+            this.collectionElementTag.addResults({
+                collection: result.collection,
+                numberOfResults: this.resultCounter
+            });
         },
         appendNextPageData: function () {
             this.currentPage++;
             this.fetchData();
         },
         fetchNextPageData: function () {
-            this.collectionElementTag.emptyCollection();
             this.currentPage++;
             this.fetchData();
         },
@@ -146,7 +181,6 @@ export default {
             if (this.currentPage == 1) {
                 return;
             }
-            this.collectionElementTag.emptyCollection();
             this.currentPage--;
             this.fetchData();
         },
@@ -174,12 +208,15 @@ export default {
         renderInfiniteScrolling: function () {
             var self = this;
             if (self.infiniteScrolling) {
-                window.addEventListener("scroll", function () {                    
-                    var positionOffset = window.innerHeight + window.scrollY - thatDoc.body.offsetHeight;
+                var scrollCallback =  function () {                    
+                    var positionOffset = window.outerHeight + (window.scrollY || pageYOffset) - document.body.offsetHeight;
+                    console.log(positionOffset);
                     if (positionOffset >= 0) {
                         self.appendNextPageData();
                     }                    
-                }, false);
+                };
+                var throttledFunction = _.throttle(scrollCallback, 300);
+                window.addEventListener("scroll", throttledFunction, false);
             }                
         },
         activateRefreshing: function() {
@@ -198,13 +235,14 @@ export default {
                 self.collectionElementTag.emptyCollection();
                 self.fetchData();
             }, 1000 * self.refreshEvery);
-
         }
     },
     events: {
         submit: function (e) {
             e.preventDefault();
             this.currentPage = 1;
+            this.resultCounter = 0;
+            this.collectionElementTag.emptyCollection();
             this.fetchData();
         },
         tap: function () {
