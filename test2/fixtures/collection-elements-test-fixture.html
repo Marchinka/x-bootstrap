@@ -34,14 +34,14 @@
 		return sut.getRenderingRoot();
 	};
 
-	beforeEach(function() {
-		var testElement = getTestElement("#with-type-property");
-		testElement.emptyCollection();
-		var testElement = getTestElement("#with-inner-element");
-		testElement.emptyCollection();
-	});
-
 	describe("<collection-elements/>", function() {
+		beforeEach(function() {
+			var testElement = getTestElement("#with-type-property");
+			testElement.emptyCollection();
+			var testElement = getTestElement("#with-inner-element");
+			testElement.emptyCollection();
+		});
+
 		describe("with 'type' property", function() {
 			describe("'renderData' method", function() {
 				it("renders data in tags of type 'type'", function() {

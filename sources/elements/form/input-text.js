@@ -99,7 +99,7 @@ export default {
     },        
     lifecycle: {
         created: function() {
-            this.innerContent = this.getInnerContent("input-text-content");
+            this.innerContent = this.getInnerContent("input-text-content").innerHTML;
             this.render();
         },
         attributeChanged: function(attributeName, oldValue, newValue) {

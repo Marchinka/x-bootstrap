@@ -25,9 +25,9 @@ export default {
 		getInnerContent: function (selector) {
 			var content = this.querySelector(selector);
 			if (content) {
-				return content.innerHTML;
+				return content;
 			} else {
-				return this.innerHTML;
+				return this;
 			}
 		}
 	}

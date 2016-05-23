@@ -118,6 +118,10 @@
 
 	var _collectionSearchForm2 = _interopRequireDefault(_collectionSearchForm);
 
+	var _collectionElements = __webpack_require__(20);
+
+	var _collectionElements2 = _interopRequireDefault(_collectionElements);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	if (!window.$) {
@@ -164,6 +168,9 @@
 
 	var searchFormProto = _utils2.default.extend(_collectionSearchForm2.default).from(_formElementBase2.default);
 	_utils2.default.register('collection-search-form', searchFormProto);
+
+	var elementsProto = _utils2.default.extend(_collectionElements2.default).from(_elementBase2.default);
+	_utils2.default.register('collection-elements', elementsProto);
 
 /***/ },
 /* 1 */
@@ -295,9 +302,9 @@
 			getInnerContent: function getInnerContent(selector) {
 				var content = this.querySelector(selector);
 				if (content) {
-					return content.innerHTML;
+					return content;
 				} else {
-					return this.innerHTML;
+					return this;
 				}
 			}
 		}
@@ -951,7 +958,7 @@
 	    },
 	    lifecycle: {
 	        created: function created() {
-	            this.innerContent = this.getInnerContent("radio-group-content");
+	            this.innerContent = this.getInnerContent("radio-group-content").innerHTML;
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
@@ -1212,7 +1219,7 @@
 	    },
 	    lifecycle: {
 	        created: function created() {
-	            this.innerContent = this.getInnerContent("input-text-content");
+	            this.innerContent = this.getInnerContent("input-text-content").innerHTML;
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
@@ -1476,7 +1483,7 @@
 	    },
 	    lifecycle: {
 	        created: function created() {
-	            this.innerContent = this.getInnerContent("input-select-content");
+	            this.innerContent = this.getInnerContent("input-select-content").innerHTML;
 	            this.render();
 	        },
 	        inserted: function inserted() {
@@ -1735,7 +1742,7 @@
 	    }), _accessors),
 	    lifecycle: {
 	        created: function created() {
-	            this.innerContent = this.getInnerContent("form-ajax-content");
+	            this.innerContent = this.getInnerContent("form-ajax-content").innerHTML;
 	            this.render();
 	        },
 	        inserted: function inserted() {
@@ -1857,7 +1864,7 @@
 	exports.default = {
 	    lifecycle: {
 	        created: function created() {
-	            this.innerContent = this.getInnerContent("collection-search-form-content");
+	            this.innerContent = this.getInnerContent("collection-search-form-content").innerHTML;
 	            this.render();
 	        }
 	    },
@@ -1878,6 +1885,109 @@
 	                //var formData = this.getData();
 	                //alert(JSON.stringify(formData));
 	            }
+	        }
+	    }
+	};
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var template = '\n    <p id="number-of-result"></p>\n    <collection-elements-content id="inner-container"></collection-elements-content>';
+
+	exports.default = {
+	    accessors: {
+	        type: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('type');
+	            },
+	            set: function set(value) {
+	                this.xtag.data.type = value;
+	            }
+	        },
+	        numberOfResultsMessage: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('number-of-results-message');
+	            },
+	            set: function set(value) {
+	                this.xtag.data.numberOfResultsMessage = value;
+	            }
+	        },
+	        numberOfResults: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getAttribute('number-of-results');
+	            },
+	            set: function set(value) {
+	                this.xtag.data.numberOfResults = value;
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        created: function created() {
+	            var firstChild = this.getRenderingRoot().firstElementChild;
+	            if (firstChild) {
+	                this.listItemTemplate = firstChild.cloneNode(true);
+	            }
+	            this.getRenderingRoot().innerHTML = template;
+	            this.p = this.selectInRenderingRoot('#number-of-result');
+	            this.innerContainer = this.selectInRenderingRoot("collection-elements-content");
+	            this.render();
+	        },
+	        attributeChanged: function attributeChanged(attributeName) {
+	            this.render();
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            if (this.numberOfResults && this.numberOfResultsMessage) {
+	                this.p.textContent = this.numberOfResultsMessage.replace("{0}", this.numberOfResults);
+	            }
+	        },
+	        addResults: function addResults(dataFromServer) {
+	            this.numberOfResults = dataFromServer.numberOfResults;
+	            this.appendData(dataFromServer.collection);
+	        },
+	        appendData: function appendData(data) {
+	            if (!data) {
+	                throw new Error("Data not defined.");
+	            }
+
+	            if (!data.length && data.length != 0) {
+	                throw new Error("Data must be a collection.");
+	            }
+
+	            for (var i = 0; i < data.length; i++) {
+	                var elementData = data[i];
+	                var domElement = this.getChildElement(elementData);
+	                this.innerContainer.appendChild(domElement);
+	            }
+	        },
+	        renderData: function renderData(data) {
+	            this.emptyCollection();
+	            this.appendData(data);
+	        },
+	        emptyCollection: function emptyCollection() {
+	            this.innerContainer.innerHTML = '';
+	        },
+	        getChildElement: function getChildElement(elementData) {
+	            var domElement;
+	            if (this.listItemTemplate) {
+	                domElement = this.listItemTemplate.cloneNode(true);
+	            } else if (this.type) {
+	                domElement = document.createElement(this.type);
+	            } else {
+	                throw new Error("Neither 'type' property nor inner element defined in <collection-elements/>.");
+	            }
+	            _.extend(domElement, elementData);
+	            return domElement;
 	        }
 	    }
 	};

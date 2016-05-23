@@ -73,7 +73,7 @@ export default {
     },    
     lifecycle: {
         created: function() {
-            this.innerContent = this.getInnerContent("form-ajax-content");
+            this.innerContent = this.getInnerContent("form-ajax-content").innerHTML;
             this.render();
         },
         inserted: function () {

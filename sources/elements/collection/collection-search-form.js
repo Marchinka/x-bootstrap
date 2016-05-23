@@ -8,7 +8,7 @@ const template = data => `
 export default {
     lifecycle: {
         created: function() {
-            this.innerContent = this.getInnerContent("collection-search-form-content");
+            this.innerContent = this.getInnerContent("collection-search-form-content").innerHTML;
             this.render();
         }
     },

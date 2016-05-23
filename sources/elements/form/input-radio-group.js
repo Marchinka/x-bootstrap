@@ -33,7 +33,7 @@ export default {
     },
     lifecycle: {
         created: function() {
-        	this.innerContent = this.getInnerContent("radio-group-content");
+        	this.innerContent = this.getInnerContent("radio-group-content").innerHTML;
             this.render();
         },
         attributeChanged: function(attributeName) {

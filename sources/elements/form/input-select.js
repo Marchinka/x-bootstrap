@@ -68,7 +68,7 @@ export default {
     },
     lifecycle: {
         created: function() {
-            this.innerContent = this.getInnerContent("input-select-content");
+            this.innerContent = this.getInnerContent("input-select-content").innerHTML;
             this.render();
         },
         inserted: function() {
