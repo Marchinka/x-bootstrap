@@ -45,7 +45,7 @@
         <small>Mocked ajax responses can be found in 'dummy-ajax-service.js'</small>
       </p>
       
-      <form-ajax  post-url="/path/to/something" get-url="/initial/data/from/here" clear-on-success>
+      <form-ajax  post-url="/path/to/something" get-url="/initial/data/from/here" clear-on-success  rest-service="restService">
         
         <input-text field="denomination" 
                     label="Denominazione" 
@@ -86,7 +86,8 @@
         <input-select field="city"
                       label="City"
                       placeholder="Select your favorite city"
-                      required
+                      rest-service="restService"
+                      required 
                       required-message="Required field: you really shouldn't left this option unselected.">
           <dropdown-option key="1" value="Milan"></dropdown-option>
           <dropdown-option key="2" value="Rome"></dropdown-option>
@@ -96,6 +97,7 @@
         </input-select>
 
         <input-autocomplete field="favoriteSuperHero" 
+                            rest-service="restService"
                             label="Your Favorite Super Hero (Batman... Duh!)" 
                             url="/SuperHeroes/"
                             placeholder="What is your favorite superhero?" 
@@ -133,7 +135,37 @@
         One awesome collection with pager
       </h1>
 
-      <collection-container url="/SuperVillans/" elements-per-page="3" pager>
+      <collection-container url="/SuperVillans/" elements-per-page="3" data-pager data-rest-service="restService">
+
+        <collection-search-form>
+          <input-text field="searchText" 
+                      label="Search Text" 
+                      placeholder="Type something here and see how the collection changes">
+          </input-text>
+          <button type="submit" class="btn btn-default">Search</button>
+        </collection-search-form>
+
+        <br/>
+
+        <collection-feedback>
+          Your query has found <span class="badge"><feedback-token data-key="numberOfResults" default="0"/></span> results
+        </collection-feedback>
+
+        <br/>
+
+        <collection-elements>
+          <comincbook-character type="Villain"></comincbook-character>
+        </collection-elements>
+
+      </collection-container>
+
+      <hr/>
+
+      <h1>
+        One awesome collection with show more button
+      </h1>
+
+      <collection-container url="/SuperVillans/" elements-per-page="3" show-more-button rest-service="restService">
 
         <collection-search-form>
           <input-text field="searchText" 
@@ -154,36 +186,10 @@
       <hr/>
 
       <h1>
-        One awesome collection with show more button
-      </h1>
-
-      <collection-container url="/SuperVillans/" elements-per-page="3" show-more-button>
-
-        <collection-search-form>
-          <input-text field="searchText" 
-                      label="Search Text" 
-                      placeholder="Type something here and see how the collection changes">
-          </input-text>
-          <button type="submit" class="btn btn-default">Search</button>
-        </collection-search-form>
-
-        <br/>
-
-        <collection-elements 
-          number-of-results-message=
-          "Your query has found <span class='badge'>{0}</span> results.">
-          <comincbook-character type="Villain"></comincbook-character>
-        </collection-elements>
-
-      </collection-container>
-
-      <hr/>
-
-      <h1>
         One awesome collection with infinite scrolling
       </h1>
 
-      <collection-container url="/SuperVillans/" elements-per-page="3" infinite-scrolling>
+      <collection-container url="/SuperVillans/" elements-per-page="3" infinite-scrolling rest-service="restService">
 
         <collection-search-form>
           <input-text field="searchText" 
@@ -195,9 +201,7 @@
 
         <br/>
 
-        <collection-elements 
-          number-of-results-message=
-          "Your query has found <span class='badge'>{0}</span> results.">
+        <collection-elements>
           <comincbook-character type="Villain"></comincbook-character>
         </collection-elements>
 

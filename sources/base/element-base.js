@@ -1,6 +1,17 @@
 import utils from "./../utils/utils.js";
 
 export default {
+    accessors: {
+        restService: {
+            attribute: { },
+            get: function() {
+                return this.getDataAttribute('rest-service') || "";
+            },
+            set: function(data) {
+                this.xtag.data.restService = data;
+            }
+        }
+    },	
 	methods: {
 		getRenderingRoot: function () {
 			// Could be used for shadow dom
@@ -11,6 +22,12 @@ export default {
 		},
 		insertHtmlInRenderingRoot: function (html) {
 			this.getRenderingRoot().innerHTML = html;
+		},
+		getDataAttribute: function (attributeName) {
+			return this.getAttribute(attributeName) || this.getAttribute("data-" + attributeName);
+		},
+		hasDataAttribute: function (attributeName) {
+			return this.hasAttribute(attributeName) || this.hasAttribute("data-" + attributeName);
 		},		
 		appendHtmlInRenderingRoot: function (html) {
 			var div = document.createElement('div');
@@ -45,6 +62,17 @@ export default {
 			setTimeout(function () {
 				func();
 			}, 200);
-		}
+		},
+		getRestService: function () {
+			var restServiceKey = this.restService || "$";
+			var restServiceObject = window[restServiceKey];
+			if (!restServiceObject) {
+				var message = 
+					"A rest service with an ajax method must be assigned to window." + 
+					restServiceKey;
+				throw new Error(message);
+			}
+			return restServiceObject;
+		}		
 	}
 };

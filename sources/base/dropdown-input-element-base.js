@@ -6,7 +6,7 @@ var dropdownInputElementBase = {
         url: {
             attribute: { },
             get: function() {
-                return this.getAttribute('url');
+                return this.getDataAttribute('url');
             },
             set: function(data) {
                 this.xtag.data.url = data;

@@ -18,7 +18,7 @@ var inputRadio = {
         field: {
             attribute: {},
             get: function() {
-                return this.getAttribute('field');
+                return this.getDataAttribute('field');
             },
             set: function(value) {
                 this.xtag.data.field = value;
@@ -27,7 +27,7 @@ var inputRadio = {
         value: {
             attribute: {},
             get: function() {
-                return this.getAttribute('value');
+                return this.getDataAttribute('value');
             },
             set: function(data) {
                 var old = this.xtag.data.value;

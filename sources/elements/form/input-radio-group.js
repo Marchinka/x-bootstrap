@@ -18,7 +18,7 @@ var inputRadioGroup = {
         required: {
             attribute: { boolean: true },
             get: function() {
-                return this.hasAttribute('required');
+                return this.hasDataAttribute('required');
             },
             set: function(data) {
                 this.xtag.data.required = data;
@@ -27,7 +27,7 @@ var inputRadioGroup = {
         requiredMessage: {
             attribute: {},
             get: function() {
-                return this.getAttribute('required-message') || '';
+                return this.getDataAttribute('required-message') || '';
             },
             set: function(data) {
                 this.xtag.data.requiredMessage = data;

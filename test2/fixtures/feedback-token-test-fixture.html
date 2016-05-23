@@ -6,6 +6,10 @@
 	<feedback-token key="fieldName"></feedback-token>
 </div>
 
+<div id="with-key-and-default">
+	<feedback-token key="fieldName" default="something"></feedback-token>
+</div>
+
 <script type="text/javascript">
 (function(currentDocument) {
 	var getTestElement = function (selector) {
@@ -48,6 +52,17 @@
 					testElement.renderFrom({ otherField: "other value" });
 					var innerSpan = testElement.selectInRenderingRoot("span");
 					expect(innerSpan.textContent).to.be.equal("");
+				});
+
+				describe("with default attribute", function () {
+					describe("renderFrom with object with no key as one of the fields", function() {
+						it("is renderd with default value", function() {
+							var testElement = getTestElement("#with-key-and-default");
+							testElement.renderFrom({ otherField: "other value" });
+							var innerSpan = testElement.selectInRenderingRoot("span");
+							expect(innerSpan.textContent).to.be.equal(testElement.default);
+						});
+					});
 				});
 			});
 

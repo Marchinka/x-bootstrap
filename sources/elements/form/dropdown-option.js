@@ -8,7 +8,7 @@ var dropdownElement = {
         key: {
             attribute: {},
             get: function() {
-                return this.getAttribute('key') || '';
+                return this.getDataAttribute('key') || '';
             },
             set: function(data) {
                 this.xtag.data.key = data;
@@ -17,7 +17,7 @@ var dropdownElement = {
         value: {
             attribute: {},
             get: function() {
-                return this.getAttribute('value') || '';
+                return this.getDataAttribute('value') || '';
             },
             set: function(data) {
                 this.xtag.data.value = data;

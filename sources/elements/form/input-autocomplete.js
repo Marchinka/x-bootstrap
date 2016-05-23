@@ -61,11 +61,8 @@ var inputAutocomplete = {
                 return;
             }
 
-            if (!window.restService) {
-                throw new Error("'restService' must be assigned to main window for <input-autocomplete/> to work correctly");   
-            }
-
-            window.restService.ajax({
+            var restService = this.getRestService();
+            restService.ajax({
                 url: self.url,
                 method: "GET",
                 data: { search: this.value },

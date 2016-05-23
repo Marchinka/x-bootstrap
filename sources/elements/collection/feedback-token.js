@@ -8,17 +8,26 @@ var feedbackToken = {
         key: {
             attribute: { },
             get: function() {
-                return this.getAttribute('key') || '';
+                return this.getDataAttribute('key') || '';
             },
             set: function(data) {
                 this.xtag.data.key = data;
             }
         },
+        default: {
+            attribute: { },
+            get: function() {
+                return this.getDataAttribute('default') || '';
+            },
+            set: function(data) {
+                this.xtag.data.default = data;
+            }
+        },        
     },
     lifecycle: {
         created: function () {
-            var data = { value: null };
-            this.getRenderingRoot().textContent = template(data);            
+            var data = { value: this.default };
+            this.getRenderingRoot().innerHTML = template(data);
         }
     },
     methods: {
@@ -31,7 +40,7 @@ var feedbackToken = {
                 throw new Error("Falsy key in <feedback-token/>");
             }
 
-            var data = { value: object[this.key] || '' };
+            var data = { value: object[this.key] || this.default };
             this.getRenderingRoot().innerHTML = template(data);
         }
     }

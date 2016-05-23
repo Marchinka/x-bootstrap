@@ -6,7 +6,7 @@ var additionalInfo = {
         field: {
             attribute: {},
             get: function() {
-                return this.getAttribute('field');
+                return this.getDataAttribute('field');
             },
             set: function(value) {
                 this.xtag.data.field = value;
@@ -15,7 +15,7 @@ var additionalInfo = {
         value: {
             attribute: {},
             get: function() {
-                return this.getAttribute('value');
+                return this.getDataAttribute('value');
             },
             set: function(data) {
                 this.xtag.data.value = data;
@@ -24,7 +24,7 @@ var additionalInfo = {
         valueOf: {
             attribute: {},
             get: function() {
-                return this.getAttribute('value-of');
+                return this.getDataAttribute('value-of');
             },
             set: function(data) {
                 this.xtag.data.valueOf = data;

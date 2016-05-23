@@ -1,0 +1,78 @@
+<div id="with-no-key">
+	<feedback-token></feedback-token>
+</div>
+
+<div id="with-inner-content">
+	<collection-feedback>
+		<test-element></test-element>
+	<collection-feedback>
+</div>
+
+<div id="with-feedback-token">
+	<collection-feedback>
+		Some text with <feedback-token key="fieldName"/>
+	<collection-feedback>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector("collection-feedback");
+		return sut.getRenderingRoot();
+	};	
+
+	describe("<collection-feedback/>", function() {
+		describe("with inner content", function() {
+			it("is rendered with inner content", function() {
+				var testElement = getTestElement("#with-inner-content");
+				var innerElement = testElement.selectInRenderingRoot("test-element");
+				expect(innerElement).not.to.be.null;
+			});
+		});
+
+		describe("renderFrom", function() {
+			describe("with undefined input", function() {
+				it("throws error", function() {
+					var testElement = getTestElement("#with-feedback-token");
+					var expectedError = "Falsy object in renderFrom of <collection-feedback/>";
+					var errorThrower = function () {
+						testElement.renderFrom(undefined);
+					};					
+					expect(errorThrower).to.throw(expectedError);
+				});
+			});
+
+			describe("with object", function() {
+				describe("with no field equal to inner token key", function() {
+					it("gets empty rendering inside token", function() {
+						var testElement = getTestElement("#with-feedback-token");
+						var object = {
+							otherField: "value"
+						}
+						testElement.renderFrom(object);
+						var innerSpan = testElement
+							.selectInRenderingRoot("feedback-token")
+							.querySelector("span")
+						expect(innerSpan.tectContent).to.be.undefined;
+					});
+				});
+
+				describe("with field equal to inner token key", function() {
+					it("gets rendering inside token with field value", function() {
+						var testElement = getTestElement("#with-feedback-token");
+						var object = {
+							fieldName: "value"
+						}
+						testElement.renderFrom(object);
+						var innerSpan = testElement
+							.selectInRenderingRoot("feedback-token")
+							.querySelector("span")
+						expect(innerSpan.textContent).to.be.equal(object.fieldName);
+					});
+				});				
+			});
+		});
+	});
+})(document._currentScript.ownerDocument);
+</script>

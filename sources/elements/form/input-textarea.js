@@ -24,7 +24,7 @@ var inputTextarea = {
         rows: {
             attribute: {},
             get: function() {
-                return this.getAttribute('rows');
+                return this.getDataAttribute('rows');
             },
             set: function(data) {
                 this.xtag.data.rows = data;
@@ -33,7 +33,7 @@ var inputTextarea = {
         maxLength: {
             attribute: {},
             get: function() {
-                return this.getAttribute('max-length');
+                return this.getDataAttribute('max-length');
             },
             set: function(data) {
                 this.xtag.data.maxLength = data;
@@ -42,7 +42,7 @@ var inputTextarea = {
         maxLengthMessage: {
             attribute: {},
             get: function() {
-                return this.getAttribute('max-length-message') || '';
+                return this.getDataAttribute('max-length-message') || '';
             },
             set: function(data) {
                 this.xtag.data.maxLengthMessage = data;

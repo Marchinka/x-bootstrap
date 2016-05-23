@@ -341,7 +341,8 @@
 				};
 				window.restService.addMockedAjax(mock);
 				var newElement = document.createElement("input-autocomplete");
-				newElement.url = restUrl;			
+				newElement.url = restUrl;
+				newElement.restService = "restService";			
 				currentDocument.body.appendChild(newElement);
 
 				// EXERCISE
@@ -366,7 +367,8 @@
 				};
 				window.restService.addMockedAjax(mock);
 				var newElement = document.createElement("input-autocomplete");
-				newElement.url = restUrl;			
+				newElement.url = restUrl;
+				newElement.restService = "restService";			
 				currentDocument.body.appendChild(newElement);
 
 				// EXERCISE

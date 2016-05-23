@@ -6,7 +6,7 @@ var inputElementBase = {
         field: {
             attribute: {},
             get: function() {
-                return this.getAttribute('field');
+                return this.getDataAttribute('field');
             },
             set: function(value) {
                 this.xtag.data.field = value;
@@ -15,7 +15,7 @@ var inputElementBase = {
         label: {
             attribute: {},
             get: function() {
-                return this.getAttribute('label');
+                return this.getDataAttribute('label');
             },
             set: function(value) {
                 this.xtag.data.label = value;
@@ -24,7 +24,7 @@ var inputElementBase = {
         error: {
             attribute: {},
             get: function() {
-                return this.getAttribute('error') || '';
+                return this.getDataAttribute('error') || '';
             },
             set: function(value) {
                 var old = this.xtag.data.error;

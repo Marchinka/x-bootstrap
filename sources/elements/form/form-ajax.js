@@ -13,7 +13,7 @@ var formAjax = {
         postUrl: {
             attribute: {},
             get: function() {
-                return this.getAttribute('post-url') || '';
+                return this.getDataAttribute('post-url') || '';
             },
             set: function(data) {
                 this.xtag.data.postUrl = data;
@@ -22,7 +22,7 @@ var formAjax = {
         getUrl: {
             attribute: {},
             get: function() {
-                return this.getAttribute('get-url') || '';
+                return this.getDataAttribute('get-url') || '';
             },
             set: function(data) {
                 this.xtag.data.getUrl = data;
@@ -31,7 +31,7 @@ var formAjax = {
         redirectUrl: {
             attribute: {},
             get: function() {
-                return this.getAttribute('redirect-url') || '';
+                return this.getDataAttribute('redirect-url') || '';
             },
             set: function(data) {
                 this.xtag.data.redirectUrl = data;
@@ -40,7 +40,7 @@ var formAjax = {
         redirectHash: {
             attribute: {},
             get: function() {
-                return this.getAttribute('redirect-hash') || '';
+                return this.getDataAttribute('redirect-hash') || '';
             },
             set: function(data) {
                 this.xtag.data.redirectHash = data;
@@ -49,7 +49,7 @@ var formAjax = {
         redirectToId: {
             attribute: { boolean: true },
             get: function() {
-                return this.hasAttribute('redirect-to-id') || '';
+                return this.hasDataAttribute('redirect-to-id') || '';
             },
             set: function(data) {
                 this.xtag.data.redirectToId = data;
@@ -58,7 +58,7 @@ var formAjax = {
         redirectUrl: {
             attribute: {},
             get: function() {
-                return this.getAttribute('redirect-url') || '';
+                return this.getDataAttribute('redirect-url') || '';
             },
             set: function(data) {
                 this.xtag.data.redirectUrl = data;
@@ -67,7 +67,7 @@ var formAjax = {
         clearOnSuccess: {
             attribute: { boolean: true },
             get: function() {
-                return this.hasAttribute('clear-on-success') || '';
+                return this.hasDataAttribute('clear-on-success') || '';
             },
             set: function(data) {
                 this.xtag.data.clearOnSuccess = data;
@@ -99,7 +99,8 @@ var formAjax = {
             }
 
             var formData = self.getData();
-            window.restService.ajax({
+            var restService = self.getRestService();
+            restService.ajax({
                 url: self.postUrl,
                 method: "POST",
                 data: formData,

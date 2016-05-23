@@ -25,7 +25,7 @@ var inputSelect = {
         placeholder: {
             attribute: {},
             get: function() {
-                return this.getAttribute('placeholder') || '';
+                return this.getDataAttribute('placeholder') || '';
             },
             set: function(value) {
                 this.xtag.data.placeholder = value;
@@ -122,11 +122,8 @@ var inputSelect = {
                 return;
             }
 
-            if (!window.restService) {
-                throw new Error("'restService' must be assigned to main window for <input-select/> to work correctly");   
-            }
-
-            window.restService.ajax({
+            var restService = this.getRestService();
+            restService.ajax({
                 url: self.url,
                 method: "GET",
                 success: function (result) {

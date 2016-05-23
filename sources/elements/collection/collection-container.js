@@ -20,7 +20,7 @@ var collectionContainer = {
         url: {
             attribute: { },
             get: function() {
-                return this.getAttribute('url');
+                return this.getDataAttribute('url');
             },
             set: function(data) {
                 this.xtag.data.url = data;
@@ -29,7 +29,7 @@ var collectionContainer = {
         infiniteScrolling: {
             attribute: { boolean: true },
             get: function() {
-                return this.hasAttribute('infinite-scrolling');
+                return this.hasDataAttribute('infinite-scrolling');
             },
             set: function(data) {
                 this.xtag.data.infiniteScrolling = data;
@@ -38,7 +38,7 @@ var collectionContainer = {
         showMoreButton: {
             attribute: { boolean: true },
             get: function() {
-                return this.hasAttribute('show-more-button');
+                return this.hasDataAttribute('show-more-button');
             },
             set: function(data) {
                 this.xtag.data.showMoreButton = data;
@@ -47,7 +47,7 @@ var collectionContainer = {
         pager: {
             attribute: { boolean: true },
             get: function() {
-                return this.hasAttribute('pager');
+                return this.hasDataAttribute('pager');
             },
             set: function(data) {
                 this.xtag.data.pager = data;
@@ -56,7 +56,7 @@ var collectionContainer = {
         elementsPerPage: {
             attribute: { },
             get: function() {
-                return this.getAttribute('elements-per-page');
+                return this.getDataAttribute('elements-per-page');
             },
             set: function(data) {
                 this.xtag.data.elementsPerPage = data;
@@ -65,7 +65,7 @@ var collectionContainer = {
         currentPage: {
             attribute: { },
             get: function() {
-                return this.getAttribute('current-page');
+                return this.getDataAttribute('current-page');
             },
             set: function(data) {
                 this.xtag.data.currentPage = data;
@@ -118,11 +118,7 @@ var collectionContainer = {
 
             if (!self.collectionElementTag) {
                  throw new Error("No <collection-elements/> found as inner contet of <collection-container/>.");
-            }   
-
-            if (!window.restService) {
-                throw new Error("'restService' must be assigned to main window for <collection-container/> to work correctly");   
-            }      
+            }
            
             var formData = {};
             if (self.searchForm) {
@@ -135,7 +131,8 @@ var collectionContainer = {
             formData.page = this.currentPage;
             formData.elementsPerPage = this.elementsPerPage;
 
-            window.restService.ajax({
+            var restService = self.getRestService();
+            restService.ajax({
                 url: self.url,
                 method: "GET",
                 data: formData,
@@ -173,6 +170,16 @@ var collectionContainer = {
                 this.collectionElementTag.emptyCollection();
             }
             this.collectionElementTag.appendData(result.collection);
+            this.renderFeedbacks(result);
+        },
+        renderFeedbacks: function (result) {
+            var feedbacks = this
+                .getRenderingRoot()
+                .querySelectorAll("collection-feedback");
+
+            _(feedbacks).each(function (feedback) {
+                if(_(feedback.renderFrom).isFunction()) feedback.renderFrom(result);
+            });
         },
         appendNextPageData: function () {
             this.currentPage++;

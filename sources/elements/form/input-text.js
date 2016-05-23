@@ -48,7 +48,7 @@ var inputText = {
         jquery: {
             attribute: {},
             get: function() {
-                return this.getAttribute('jquery') || '';
+                return this.getDataAttribute('jquery') || '';
             },
             set: function(data) {
                 this.xtag.data.jquery = data;
@@ -57,7 +57,7 @@ var inputText = {
         dateFormat: {
             attribute: {},
             get: function() {
-                return this.getAttribute('date-format') || '';
+                return this.getDataAttribute('date-format') || '';
             },
             set: function(data) {
                 this.xtag.data.dateFormat = data;
@@ -66,7 +66,7 @@ var inputText = {
         regex: {
             attribute: {},
             get: function() {
-                return this.getAttribute('regex') || '';
+                return this.getDataAttribute('regex') || '';
             },
             set: function(data) {
                 this.xtag.data.regex = data;
@@ -75,7 +75,7 @@ var inputText = {
         regexMessage: {
             attribute: {},
             get: function() {
-                return this.getAttribute('regex-message') || '';
+                return this.getDataAttribute('regex-message') || '';
             },
             set: function(data) {
                 this.xtag.data.regexMessage = data;
@@ -84,7 +84,7 @@ var inputText = {
         maxLength: {
             attribute: {},
             get: function() {
-                return this.getAttribute('max-length');
+                return this.getDataAttribute('max-length');
             },
             set: function(data) {
                 this.xtag.data.maxLength = data;
@@ -93,7 +93,7 @@ var inputText = {
         maxLengthMessage: {
             attribute: {},
             get: function() {
-                return this.getAttribute('max-length-message') || '';
+                return this.getDataAttribute('max-length-message') || '';
             },
             set: function(data) {
                 this.xtag.data.maxLengthMessage = data;

@@ -286,7 +286,7 @@
 	        key: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('key') || '';
+	                return this.getDataAttribute('key') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.key = data;
@@ -295,7 +295,7 @@
 	        value: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('value') || '';
+	                return this.getDataAttribute('value') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.value = data;
@@ -332,7 +332,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -345,6 +345,17 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
+		accessors: {
+			restService: {
+				attribute: {},
+				get: function get() {
+					return this.getDataAttribute('rest-service') || "";
+				},
+				set: function set(data) {
+					this.xtag.data.restService = data;
+				}
+			}
+		},
 		methods: {
 			getRenderingRoot: function getRenderingRoot() {
 				// Could be used for shadow dom
@@ -355,6 +366,12 @@
 			},
 			insertHtmlInRenderingRoot: function insertHtmlInRenderingRoot(html) {
 				this.getRenderingRoot().innerHTML = html;
+			},
+			getDataAttribute: function getDataAttribute(attributeName) {
+				return this.getAttribute(attributeName) || this.getAttribute("data-" + attributeName);
+			},
+			hasDataAttribute: function hasDataAttribute(attributeName) {
+				return this.hasAttribute(attributeName) || this.hasAttribute("data-" + attributeName);
 			},
 			appendHtmlInRenderingRoot: function appendHtmlInRenderingRoot(html) {
 				var div = document.createElement('div');
@@ -386,6 +403,15 @@
 				setTimeout(function () {
 					func();
 				}, 200);
+			},
+			getRestService: function getRestService() {
+				var restServiceKey = this.restService || "$";
+				var restServiceObject = window[restServiceKey];
+				if (!restServiceObject) {
+					var message = "A rest service with an ajax method must be assigned to window." + restServiceKey;
+					throw new Error(message);
+				}
+				return restServiceObject;
 			}
 		}
 	};
@@ -415,7 +441,7 @@
 	        field: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('field');
+	                return this.getDataAttribute('field');
 	            },
 	            set: function set(value) {
 	                this.xtag.data.field = value;
@@ -424,7 +450,7 @@
 	        value: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('value');
+	                return this.getDataAttribute('value');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.value = data;
@@ -433,7 +459,7 @@
 	        valueOf: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('value-of');
+	                return this.getDataAttribute('value-of');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.valueOf = data;
@@ -500,7 +526,7 @@
 	        field: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('field');
+	                return this.getDataAttribute('field');
 	            },
 	            set: function set(value) {
 	                this.xtag.data.field = value;
@@ -509,7 +535,7 @@
 	        value: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('value');
+	                return this.getDataAttribute('value');
 	            },
 	            set: function set(data) {
 	                var old = this.xtag.data.value;
@@ -608,7 +634,7 @@
 	        required: {
 	            attribute: { boolean: true },
 	            get: function get() {
-	                return this.hasAttribute('required');
+	                return this.hasDataAttribute('required');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.required = data;
@@ -617,7 +643,7 @@
 	        requiredMessage: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('required-message') || '';
+	                return this.getDataAttribute('required-message') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.requiredMessage = data;
@@ -762,7 +788,7 @@
 	        field: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('field');
+	                return this.getDataAttribute('field');
 	            },
 	            set: function set(value) {
 	                this.xtag.data.field = value;
@@ -771,7 +797,7 @@
 	        label: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('label');
+	                return this.getDataAttribute('label');
 	            },
 	            set: function set(value) {
 	                this.xtag.data.label = value;
@@ -780,7 +806,7 @@
 	        error: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('error') || '';
+	                return this.getDataAttribute('error') || '';
 	            },
 	            set: function set(value) {
 	                var old = this.xtag.data.error;
@@ -960,7 +986,7 @@
 	        jquery: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('jquery') || '';
+	                return this.getDataAttribute('jquery') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.jquery = data;
@@ -969,7 +995,7 @@
 	        dateFormat: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('date-format') || '';
+	                return this.getDataAttribute('date-format') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.dateFormat = data;
@@ -978,7 +1004,7 @@
 	        regex: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('regex') || '';
+	                return this.getDataAttribute('regex') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.regex = data;
@@ -987,7 +1013,7 @@
 	        regexMessage: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('regex-message') || '';
+	                return this.getDataAttribute('regex-message') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.regexMessage = data;
@@ -996,7 +1022,7 @@
 	        maxLength: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('max-length');
+	                return this.getDataAttribute('max-length');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.maxLength = data;
@@ -1005,7 +1031,7 @@
 	        maxLengthMessage: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('max-length-message') || '';
+	                return this.getDataAttribute('max-length-message') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.maxLengthMessage = data;
@@ -1132,7 +1158,7 @@
 	        placeholder: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('placeholder') || '';
+	                return this.getDataAttribute('placeholder') || '';
 	            },
 	            set: function set(value) {
 	                this.xtag.data.placeholder = value;
@@ -1141,7 +1167,7 @@
 	        required: {
 	            attribute: { boolean: true },
 	            get: function get() {
-	                return this.hasAttribute('required');
+	                return this.hasDataAttribute('required');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.required = data;
@@ -1150,7 +1176,7 @@
 	        requiredMessage: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('required-message') || '';
+	                return this.getDataAttribute('required-message') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.requiredMessage = data;
@@ -1221,7 +1247,7 @@
 	        rows: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('rows');
+	                return this.getDataAttribute('rows');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.rows = data;
@@ -1230,7 +1256,7 @@
 	        maxLength: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('max-length');
+	                return this.getDataAttribute('max-length');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.maxLength = data;
@@ -1239,7 +1265,7 @@
 	        maxLengthMessage: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('max-length-message') || '';
+	                return this.getDataAttribute('max-length-message') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.maxLengthMessage = data;
@@ -1343,7 +1369,7 @@
 	        placeholder: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('placeholder') || '';
+	                return this.getDataAttribute('placeholder') || '';
 	            },
 	            set: function set(value) {
 	                this.xtag.data.placeholder = value;
@@ -1440,11 +1466,8 @@
 	                return;
 	            }
 
-	            if (!window.restService) {
-	                throw new Error("'restService' must be assigned to main window for <input-select/> to work correctly");
-	            }
-
-	            window.restService.ajax({
+	            var restService = this.getRestService();
+	            restService.ajax({
 	                url: self.url,
 	                method: "GET",
 	                success: function success(result) {
@@ -1499,7 +1522,7 @@
 	        url: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('url');
+	                return this.getDataAttribute('url');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.url = data;
@@ -1637,11 +1660,8 @@
 	                return;
 	            }
 
-	            if (!window.restService) {
-	                throw new Error("'restService' must be assigned to main window for <input-autocomplete/> to work correctly");
-	            }
-
-	            window.restService.ajax({
+	            var restService = this.getRestService();
+	            restService.ajax({
 	                url: self.url,
 	                method: "GET",
 	                data: { search: this.value },
@@ -1732,7 +1752,7 @@
 	        postUrl: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('post-url') || '';
+	                return this.getDataAttribute('post-url') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.postUrl = data;
@@ -1741,7 +1761,7 @@
 	        getUrl: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('get-url') || '';
+	                return this.getDataAttribute('get-url') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.getUrl = data;
@@ -1750,7 +1770,7 @@
 	        redirectUrl: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('redirect-url') || '';
+	                return this.getDataAttribute('redirect-url') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.redirectUrl = data;
@@ -1759,7 +1779,7 @@
 	        redirectHash: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('redirect-hash') || '';
+	                return this.getDataAttribute('redirect-hash') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.redirectHash = data;
@@ -1768,7 +1788,7 @@
 	        redirectToId: {
 	            attribute: { boolean: true },
 	            get: function get() {
-	                return this.hasAttribute('redirect-to-id') || '';
+	                return this.hasDataAttribute('redirect-to-id') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.redirectToId = data;
@@ -1777,7 +1797,7 @@
 	    }, _defineProperty(_accessors, "redirectUrl", {
 	        attribute: {},
 	        get: function get() {
-	            return this.getAttribute('redirect-url') || '';
+	            return this.getDataAttribute('redirect-url') || '';
 	        },
 	        set: function set(data) {
 	            this.xtag.data.redirectUrl = data;
@@ -1785,7 +1805,7 @@
 	    }), _defineProperty(_accessors, "clearOnSuccess", {
 	        attribute: { boolean: true },
 	        get: function get() {
-	            return this.hasAttribute('clear-on-success') || '';
+	            return this.hasDataAttribute('clear-on-success') || '';
 	        },
 	        set: function set(data) {
 	            this.xtag.data.clearOnSuccess = data;
@@ -1816,7 +1836,8 @@
 	            }
 
 	            var formData = self.getData();
-	            window.restService.ajax({
+	            var restService = self.getRestService();
+	            restService.ajax({
 	                url: self.postUrl,
 	                method: "POST",
 	                data: formData,
@@ -2067,7 +2088,7 @@
 	        type: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('type');
+	                return this.getDataAttribute('type');
 	            },
 	            set: function set(value) {
 	                this.xtag.data.type = value;
@@ -2154,7 +2175,7 @@
 	        url: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('url');
+	                return this.getDataAttribute('url');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.url = data;
@@ -2163,7 +2184,7 @@
 	        infiniteScrolling: {
 	            attribute: { boolean: true },
 	            get: function get() {
-	                return this.hasAttribute('infinite-scrolling');
+	                return this.hasDataAttribute('infinite-scrolling');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.infiniteScrolling = data;
@@ -2172,7 +2193,7 @@
 	        showMoreButton: {
 	            attribute: { boolean: true },
 	            get: function get() {
-	                return this.hasAttribute('show-more-button');
+	                return this.hasDataAttribute('show-more-button');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.showMoreButton = data;
@@ -2181,7 +2202,7 @@
 	        pager: {
 	            attribute: { boolean: true },
 	            get: function get() {
-	                return this.hasAttribute('pager');
+	                return this.hasDataAttribute('pager');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.pager = data;
@@ -2190,7 +2211,7 @@
 	        elementsPerPage: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('elements-per-page');
+	                return this.getDataAttribute('elements-per-page');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.elementsPerPage = data;
@@ -2199,7 +2220,7 @@
 	        currentPage: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('current-page');
+	                return this.getDataAttribute('current-page');
 	            },
 	            set: function set(data) {
 	                this.xtag.data.currentPage = data;
@@ -2254,10 +2275,6 @@
 	                throw new Error("No <collection-elements/> found as inner contet of <collection-container/>.");
 	            }
 
-	            if (!window.restService) {
-	                throw new Error("'restService' must be assigned to main window for <collection-container/> to work correctly");
-	            }
-
 	            var formData = {};
 	            if (self.searchForm) {
 	                var isFormValid = self.searchForm.validate();
@@ -2269,7 +2286,8 @@
 	            formData.page = this.currentPage;
 	            formData.elementsPerPage = this.elementsPerPage;
 
-	            window.restService.ajax({
+	            var restService = self.getRestService();
+	            restService.ajax({
 	                url: self.url,
 	                method: "GET",
 	                data: formData,
@@ -2303,6 +2321,14 @@
 	                this.collectionElementTag.emptyCollection();
 	            }
 	            this.collectionElementTag.appendData(result.collection);
+	            this.renderFeedbacks(result);
+	        },
+	        renderFeedbacks: function renderFeedbacks(result) {
+	            var feedbacks = this.getRenderingRoot().querySelectorAll("collection-feedback");
+
+	            _(feedbacks).each(function (feedback) {
+	                if (_(feedback.renderFrom).isFunction()) feedback.renderFrom(result);
+	            });
 	        },
 	        appendNextPageData: function appendNextPageData() {
 	            this.currentPage++;
@@ -2411,7 +2437,34 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var collectionFeedback = {};
+	var template = function template(data) {
+	    return "    \n    <collection-feedback-content>\n        " + data.innerContent + "\n    </collection-feedback-content>";
+	};
+
+	var collectionFeedback = {
+	    lifecycle: {
+	        created: function created() {
+	            this.innerContent = this.getInnerContent("collection-feedback-content").innerHTML;
+	            var data = {
+	                innerContent: this.innerContent
+	            };
+	            var html = template(data);
+	            this.insertHtmlInRenderingRoot(html);
+	        }
+	    },
+	    methods: {
+	        renderFrom: function renderFrom(object) {
+	            if (!object) {
+	                throw new Error("Falsy object in renderFrom of <collection-feedback/>");
+	            }
+
+	            var tokens = this.getRenderingRoot().querySelectorAll("feedback-token");
+	            _(tokens).each(function (token) {
+	                token.renderFrom(object);
+	            });
+	        }
+	    }
+	};
 
 	exports.default = _utils2.default.extend(collectionFeedback).from(_elementBase2.default);
 
@@ -2444,17 +2497,26 @@
 	        key: {
 	            attribute: {},
 	            get: function get() {
-	                return this.getAttribute('key') || '';
+	                return this.getDataAttribute('key') || '';
 	            },
 	            set: function set(data) {
 	                this.xtag.data.key = data;
+	            }
+	        },
+	        default: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('default') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.default = data;
 	            }
 	        }
 	    },
 	    lifecycle: {
 	        created: function created() {
-	            var data = { value: null };
-	            this.getRenderingRoot().textContent = template(data);
+	            var data = { value: this.default };
+	            this.getRenderingRoot().innerHTML = template(data);
 	        }
 	    },
 	    methods: {
@@ -2467,7 +2529,7 @@
 	                throw new Error("Falsy key in <feedback-token/>");
 	            }
 
-	            var data = { value: object[this.key] || '' };
+	            var data = { value: object[this.key] || this.default };
 	            this.getRenderingRoot().innerHTML = template(data);
 	        }
 	    }

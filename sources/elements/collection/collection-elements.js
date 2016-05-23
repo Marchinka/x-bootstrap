@@ -10,7 +10,7 @@ var collectionElements = {
         type: {
             attribute: {},
             get: function() {
-                return this.getAttribute('type');
+                return this.getDataAttribute('type');
             },
             set: function(value) {
                 this.xtag.data.type = value;
