@@ -19,25 +19,40 @@ var collectionElements = {
     },
     lifecycle: {
         created: function() {
-            var firstChild = this.getInnerContent("collection-elements-template").firstElementChild;
-            this.getRenderingRoot().innerHTML = template;
-            this.templateTagContainer = this.selectInRenderingRoot('collection-elements-template');
-            this.innerContainer = this.selectInRenderingRoot("collection-elements-content");
-            if (firstChild) {
-                this.listItemTemplate = firstChild.cloneNode(true);
-                this.templateTagContainer.appendChild(this.listItemTemplate);
-            }
+            this.saveTemplate();
+            this.render();
+            this.saveTemplateInMarkup();            
         }
     },
     methods: {
+        getInnerContainer: function () {
+            return this.selectInRenderingRoot("collection-elements-content");
+        },
+        render: function () {
+            this.getRenderingRoot().innerHTML = template;
+        },
+        saveTemplateInMarkup: function () {
+            this.templateTagContainer = this.selectInRenderingRoot('collection-elements-template');
+            if (this.listItemTemplate) {
+                this.templateTagContainer.appendChild(this.listItemTemplate);
+            }
+        },        
+        saveTemplate: function () {
+            var firstChild = this.getInnerContent("collection-elements-template").firstElementChild;
+            if (firstChild) {
+                this.listItemTemplate = firstChild.cloneNode(true);
+            }
+        },
         appendData: function (data) {
             if (!_(data).isArray()) {
                 throw new Error("Result json from server is expected to have a collection property of type array");
             }
 
+            this.addToModel(data);
+
             _(data).each(function (elementData) {
                 var domElement = this.getChildElement(elementData);
-                this.innerContainer.appendChild(domElement);
+                this.getInnerContainer().appendChild(domElement);
             }, this);
         },
         renderData: function (data) {
@@ -45,8 +60,9 @@ var collectionElements = {
             this.appendData(data);
         },
         emptyCollection: function () {
-            if (this.innerContainer) {
-                this.innerContainer.innerHTML = '';
+            if (this.getInnerContainer()) {
+                this.getInnerContainer().innerHTML = '';
+                this.emptyModel();
             }
         },
         getChildElement: function (elementData) {
@@ -60,6 +76,25 @@ var collectionElements = {
             }
             _.extend(domElement, elementData);
             return domElement;
+        },
+        addToModel: function (elements) {
+            if(!this.model) {
+                this.model = [];
+            }
+
+            _(elements).each(function (element) {
+                this.model.push(element);
+            }, this);
+        },
+        emptyModel: function () {
+            this.model = [];
+        },
+        getModel: function () {
+            if(!this.model) {
+                this.model = [];
+            }
+
+            return this.model;
         }
     }
 };

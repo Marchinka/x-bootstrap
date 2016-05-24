@@ -1,0 +1,53 @@
+<script type="text/javascript">
+(function(currentDocument) {
+	describe("<table-column/>", function() {
+		describe("with no 'field' property", function() {
+			describe("'renderCell' method", function() {
+				it("throws error", function() {
+					var testElement = document.createElement("table-column");
+					var errorThrower = function () {
+						testElement.renderCell({});
+					};
+					var errorMessage = "Falsy field in <table-column/>";
+					expect(errorThrower).to.throw(errorMessage);				
+				});
+			});									
+		});		
+
+		describe("with 'field' property", function() {
+			describe("'renderCell' method", function() {
+				describe("undefined input error", function() {
+					it("throws error", function () {
+						var testElement = document.createElement("table-column");
+						testElement.field = "fieldName";
+						var errorThrower = function () {
+							testElement.renderCell(undefined);
+						};
+						var errorMessage = "Falsy object in renderCell of <table-column/>";
+						expect(errorThrower).to.throw(errorMessage);				
+					});
+				});
+
+				describe("input without field matching tag field", function() {
+					it("returns empty span", function () {
+						var testElement = document.createElement("table-column");
+						testElement.field = "fieldName";
+						var result = testElement.renderCell({ otherField: "something"});
+						expect(result.textContent).to.be.equal("");
+					});
+				});
+
+				describe("input with field matching tag field", function() {
+					it("returns span with field value", function () {
+						var testElement = document.createElement("table-column");
+						testElement.field = "fieldName";
+						var obj = { fieldName: "something" };
+						var result = testElement.renderCell(obj);
+						expect(result.textContent).to.be.equal(obj.fieldName);
+					});
+				});				
+			});									
+		});			
+	});
+})(document._currentScript.ownerDocument);
+</script>

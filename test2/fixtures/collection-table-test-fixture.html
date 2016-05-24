@@ -1,0 +1,98 @@
+<div id="base">
+	<collection-table></collection-table>
+</div>
+
+<div id="with-table-columns">
+	<collection-table>
+		<table-column field="firstField" label="First Field"></table-column>
+		<table-column field="secondField" label="Second Field"></table-column>
+	</collection-table>
+</div>
+
+<div id="for-content-test">
+	<collection-table>
+		<table-column field="firstField" label="First Field"></table-column>
+		<table-column field="secondField" label="Second Field"></table-column>
+	</collection-table>
+</div>
+
+<script type="text/javascript">
+(function(currentDocument) {
+	var getTestElement = function (selector) {
+		var testContainer = currentDocument.querySelector(selector);
+		var sut = testContainer.querySelector("collection-table");
+		return sut.getRenderingRoot();
+	};
+
+	describe("<collection-table/>", function() {
+		it("is rendered with inner <table>", function() {
+			var testElement = getTestElement("#base");
+			var innerTable = testElement.querySelector("table");
+			expect(innerTable).not.to.be.null;
+		});
+
+		it("is rendered with inner <thead>", function() {
+			var testElement = getTestElement("#base");
+			var innerTable = testElement.querySelector("thead");
+			expect(innerTable).not.to.be.null;
+		});
+
+		it("is rendered with inner <tbody>", function() {
+			var testElement = getTestElement("#base");
+			var innerTable = testElement.querySelector("tbody");
+			expect(innerTable).not.to.be.null;
+		});
+
+		describe("with inner <table-column/>", function() {
+			it("is rendered with <thead> cells equal to <table-column> label", function() {
+				var testElement = getTestElement("#with-table-columns");
+				var innerHeaders = testElement.querySelectorAll("th");
+				expect(innerHeaders.length).to.be.equal(2);
+				var firstHeader = innerHeaders[0];
+				var secondHeader = innerHeaders[1];
+				expect(firstHeader.textContent).to.be.equal("First Field");
+				expect(secondHeader.textContent).to.be.equal("Second Field");
+			});
+
+			describe("appendData method", function() {
+				it("renders number of rows equal to data length and columns equal to stored <table-column>s", function() {
+					var testElement = getTestElement("#for-content-test");
+					var firstObject = { firstField: "data11", secondField: "data12"};
+					var secondObject = { firstField: "data21", secondField: "data22"};
+					var data = [
+						firstObject,
+						secondObject
+					];
+					
+					testElement.appendData(data);
+					var rows = testElement
+						.querySelector("tbody")
+						.querySelectorAll("tr");
+
+					expect(rows.length).to.be.equal(data.length);
+					var firstRow = rows[0];
+					var secondRow = rows[1];
+					var firstRowCells = firstRow.querySelectorAll("td");
+					var secondRowCells = secondRow.querySelectorAll("td");
+
+					expect(firstRowCells.length).to.be.equal(2);
+					var cell11 = firstRowCells[0];
+					var cell12 = firstRowCells[1];
+					expect(cell11.innerHTML).to.contain(firstObject.firstField);
+					expect(cell12.innerHTML).to.contain(firstObject.secondField);
+
+					expect(secondRowCells.length).to.be.equal(2);
+					var cell21 = secondRowCells[0];
+					var cell22 = secondRowCells[1];
+					expect(cell21.innerHTML).to.contain(secondObject.firstField);
+					expect(cell22.innerHTML).to.contain(secondObject.secondField);					
+				});
+			});
+		});
+	});
+})(document._currentScript.ownerDocument);
+
+
+
+</script>
+

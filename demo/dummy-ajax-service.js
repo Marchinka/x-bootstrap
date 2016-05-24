@@ -17,6 +17,7 @@ var superheroList = [
 ];
 
 var superVillans = [
+	{ name: "Tweedledum and Tweedledee" },
 	{ name: "Joker" },
 	{ name: "Bane" },
 	{ name: "Killer Croc" },

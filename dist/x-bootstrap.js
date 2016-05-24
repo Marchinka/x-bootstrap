@@ -110,6 +110,14 @@
 
 	var _feedbackToken2 = _interopRequireDefault(_feedbackToken);
 
+	var _tableColumn = __webpack_require__(24);
+
+	var _tableColumn2 = _interopRequireDefault(_tableColumn);
+
+	var _collectionTable = __webpack_require__(25);
+
+	var _collectionTable2 = _interopRequireDefault(_collectionTable);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	if (!window.$) {
@@ -124,46 +132,52 @@
 		throw new Error("x-tag-core.js must be loaded as a dependency, as long as JQuery, Underscore.js and Bootstrap.js.");
 	}
 
-	var baseElements = {
-		form: {
-			dropdownElement: _dropdownOption2.default,
-			additionalInfo: _additionalInfo2.default,
-			radioInput: _inputRadio2.default,
-			inputRadioGroup: _inputRadioGroup2.default,
-			inputCheckbox: _inputCheckbox2.default,
-			inputText: _inputText2.default,
-			inputTextarea: _inputTextarea2.default,
-			inputSelect: _inputSelect2.default,
-			inputAutocomplete: _inputAutocomplete2.default,
-			formAjax: _formAjax2.default
-		},
-		collection: {
-			collectionSearchForm: _collectionSearchForm2.default,
-			collectionElements: _collectionElements2.default,
-			collectionContainer: _collectionContainer2.default,
-			feedbackToken: _feedbackToken2.default,
-			collectionFeedback: _collectionFeedback2.default
-		}
-	};
+	(function (document) {
+		var baseElements = {
+			form: {
+				dropdownElement: _dropdownOption2.default,
+				additionalInfo: _additionalInfo2.default,
+				radioInput: _inputRadio2.default,
+				inputRadioGroup: _inputRadioGroup2.default,
+				inputCheckbox: _inputCheckbox2.default,
+				inputText: _inputText2.default,
+				inputTextarea: _inputTextarea2.default,
+				inputSelect: _inputSelect2.default,
+				inputAutocomplete: _inputAutocomplete2.default,
+				formAjax: _formAjax2.default
+			},
+			collection: {
+				collectionSearchForm: _collectionSearchForm2.default,
+				collectionElements: _collectionElements2.default,
+				collectionContainer: _collectionContainer2.default,
+				feedbackToken: _feedbackToken2.default,
+				collectionFeedback: _collectionFeedback2.default,
+				tableColumn: _tableColumn2.default,
+				collectionTable: _collectionTable2.default
+			}
+		};
 
-	// Form Elements
-	_utils2.default.register('dropdown-option', _dropdownOption2.default);
-	_utils2.default.register('additional-info', _additionalInfo2.default);
-	_utils2.default.register('input-radio', _inputRadio2.default);
-	_utils2.default.register('input-radio-group', _inputRadioGroup2.default);
-	_utils2.default.register('input-checkbox', _inputCheckbox2.default);
-	_utils2.default.register('input-text', _inputText2.default);
-	_utils2.default.register('input-textarea', _inputTextarea2.default);
-	_utils2.default.register('input-select', _inputSelect2.default);
-	_utils2.default.register('input-autocomplete', _inputAutocomplete2.default);
-	_utils2.default.register('form-ajax', _formAjax2.default);
+		// Form Elements
+		_utils2.default.register('dropdown-option', _dropdownOption2.default);
+		_utils2.default.register('additional-info', _additionalInfo2.default);
+		_utils2.default.register('input-radio', _inputRadio2.default);
+		_utils2.default.register('input-radio-group', _inputRadioGroup2.default);
+		_utils2.default.register('input-checkbox', _inputCheckbox2.default);
+		_utils2.default.register('input-text', _inputText2.default);
+		_utils2.default.register('input-textarea', _inputTextarea2.default);
+		_utils2.default.register('input-select', _inputSelect2.default);
+		_utils2.default.register('input-autocomplete', _inputAutocomplete2.default);
+		_utils2.default.register('form-ajax', _formAjax2.default);
 
-	// Collection Elements
-	_utils2.default.register('collection-search-form', _collectionSearchForm2.default);
-	_utils2.default.register('collection-elements', _collectionElements2.default);
-	_utils2.default.register('collection-container', _collectionContainer2.default);
-	_utils2.default.register('collection-feedback', _collectionFeedback2.default);
-	_utils2.default.register('feedback-token', _feedbackToken2.default);
+		// Collection Elements
+		_utils2.default.register('collection-search-form', _collectionSearchForm2.default);
+		_utils2.default.register('collection-elements', _collectionElements2.default);
+		_utils2.default.register('collection-container', _collectionContainer2.default);
+		_utils2.default.register('collection-feedback', _collectionFeedback2.default);
+		_utils2.default.register('feedback-token', _feedbackToken2.default);
+		_utils2.default.register('table-column', _tableColumn2.default);
+		_utils2.default.register('collection-table', _collectionTable2.default);
+	})(document);
 
 /***/ },
 /* 1 */
@@ -205,6 +219,25 @@
 	      element[attrname] = object[attrname];
 	    }
 	    return element;
+	  },
+	  hideElement: function hideElement(element) {
+	    if (!element) {
+	      return;
+	    }
+	    console.log("hide");
+	    this.addClassToElement('hidden', element);
+	  },
+	  showElement: function showElement(element) {
+	    if (!element) {
+	      return;
+	    }
+	    this.removeClassFromElement('hidden', element);
+	  },
+	  addClassToElement: function addClassToElement(className, el) {
+	    if (el.classList) el.classList.add(className);else el.className = (el.className || '') + ' ' + className;
+	  },
+	  removeClassFromElement: function removeClassFromElement(className, el) {
+	    if (el.classList) el.classList.remove(className);else el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
 	  }
 	};
 
@@ -2097,25 +2130,40 @@
 	    },
 	    lifecycle: {
 	        created: function created() {
-	            var firstChild = this.getInnerContent("collection-elements-template").firstElementChild;
-	            this.getRenderingRoot().innerHTML = template;
-	            this.templateTagContainer = this.selectInRenderingRoot('collection-elements-template');
-	            this.innerContainer = this.selectInRenderingRoot("collection-elements-content");
-	            if (firstChild) {
-	                this.listItemTemplate = firstChild.cloneNode(true);
-	                this.templateTagContainer.appendChild(this.listItemTemplate);
-	            }
+	            this.saveTemplate();
+	            this.render();
+	            this.saveTemplateInMarkup();
 	        }
 	    },
 	    methods: {
+	        getInnerContainer: function getInnerContainer() {
+	            return this.selectInRenderingRoot("collection-elements-content");
+	        },
+	        render: function render() {
+	            this.getRenderingRoot().innerHTML = template;
+	        },
+	        saveTemplateInMarkup: function saveTemplateInMarkup() {
+	            this.templateTagContainer = this.selectInRenderingRoot('collection-elements-template');
+	            if (this.listItemTemplate) {
+	                this.templateTagContainer.appendChild(this.listItemTemplate);
+	            }
+	        },
+	        saveTemplate: function saveTemplate() {
+	            var firstChild = this.getInnerContent("collection-elements-template").firstElementChild;
+	            if (firstChild) {
+	                this.listItemTemplate = firstChild.cloneNode(true);
+	            }
+	        },
 	        appendData: function appendData(data) {
 	            if (!_(data).isArray()) {
 	                throw new Error("Result json from server is expected to have a collection property of type array");
 	            }
 
+	            this.addToModel(data);
+
 	            _(data).each(function (elementData) {
 	                var domElement = this.getChildElement(elementData);
-	                this.innerContainer.appendChild(domElement);
+	                this.getInnerContainer().appendChild(domElement);
 	            }, this);
 	        },
 	        renderData: function renderData(data) {
@@ -2123,8 +2171,9 @@
 	            this.appendData(data);
 	        },
 	        emptyCollection: function emptyCollection() {
-	            if (this.innerContainer) {
-	                this.innerContainer.innerHTML = '';
+	            if (this.getInnerContainer()) {
+	                this.getInnerContainer().innerHTML = '';
+	                this.emptyModel();
 	            }
 	        },
 	        getChildElement: function getChildElement(elementData) {
@@ -2138,6 +2187,25 @@
 	            }
 	            _.extend(domElement, elementData);
 	            return domElement;
+	        },
+	        addToModel: function addToModel(elements) {
+	            if (!this.model) {
+	                this.model = [];
+	            }
+
+	            _(elements).each(function (element) {
+	                this.model.push(element);
+	            }, this);
+	        },
+	        emptyModel: function emptyModel() {
+	            this.model = [];
+	        },
+	        getModel: function getModel() {
+	            if (!this.model) {
+	                this.model = [];
+	            }
+
+	            return this.model;
 	        }
 	    }
 	};
@@ -2245,14 +2313,13 @@
 	        },
 	        inserted: function inserted() {
 	            var self = this;
-	            self.activateInfiniteScrolling();
-	            self.renderShowMoreButton();
-	            self.renderPager();
-	            self.onComponentsReady(function (event) {
+	            self.onComponentsReady(function () {
 	                self.fetchData();
+	                self.activateRefreshing();
+	                self.activateInfiniteScrolling();
+	                self.renderShowMoreButton();
+	                self.renderPager();
 	            });
-	            self.fetchData();
-	            self.activateRefreshing();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
 	            this.activateRefreshing();
@@ -2260,8 +2327,8 @@
 	    },
 	    methods: {
 	        initializeComponents: function initializeComponents() {
-	            this.collectionElementTag = this.selectInRenderingRoot("collection-elements");
-	            this.searchForm = this.selectInRenderingRoot("collection-search-form");
+	            this.collectionElementTag = this.selectInRenderingRoot("collection-elements,collection-table,[collection-elements],[collection-table],[data-collection-elements],[data-collection-table]");
+	            this.searchForm = this.selectInRenderingRoot("collection-search-form,[collection-search-form],[data-collection-search-form]");
 	            this.currentPage = this.currentPage || 1;
 	        },
 	        fetchData: function fetchData() {
@@ -2283,8 +2350,16 @@
 	                }
 	                formData = self.searchForm.getData();
 	            }
-	            formData.page = this.currentPage;
-	            formData.elementsPerPage = this.elementsPerPage;
+
+	            var dataMatcher = _.matcher(self.lastData || {});
+	            var hasFormChanged = !dataMatcher(formData);
+	            self.lastData = _(formData).clone();
+	            if (hasFormChanged) {
+	                self.currentPage = 1;
+	                self.collectionElementTag.emptyCollection();
+	            }
+	            formData.page = self.currentPage;
+	            formData.elementsPerPage = self.elementsPerPage;
 
 	            var restService = self.getRestService();
 	            restService.ajax({
@@ -2322,6 +2397,19 @@
 	            }
 	            this.collectionElementTag.appendData(result.collection);
 	            this.renderFeedbacks(result);
+	            this.toggleShowButtons();
+	        },
+	        toggleShowButtons: function toggleShowButtons() {
+	            var modelList = this.collectionElementTag.getModel();
+	            var button = this.selectInRenderingRoot("#show-more-button");
+	            var pager = this.selectInRenderingRoot(".pager");
+	            if (_(modelList).isEmpty()) {
+	                _utils2.default.hideElement(button);
+	                _utils2.default.hideElement(pager);
+	            } else {
+	                _utils2.default.showElement(button);
+	                _utils2.default.showElement(pager);
+	            }
 	        },
 	        renderFeedbacks: function renderFeedbacks(result) {
 	            var feedbacks = this.getRenderingRoot().querySelectorAll("collection-feedback");
@@ -2536,6 +2624,182 @@
 	};
 
 	exports.default = _utils2.default.extend(feedbackToken).from(_elementBase2.default);
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var tableColumn = {
+	    accessors: {
+	        label: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('label') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.label = data;
+	            }
+	        },
+	        field: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('field') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.field = data;
+	            }
+	        },
+	        default: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('default') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.default = data;
+	            }
+	        }
+	    },
+	    methods: {
+	        renderCell: function renderCell(object) {
+	            if (!object) {
+	                throw new Error("Falsy object in renderCell of <table-column/>");
+	            }
+
+	            if (!this.field) {
+	                throw new Error("Falsy field in <table-column/>");
+	            }
+
+	            var element = document.createElement("span");
+	            element.textContent = object[this.field] || this.default;
+	            return element;
+	        }
+	    }
+	};
+
+	exports.default = _utils2.default.extend(tableColumn).from(_elementBase2.default);
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _collectionElements = __webpack_require__(20);
+
+	var _collectionElements2 = _interopRequireDefault(_collectionElements);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var template = "\n    <table class=\"table\">\n        <thead>\n        </thead>\n        <tbody>\n        </tbody>\n    </table>\n    <collection-table-template style=\"display: none;\"></collection-table-template>";
+
+	var collectionTable = {
+	    lifecycle: {
+	        created: function created() {
+	            this.saveTemplate();
+	            this.renderBaseTemplate();
+	            this.saveTemplateInMarkup();
+	            this.appendHeader();
+	        }
+	    },
+	    methods: {
+	        getInnerContainer: function getInnerContainer() {
+	            return this.selectInRenderingRoot("tbody");
+	        },
+	        saveTemplate: function saveTemplate() {
+	            this.innerContent = this.getInnerContent("collection-table-template").innerHTML;
+	        },
+	        renderBaseTemplate: function renderBaseTemplate() {
+	            this.getRenderingRoot().innerHTML = template;
+	            this.table = this.selectInRenderingRoot("table");
+	            this.header = this.selectInRenderingRoot("thead");
+	            this.body = this.selectInRenderingRoot("tbody");
+	            this.hideTable();
+	        },
+	        showTable: function showTable() {
+	            this.table.className = "table";
+	        },
+	        hideTable: function hideTable() {
+	            this.table.className = "hidden table";
+	        },
+	        appendHeader: function appendHeader() {
+	            var row = document.createElement("tr");
+	            var columns = this.getInnerContent("collection-table-template").querySelectorAll("table-column");
+
+	            _(columns).each(function (column) {
+	                var headerCell = document.createElement("th");
+	                headerCell.textContent = column.label || column.field;
+	                row.appendChild(headerCell);
+	            }, this);
+
+	            this.header.appendChild(row);
+	        },
+	        saveTemplateInMarkup: function saveTemplateInMarkup() {
+	            this.templateTagContainer = this.selectInRenderingRoot('collection-table-template');
+	            this.templateTagContainer.innerHTML = this.innerContent;
+	        },
+	        emptyCollection: function emptyCollection() {
+	            this.body.innerHTML = '';
+	            this.emptyModel();
+	        },
+	        appendData: function appendData(data) {
+	            if (!_(data).isArray()) {
+	                throw new Error("Result json from server is expected to have a collection property of type array");
+	            }
+
+	            this.addToModel(data);
+
+	            _(data).each(function (elementData) {
+	                var domElement = this.getChildElement(elementData);
+	                this.getInnerContainer().appendChild(domElement);
+	            }, this);
+
+	            var rows = this.getRenderingRoot().querySelectorAll("tr");
+	            if (rows.length <= 1) {
+	                this.hideTable();
+	            } else {
+	                this.showTable();
+	            }
+	        },
+	        getChildElement: function getChildElement(elementData) {
+	            var row = document.createElement("tr");
+	            var columns = this.getInnerContent("collection-table-template").querySelectorAll("table-column");
+
+	            _(columns).each(function (column) {
+	                var td = document.createElement("td");
+	                var cellContent = column.renderCell(elementData);
+	                td.appendChild(cellContent);
+	                row.appendChild(td);
+	            }, this);
+	            return row;
+	        }
+	    }
+	};
+
+	exports.default = _utils2.default.extend(collectionTable).from(_collectionElements2.default);
 
 /***/ }
 /******/ ]);

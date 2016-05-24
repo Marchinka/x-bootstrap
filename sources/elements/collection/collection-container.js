@@ -90,14 +90,13 @@ var collectionContainer = {
         },
         inserted: function () {
             var self = this;
-            self.activateInfiniteScrolling();
-            self.renderShowMoreButton();
-            self.renderPager();
-            self.onComponentsReady(function(event) { 
+            self.onComponentsReady(function() { 
                 self.fetchData();
+                self.activateRefreshing();
+                self.activateInfiniteScrolling();
+                self.renderShowMoreButton();
+                self.renderPager();                
             });
-            self.fetchData();
-            self.activateRefreshing();
         },
         attributeChanged: function(attributeName) {
             this.activateRefreshing();
@@ -105,8 +104,8 @@ var collectionContainer = {
     },
     methods: {
         initializeComponents: function () {
-            this.collectionElementTag = this.selectInRenderingRoot("collection-elements");
-            this.searchForm = this.selectInRenderingRoot("collection-search-form");
+            this.collectionElementTag = this.selectInRenderingRoot("collection-elements,collection-table,[collection-elements],[collection-table],[data-collection-elements],[data-collection-table]");
+            this.searchForm = this.selectInRenderingRoot("collection-search-form,[collection-search-form],[data-collection-search-form]");
             this.currentPage = this.currentPage || 1;
         },
         fetchData: function() {
@@ -128,8 +127,16 @@ var collectionContainer = {
                 }
                 formData = self.searchForm.getData();    
             }
-            formData.page = this.currentPage;
-            formData.elementsPerPage = this.elementsPerPage;
+
+            var dataMatcher = _.matcher(self.lastData || {});
+            var hasFormChanged = !dataMatcher(formData);
+            self.lastData = _(formData).clone();
+            if (hasFormChanged) {
+                self.currentPage = 1;
+                self.collectionElementTag.emptyCollection();
+            }
+            formData.page = self.currentPage;
+            formData.elementsPerPage = self.elementsPerPage;
 
             var restService = self.getRestService();
             restService.ajax({
@@ -171,6 +178,19 @@ var collectionContainer = {
             }
             this.collectionElementTag.appendData(result.collection);
             this.renderFeedbacks(result);
+            this.toggleShowButtons();
+        },
+        toggleShowButtons: function () {
+            var modelList = this.collectionElementTag.getModel();
+            var button = this.selectInRenderingRoot("#show-more-button");
+            var pager = this.selectInRenderingRoot(".pager");
+            if (_(modelList).isEmpty()) {
+                utils.hideElement(button);
+                utils.hideElement(pager);
+            } else {
+                utils.showElement(button);
+                utils.showElement(pager);
+            }
         },
         renderFeedbacks: function (result) {
             var feedbacks = this

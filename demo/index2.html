@@ -186,6 +186,36 @@
       <hr/>
 
       <h1>
+        One awesome table with show more button
+      </h1>
+
+      <collection-container url="/SuperVillans/" elements-per-page="3" show-more-button rest-service="restService">
+
+        <collection-search-form>
+          <input-text field="searchText" 
+                      label="Search Text" 
+                      placeholder="Type something here and see how the collection changes">
+          </input-text>
+          <button type="submit" class="btn btn-default">Search</button>
+        </collection-search-form>
+
+        <collection-feedback>
+          Your query has found <span class="badge"><feedback-token data-key="numberOfResults" default="0"/></span> results
+        </collection-feedback>
+        
+        <br/>
+
+        <collection-table>
+          <table-column label="Name" field="name"></table-column>
+          <table-column label="Type" field="type" default="Villain"></table-column>
+          <table-column label="Comic" field="comic" default="Batman"></table-column>
+        </collection-table>
+
+      </collection-container>
+
+      <hr/>
+
+      <h1>
         One awesome collection with infinite scrolling
       </h1>
 

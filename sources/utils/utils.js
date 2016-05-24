@@ -24,5 +24,30 @@ export default {
       element[attrname] = object[attrname];
     }
     return element;
+  },
+  hideElement: function (element) {
+    if(!element) {
+      return;
+    }
+    console.log("hide");
+    this.addClassToElement('hidden', element);
+  },
+  showElement: function (element) {
+    if(!element) {
+      return;
+    }
+    this.removeClassFromElement('hidden', element);
+  },
+  addClassToElement: function (className, el) {
+    if (el.classList)
+      el.classList.add(className);
+    else
+      el.className = (el.className || '') + ' ' + className;
+  },
+  removeClassFromElement: function (className, el) {
+    if (el.classList)
+      el.classList.remove(className);
+    else
+      el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');    
   }
 };

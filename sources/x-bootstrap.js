@@ -11,7 +11,6 @@ if (!window.xtag) {
 }
 
 import utils from "./utils/utils.js";
-
 import dropdownElement from "./elements/form/dropdown-option.js";
 import additionalInfo from "./elements/form/additional-info.js";
 import radioInput from "./elements/form/input-radio.js";
@@ -27,44 +26,52 @@ import collectionElements from "./elements/collection/collection-elements.js";
 import collectionContainer from "./elements/collection/collection-container.js";
 import collectionFeedback from "./elements/collection/collection-feedback.js";
 import feedbackToken from "./elements/collection/feedback-token.js";
+import tableColumn from "./elements/collection/table-column.js";
+import collectionTable from "./elements/collection/collection-table.js";
 
-var baseElements = {
-	form: {
-		dropdownElement: dropdownElement,
-		additionalInfo: additionalInfo,
-		radioInput: radioInput,
-		inputRadioGroup: inputRadioGroup,
-		inputCheckbox: inputCheckbox,
-		inputText: inputText,
-		inputTextarea: inputTextarea,
-		inputSelect: inputSelect,
-		inputAutocomplete: inputAutocomplete,
-		formAjax: formAjax
-	},
-	collection: {
-		collectionSearchForm: collectionSearchForm,
-		collectionElements: collectionElements,
-		collectionContainer: collectionContainer,
-		feedbackToken: feedbackToken,
-		collectionFeedback: collectionFeedback
-	}
-};
+(function(document) {
+	var baseElements = {
+		form: {
+			dropdownElement: dropdownElement,
+			additionalInfo: additionalInfo,
+			radioInput: radioInput,
+			inputRadioGroup: inputRadioGroup,
+			inputCheckbox: inputCheckbox,
+			inputText: inputText,
+			inputTextarea: inputTextarea,
+			inputSelect: inputSelect,
+			inputAutocomplete: inputAutocomplete,
+			formAjax: formAjax
+		},
+		collection: {
+			collectionSearchForm: collectionSearchForm,
+			collectionElements: collectionElements,
+			collectionContainer: collectionContainer,
+			feedbackToken: feedbackToken,
+			collectionFeedback: collectionFeedback,
+			tableColumn: tableColumn,
+			collectionTable: collectionTable
+		}
+	};
 
-// Form Elements
-utils.register('dropdown-option', dropdownElement);
-utils.register('additional-info', additionalInfo);
-utils.register('input-radio', radioInput);
-utils.register('input-radio-group', inputRadioGroup);
-utils.register('input-checkbox', inputCheckbox);
-utils.register('input-text', inputText);
-utils.register('input-textarea', inputTextarea);
-utils.register('input-select', inputSelect);
-utils.register('input-autocomplete', inputAutocomplete);
-utils.register('form-ajax', formAjax);
+	// Form Elements
+	utils.register('dropdown-option', dropdownElement);
+	utils.register('additional-info', additionalInfo);
+	utils.register('input-radio', radioInput);
+	utils.register('input-radio-group', inputRadioGroup);
+	utils.register('input-checkbox', inputCheckbox);
+	utils.register('input-text', inputText);
+	utils.register('input-textarea', inputTextarea);
+	utils.register('input-select', inputSelect);
+	utils.register('input-autocomplete', inputAutocomplete);
+	utils.register('form-ajax', formAjax);
 
-// Collection Elements
-utils.register('collection-search-form', collectionSearchForm);
-utils.register('collection-elements', collectionElements);
-utils.register('collection-container', collectionContainer);
-utils.register('collection-feedback', collectionFeedback);
-utils.register('feedback-token', feedbackToken);
+	// Collection Elements
+	utils.register('collection-search-form', collectionSearchForm);
+	utils.register('collection-elements', collectionElements);
+	utils.register('collection-container', collectionContainer);
+	utils.register('collection-feedback', collectionFeedback);
+	utils.register('feedback-token', feedbackToken);
+	utils.register('table-column', tableColumn);
+	utils.register('collection-table', collectionTable);
+})(document);
