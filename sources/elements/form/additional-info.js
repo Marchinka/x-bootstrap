@@ -41,7 +41,7 @@ var additionalInfo = {
             }
             var data = {};
             if (_(this.valueOf).isString()) {
-            	data[this.field] = this.executeFromWindow();
+                data[this.field] = this.executeFromWindow();
             } else {
                 data[this.field] = this.value;
             }

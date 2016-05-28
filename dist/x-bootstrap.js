@@ -120,6 +120,10 @@
 
 	var _collectionTable2 = _interopRequireDefault(_collectionTable);
 
+	var _partialAjax = __webpack_require__(26);
+
+	var _partialAjax2 = _interopRequireDefault(_partialAjax);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	if (!window.$) {
@@ -169,29 +173,35 @@
 				collectionFeedback: _collectionFeedback2.default,
 				tableColumn: _tableColumn2.default,
 				collectionTable: _collectionTable2.default
+			},
+			misc: {
+				partialAjax: _partialAjax2.default
 			}
 		};
 
 		// Form Elements
-		_utils2.default.register('dropdown-option', _dropdownOption2.default);
-		_utils2.default.register('additional-info', _additionalInfo2.default);
-		_utils2.default.register('input-radio', _inputRadio2.default);
-		_utils2.default.register('input-radio-group', _inputRadioGroup2.default);
-		_utils2.default.register('input-checkbox', _inputCheckbox2.default);
-		_utils2.default.register('input-text', _inputText2.default);
-		_utils2.default.register('input-textarea', _inputTextarea2.default);
-		_utils2.default.register('input-select', _inputSelect2.default);
-		_utils2.default.register('input-autocomplete', _inputAutocomplete2.default);
-		_utils2.default.register('form-ajax', _formAjax2.default);
+		_utils2.default.register({ tagName: 'dropdown-option', proto: _dropdownOption2.default });
+		_utils2.default.register({ tagName: 'additional-info', proto: _additionalInfo2.default });
+		_utils2.default.register({ tagName: 'input-radio', proto: _inputRadio2.default, ensureStateChanges: true });
+		_utils2.default.register({ tagName: 'input-radio-group', proto: _inputRadioGroup2.default, ensureStateChanges: true });
+		_utils2.default.register({ tagName: 'input-checkbox', proto: _inputCheckbox2.default, ensureStateChanges: true });
+		_utils2.default.register({ tagName: 'input-text', proto: _inputText2.default, ensureStateChanges: true });
+		_utils2.default.register({ tagName: 'input-textarea', proto: _inputTextarea2.default, ensureStateChanges: true });
+		_utils2.default.register({ tagName: 'input-select', proto: _inputSelect2.default, ensureStateChanges: true });
+		_utils2.default.register({ tagName: 'input-autocomplete', proto: _inputAutocomplete2.default, ensureStateChanges: true });
+		_utils2.default.register({ tagName: 'form-ajax', proto: _formAjax2.default });
 
 		// Collection Elements
-		_utils2.default.register('collection-search-form', _collectionSearchForm2.default);
-		_utils2.default.register('collection-elements', _collectionElements2.default);
-		_utils2.default.register('collection-container', _collectionContainer2.default);
-		_utils2.default.register('collection-feedback', _collectionFeedback2.default);
-		_utils2.default.register('feedback-token', _feedbackToken2.default);
-		_utils2.default.register('table-column', _tableColumn2.default);
-		_utils2.default.register('collection-table', _collectionTable2.default);
+		_utils2.default.register({ tagName: 'collection-search-form', proto: _collectionSearchForm2.default });
+		_utils2.default.register({ tagName: 'collection-elements', proto: _collectionElements2.default });
+		_utils2.default.register({ tagName: 'collection-container', proto: _collectionContainer2.default });
+		_utils2.default.register({ tagName: 'collection-feedback', proto: _collectionFeedback2.default });
+		_utils2.default.register({ tagName: 'feedback-token', proto: _feedbackToken2.default });
+		_utils2.default.register({ tagName: 'table-column', proto: _tableColumn2.default });
+		_utils2.default.register({ tagName: 'collection-table', proto: _collectionTable2.default });
+
+		// Utilities
+		_utils2.default.register({ tagName: 'partial-ajax', proto: _partialAjax2.default });
 
 		window.xBootstrap = _utils2.default;
 		window.xBootstrap.baseElements = baseElements;
@@ -219,29 +229,39 @@
 	  extend: function extend(element) {
 	    return new _extender2.default(element);
 	  },
-	  forMoUnsupported: function forMoUnsupported(action) {
-	    if (!this.isBrowserSupportingMo()) {
-	      action();
+	  getInternetExplorerVersion: function getInternetExplorerVersion()
+	  // Returns the version of Internet Explorer or a -1
+	  // (indicating the use of another browser).
+	  {
+	    var rv = -1; // Return value assumes failure.
+	    if (navigator.appName == 'Microsoft Internet Explorer') {
+	      var ua = navigator.userAgent;
+	      var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+	      if (re.exec(ua) != null) {
+	        rv = parseFloat(RegExp.$1);
+	      }
 	    }
+	    return rv;
 	  },
 	  isBrowserSupportingMo: function isBrowserSupportingMo() {
-	    if (!document.all) {
+	    if (this.getInternetExplorerVersion() === -1) {
 	      return true;
 	    }
 	    return false;
 	  },
-	  register: function register(elementName, object) {
+	  register: function register(data) {
+	    var elementName = data.tagName;
+	    var object = data.proto;
+	    var ensureMoPolyfill = data.ensureStateChanges;
 	    if (this.isBrowserSupportingMo()) {
 	      return xtag.register(elementName, object);
 	    }
 
-	    object.lifecycle.created = function () {
-	      var original = object.lifecycle.created;
-	      return function () {
-	        if (original) original.apply(this);
-	        this.polyfillAttributeChanged();
-	      };
-	    }();
+	    if (!ensureMoPolyfill) {
+	      return xtag.register(elementName, object);
+	    }
+
+	    object.methods.do_attributeChanged = object.lifecycle.attributeChanged;
 
 	    for (var attribute in object.accessors) {
 	      object.accessors[attribute].set = function (newValue) {
@@ -255,10 +275,6 @@
 	      }();
 	    };
 
-	    if (!_(object.methods.changeCallback).isFunction()) {
-	      var message = "You should implement a 'changeCallback' method for element " + elementName + ". It's a support for browsers not supporting mutation observers.";
-	      console.warn(message);
-	    }
 	    return xtag.register(elementName, object);
 	  },
 	  createElement: function createElement(tagName, object) {
@@ -399,13 +415,10 @@
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
-	            this.changeCallback(attributeName);
+	            this.render();
 	        }
 	    },
 	    methods: {
-	        changeCallback: function changeCallback(attributeName) {
-	            this.render();
-	        },
 	        render: function render() {
 	            var data = {
 	                value: this.value
@@ -479,15 +492,7 @@
 						oldValue: oldValue,
 						newValue: newValue
 					};
-					_utils2.default.raise(this, 'attributeChanged', changeInfo);
-				}
-			},
-			polyfillAttributeChanged: function polyfillAttributeChanged() {
-				var self = this;
-				if (self.changeCallback) {
-					_utils2.default.attachListener(self, 'attributeChanged', function (e) {
-						self.changeCallback(e.attributeName, e.oldValue, e.newValue);
-					});
+					this.do_attributeChanged(attributeName, oldValue, newValue);
 				}
 			},
 			getInnerContent: function getInnerContent(selector) {
@@ -675,13 +680,10 @@
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
-	            this.changeCallback(attributeName);
+	            this.render();
 	        }
 	    },
 	    methods: {
-	        changeCallback: function changeCallback() {
-	            this.render();
-	        },
 	        render: function render() {
 	            var data = {
 	                field: this.field,
@@ -755,7 +757,12 @@
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
-	            this.changeCallback(attributeName);
+	            if (attributeName === "error") {
+	                this.selectInRenderingRoot(".form-group").className = this.errorClass;
+	                this.selectInRenderingRoot(".help-block").textContent = this.error;
+	                return;
+	            }
+	            this.render();
 	        }
 	    },
 	    methods: {
@@ -841,14 +848,6 @@
 	            }, this);
 
 	            return data;
-	        },
-	        changeCallback: function changeCallback(attributeName) {
-	            if (attributeName === "error") {
-	                this.selectInRenderingRoot(".form-group").className = this.errorClass;
-	                this.selectInRenderingRoot(".help-block").textContent = this.error;
-	                return;
-	            }
-	            this.render();
 	        }
 	    },
 	    events: {
@@ -1010,16 +1009,13 @@
 	            this.input = this.selectInRenderingRoot("input");
 	        },
 	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
-	            this.changeCallback(attributeName, oldValue, newValue);
-	        }
-	    },
-	    methods: {
-	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
 	            if (attributeName === "checked" && oldValue != newValue) {
 	                this.input.checked = newValue === true;
 	            }
 	            this.render();
-	        },
+	        }
+	    },
+	    methods: {
 	        render: function render() {
 	            var data = {
 	                checked: this.checked ? 'checked' : '',
@@ -1139,11 +1135,6 @@
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
-	            this.changeCallback(attributeName, oldValue, newValue);
-	        }
-	    },
-	    methods: {
-	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
 	            if (attributeName === "error") {
 	                this.renderError();
 	            } else if (attributeName === "value" && oldValue != newValue) {
@@ -1151,7 +1142,9 @@
 	            } else {
 	                this.render();
 	            }
-	        },
+	        }
+	    },
+	    methods: {
 	        render: function render() {
 	            var data = {
 	                field: this.field,
@@ -1372,11 +1365,6 @@
 	            this.render();
 	        },
 	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
-	            this.changeCallback(attributeName, oldValue, newValue);
-	        }
-	    },
-	    methods: {
-	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
 	            if (attributeName === "error") {
 	                this.renderError();
 	            } else if (attributeName === "value" && oldValue != newValue) {
@@ -1384,7 +1372,9 @@
 	            } else {
 	                this.render();
 	            }
-	        },
+	        }
+	    },
+	    methods: {
 	        render: function render() {
 	            var data = {
 	                field: this.field,
@@ -1517,16 +1507,13 @@
 	            this.fetchData();
 	        },
 	        attributeChanged: function attributeChanged(attributeName) {
-	            this.changeCallback(attributeName);
-	        }
-	    },
-	    methods: {
-	        changeCallback: function changeCallback(attributeName) {
 	            if (attributeName === "value") {
 	                this.selectedValue = "";
 	            }
 	            this.render();
-	        },
+	        }
+	    },
+	    methods: {
 	        render: function render() {
 	            var data = {
 	                error: this.error,
@@ -1719,7 +1706,18 @@
 	            this.fetchData();
 	        },
 	        attributeChanged: function attributeChanged(attributeName, oldValue, newValue) {
-	            this.changeCallback(attributeName, oldValue, newValue);
+	            if (attributeName === "error") {
+	                this.renderError();
+	            } else if (attributeName === "value") {
+	                this.getInput().value = newValue;
+	                this.fetchData();
+	            } else {
+	                this.render();
+	            }
+
+	            if (this.optionData) {
+	                this.renderData(this.optionData);
+	            }
 	        }
 	    },
 	    methods: {
@@ -1734,20 +1732,6 @@
 	                value: this.value || ''
 	            };
 	            this.getRenderingRoot().innerHTML = template(data);
-	        },
-	        changeCallback: function changeCallback(attributeName, oldValue, newValue) {
-	            if (attributeName === "error") {
-	                this.renderError();
-	            } else if (attributeName === "value") {
-	                this.getInput().value = newValue;
-	                this.fetchData();
-	            } else {
-	                this.render();
-	            }
-
-	            if (this.optionData) {
-	                this.renderData(this.optionData);
-	            }
 	        },
 	        fetchData: function fetchData() {
 	            var self = this;
@@ -2382,8 +2366,6 @@
 	                self.renderShowMoreButton();
 	                self.renderPager();
 	            });
-	        },
-	        attributeChanged: function attributeChanged(attributeName) {
 	            this.activateRefreshing();
 	        }
 	    },
@@ -2862,6 +2844,110 @@
 	};
 
 	exports.default = _utils2.default.extend(collectionTable).from(_collectionElements2.default);
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var partialAjax = {
+	    accessors: {
+	        url: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('url');
+	            },
+	            set: function set(value) {
+	                this.xtag.data.url = value;
+	            }
+	        },
+	        loaderTag: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('loaderTag');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.loaderTag = data;
+	            }
+	        },
+	        errorTag: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('errorTag');
+	            },
+	            set: function set(data) {
+	                this.xtag.data.errorTag = data;
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        inserted: function inserted() {
+	            var self = this;
+	            self.innerHTML = '';
+	            self.renderLoader();
+	            var restService = self.getRestService();
+	            $.ajax({
+	                url: self.url,
+	                method: 'GET',
+	                success: function success(result) {
+	                    self.getRenderingRoot().innerHTML = result;
+	                },
+	                error: function error() {
+	                    self.renderError();
+	                }
+	            });
+	        }
+	    },
+	    methods: {
+	        getLoaderElement: function getLoaderElement() {
+	            if (!this.loaderTag) {
+	                var loaderTag = document.createElement("span");
+	                loaderTag.textContent = "Loading...";
+	                return loaderTag;
+	            } else {
+	                var loaderTag = document.createElement(this.loaderTag);
+	                return loaderTag;
+	            }
+	        },
+	        getErrorElement: function getErrorElement() {
+	            if (!this.loaderTag) {
+	                var errorElement = document.createElement("span");
+	                errorElement.textContent = "Can't load content";
+	                return errorElement;
+	            } else {
+	                var errorElement = document.createElement(this.errorTag);
+	                return errorElement;
+	            }
+	        },
+	        renderError: function renderError() {
+	            var errorElement = this.getErrorElement();
+	            this.getRenderingRoot().innerHTML = '';
+	            this.getRenderingRoot().appendChild(errorElement);
+	        },
+	        renderLoader: function renderLoader() {
+	            var loaderTag = this.getLoaderElement();
+	            this.getRenderingRoot().innerHTML = '';
+	            this.getRenderingRoot().appendChild(loaderTag);
+	        }
+	    }
+	};
+
+	exports.default = _utils2.default.extend(partialAjax).from(_elementBase2.default);
 
 /***/ }
 /******/ ]);

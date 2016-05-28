@@ -32,13 +32,10 @@ var dropdownElement = {
             this.render();
         },        
         attributeChanged: function(attributeName) {
-            this.changeCallback(attributeName);
+            this.render();
         }
     },
     methods: {
-        changeCallback: function(attributeName) {
-            this.render();
-        },
         render: function () {
         	var data = {
         		value: this.value

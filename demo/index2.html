@@ -38,6 +38,9 @@
         }
     </style>
     <div class="container">
+
+      <partial-ajax url="./partial.html"></partial-ajax>
+
       <h1>
         One form-idable form
       </h1>
@@ -154,7 +157,7 @@
         <br/>
 
         <collection-elements>
-          <comincbook-character type="Villain"></comincbook-character>
+          <comicbook-character type="Villain"></comicbook-character>
         </collection-elements>
 
       </collection-container>
@@ -178,7 +181,7 @@
         <br/>
 
         <collection-elements>
-          <comincbook-character type="Villain"></comincbook-character>
+          <comicbook-character type="Villain"></comicbook-character>
         </collection-elements>
 
       </collection-container>
@@ -232,7 +235,7 @@
         <br/>
 
         <collection-elements>
-          <comincbook-character type="Villain"></comincbook-character>
+          <comicbook-character type="Villain"></comicbook-character>
         </collection-elements>
 
       </collection-container>
@@ -246,7 +249,7 @@
     <script type="text/javascript" src="./../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./../dist/x-bootstrap.js"></script>
     <script type="text/javascript">
-      xtag.register("comincbook-character", {
+      xtag.register("comicbook-character", {
         accessors: {
           name: {
               attribute: {},
@@ -273,14 +276,6 @@
           }
         }
       });
-    </script>
-    <script type="text/javascript">
-      xBootstrap.attachListener(document.body, 'test', function (e) {
-        //alert("evento: " + e.text);
-      })
-
-      xBootstrap.raise(document.body, 'test', { text: "ciao" });
-
     </script>
     </body>
 </html>

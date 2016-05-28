@@ -38,10 +38,15 @@ var inputRadioGroup = {
         created: function() {
         	this.innerContent = this.getInnerContent("radio-group-content").innerHTML;
             this.render();
-           
+
         },
         attributeChanged: function(attributeName) {
-        	this.changeCallback(attributeName);
+            if (attributeName === "error") {
+                this.selectInRenderingRoot(".form-group").className = this.errorClass;
+                this.selectInRenderingRoot(".help-block").textContent = this.error;
+                return;
+            }
+            this.render();
         }
     },
     methods: {
@@ -127,14 +132,6 @@ var inputRadioGroup = {
             }, this);
             
             return data;
-        },
-        changeCallback: function (attributeName) {
-            if (attributeName === "error") {
-                this.selectInRenderingRoot(".form-group").className = this.errorClass;
-                this.selectInRenderingRoot(".help-block").textContent = this.error;
-                return;
-            }
-            this.render();
         }
     },
     events: {

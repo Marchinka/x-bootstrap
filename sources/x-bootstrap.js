@@ -28,6 +28,7 @@ import collectionFeedback from "./elements/collection/collection-feedback.js";
 import feedbackToken from "./elements/collection/feedback-token.js";
 import tableColumn from "./elements/collection/table-column.js";
 import collectionTable from "./elements/collection/collection-table.js";
+import partialAjax from "./elements/misc/partial-ajax.js";
 
 (function(document) {
 	if ( !typeof window.CustomEvent === "function" ) 
@@ -43,7 +44,7 @@ import collectionTable from "./elements/collection/collection-table.js";
 
 		window.CustomEvent = CustomEvent;
 	}
-	
+
 	var baseElements = {
 		form: {
 			dropdownElement: dropdownElement,
@@ -65,29 +66,35 @@ import collectionTable from "./elements/collection/collection-table.js";
 			collectionFeedback: collectionFeedback,
 			tableColumn: tableColumn,
 			collectionTable: collectionTable
+		},
+		misc: {
+			partialAjax: partialAjax
 		}
 	};
 
 	// Form Elements
-	utils.register('dropdown-option', dropdownElement);
-	utils.register('additional-info', additionalInfo);
-	utils.register('input-radio', radioInput);
-	utils.register('input-radio-group', inputRadioGroup);
-	utils.register('input-checkbox', inputCheckbox);
-	utils.register('input-text', inputText);
-	utils.register('input-textarea', inputTextarea);
-	utils.register('input-select', inputSelect);
-	utils.register('input-autocomplete', inputAutocomplete);
-	utils.register('form-ajax', formAjax);
+	utils.register({ tagName: 'dropdown-option', proto:  dropdownElement });
+	utils.register({ tagName: 'additional-info', proto:  additionalInfo });
+	utils.register({ tagName: 'input-radio', proto:  radioInput, ensureStateChanges: true });
+	utils.register({ tagName: 'input-radio-group', proto:  inputRadioGroup, ensureStateChanges: true });
+	utils.register({ tagName: 'input-checkbox', proto:  inputCheckbox, ensureStateChanges: true });
+	utils.register({ tagName: 'input-text', proto:  inputText, ensureStateChanges: true });
+	utils.register({ tagName: 'input-textarea', proto:  inputTextarea, ensureStateChanges: true });
+	utils.register({ tagName: 'input-select', proto:  inputSelect, ensureStateChanges: true });
+	utils.register({ tagName: 'input-autocomplete', proto:  inputAutocomplete, ensureStateChanges: true });
+	utils.register({ tagName: 'form-ajax', proto:  formAjax });
 
 	// Collection Elements
-	utils.register('collection-search-form', collectionSearchForm);
-	utils.register('collection-elements', collectionElements);
-	utils.register('collection-container', collectionContainer);
-	utils.register('collection-feedback', collectionFeedback);
-	utils.register('feedback-token', feedbackToken);
-	utils.register('table-column', tableColumn);
-	utils.register('collection-table', collectionTable);
+	utils.register({ tagName: 'collection-search-form', proto:  collectionSearchForm });
+	utils.register({ tagName: 'collection-elements', proto:  collectionElements });
+	utils.register({ tagName: 'collection-container', proto:  collectionContainer });
+	utils.register({ tagName: 'collection-feedback', proto:  collectionFeedback });
+	utils.register({ tagName: 'feedback-token', proto:  feedbackToken });
+	utils.register({ tagName: 'table-column', proto:  tableColumn });
+	utils.register({ tagName: 'collection-table', proto:  collectionTable });
+
+	// Utilities
+	utils.register({ tagName: 'partial-ajax', proto: partialAjax });
 
 	window.xBootstrap = utils;
 	window.xBootstrap.baseElements = baseElements;

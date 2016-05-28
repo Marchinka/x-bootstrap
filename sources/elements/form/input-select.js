@@ -78,16 +78,13 @@ var inputSelect = {
             this.fetchData();                
         },
         attributeChanged: function(attributeName) {
-            this.changeCallback(attributeName);
-        }
-    },
-    methods: {
-        changeCallback: function (attributeName) {
             if (attributeName === "value") {
                 this.selectedValue = "";
             }
             this.render();
         },
+    },
+    methods: {
         render: function() {
             var data = {
                 error: this.error,

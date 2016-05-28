@@ -25,7 +25,18 @@ var inputAutocomplete = {
             this.fetchData();
         },
         attributeChanged: function(attributeName, oldValue, newValue) {
-            this.changeCallback(attributeName, oldValue, newValue);
+            if (attributeName === "error") {
+                this.renderError();
+            } else if (attributeName === "value") {
+                this.getInput().value = newValue;
+                this.fetchData();
+            } else {
+                this.render();
+            }
+
+            if (this.optionData) {
+                this.renderData(this.optionData);
+            }            
         }
     },	
     methods: {
@@ -40,20 +51,6 @@ var inputAutocomplete = {
                 value: this.value || '',
             };
             this.getRenderingRoot().innerHTML = template(data);
-        },
-        changeCallback: function(attributeName, oldValue, newValue) {
-            if (attributeName === "error") {
-                this.renderError();
-            } else if (attributeName === "value") {
-                this.getInput().value = newValue;
-                this.fetchData();
-            } else {
-                this.render();
-            }
-
-            if (this.optionData) {
-                this.renderData(this.optionData);
-            }            
         },
         fetchData: function () {
             var self = this;

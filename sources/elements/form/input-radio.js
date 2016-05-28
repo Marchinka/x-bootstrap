@@ -68,13 +68,10 @@ var inputRadio = {
             this.render();
         },
         attributeChanged: function(attributeName) {
-            this.changeCallback(attributeName);
+            this.render();
         }
     },
     methods: {
-        changeCallback: function () {
-            this.render();
-        },
         render: function () {
         	var data = {
         		field: this.field,

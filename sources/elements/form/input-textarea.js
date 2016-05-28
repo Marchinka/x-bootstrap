@@ -54,11 +54,6 @@ var inputTextarea = {
             this.render();
         },
         attributeChanged: function(attributeName, oldValue, newValue) {
-            this.changeCallback(attributeName, oldValue, newValue);
-        }
-    },
-    methods: {
-        changeCallback: function(attributeName, oldValue, newValue) {
             if (attributeName === "error") {
                 this.renderError();
             } else if (attributeName === "value" && oldValue != newValue) {
@@ -67,6 +62,8 @@ var inputTextarea = {
                 this.render();
             }
         },
+    },
+    methods: {
         render: function() {
             var data = {
                 field: this.field,

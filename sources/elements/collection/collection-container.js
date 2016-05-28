@@ -97,9 +97,7 @@ var collectionContainer = {
                 self.renderShowMoreButton();
                 self.renderPager();                
             });
-        },
-        attributeChanged: function(attributeName) {
-            this.activateRefreshing();
+            this.activateRefreshing();            
         }
     },
     methods: {

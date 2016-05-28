@@ -46,18 +46,7 @@ export default {
 					oldValue: oldValue, 
 					newValue: newValue 
 				};
-				utils.raise(
-					this, 
-					'attributeChanged',
-					changeInfo);
-			}
-		},
-		polyfillAttributeChanged: function () {
-			var self = this;
-			if (self.changeCallback) {
-				utils.attachListener(self, 'attributeChanged', function (e) {
-	        		self.changeCallback(e.attributeName, e.oldValue, e.newValue);
-				});
+				this.do_attributeChanged(attributeName, oldValue, newValue);
 			}
 		},
 		getInnerContent: function (selector) {

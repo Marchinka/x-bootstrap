@@ -4,30 +4,42 @@ export default {
   extend: function (element) {
     return new Extender(element);
   },
-  forMoUnsupported: function (action) {
-    if(!this.isBrowserSupportingMo()){
-      action();
+  getInternetExplorerVersion: function()
+  // Returns the version of Internet Explorer or a -1
+  // (indicating the use of another browser).
+  {
+    var rv = -1; // Return value assumes failure.
+    if (navigator.appName == 'Microsoft Internet Explorer')
+    {
+      var ua = navigator.userAgent;
+      var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+      if (re.exec(ua) != null)
+      {
+        rv = parseFloat( RegExp.$1 );
+      }
     }
+    return rv;
   },
   isBrowserSupportingMo: function () {
-    if (!document.all) {
+    if (this.getInternetExplorerVersion() === - 1) {
       return true;
     }
     return false;
   },
-  register: function(elementName, object) {
+  register: function (data) {
+    var elementName = data.tagName;
+    var object = data.proto;
+    var ensureMoPolyfill = data.ensureStateChanges;
     if (this.isBrowserSupportingMo()) {
       return xtag.register(elementName, object);
     }
 
-    object.lifecycle.created = (function () {
-      var original = object.lifecycle.created;
-      return function() {
-        if(original) original.apply(this);
-        this.polyfillAttributeChanged();
-      };
-    })();
+    if (!ensureMoPolyfill) {
+      return xtag.register(elementName, object);
+    }
 
+    object.methods.do_attributeChanged = object.lifecycle.attributeChanged;
+ 
     for (var attribute in object.accessors) {
       object.accessors[attribute].set = (function (newValue) {
         var attributeName = attribute;
@@ -40,13 +52,7 @@ export default {
       })();
     };
 
-    if (!_(object.methods.changeCallback).isFunction()) {
-        var message = 
-          "You should implement a 'changeCallback' method for element " +
-          elementName + 
-          ". It's a support for browsers not supporting mutation observers.";
-        console.warn(message);      
-    }
+
     return xtag.register(elementName, object);
   },
   createElement: function (tagName, object) {
