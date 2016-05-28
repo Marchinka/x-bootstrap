@@ -40,14 +40,24 @@ export default {
 		raiseAttributeChanged: function (attributeName, oldValue, newValue) {
 			if (utils.isBrowserSupportingMo()) {
 				return;
-			} else if (!this.changeCallback) {
-				var message = 
-					"You should implement a 'changeCallback' for element " +
-					this.nodeName + 
-					". It's a support for browsers not supporting mutation observers."
-				console.log()
 			} else {
-				if(oldValue != newValue) this.changeCallback(attributeName, oldValue, newValue);
+				var changeInfo = { 
+					attributeName: attributeName, 
+					oldValue: oldValue, 
+					newValue: newValue 
+				};
+				utils.raise(
+					this, 
+					'attributeChanged',
+					changeInfo);
+			}
+		},
+		polyfillAttributeChanged: function () {
+			var self = this;
+			if (self.changeCallback) {
+				utils.attachListener(self, 'attributeChanged', function (e) {
+	        		self.changeCallback(e.attributeName, e.oldValue, e.newValue);
+				});
 			}
 		},
 		getInnerContent: function (selector) {

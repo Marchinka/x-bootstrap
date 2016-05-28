@@ -30,6 +30,20 @@ import tableColumn from "./elements/collection/table-column.js";
 import collectionTable from "./elements/collection/collection-table.js";
 
 (function(document) {
+	if ( !typeof window.CustomEvent === "function" ) 
+	{
+		function CustomEvent ( event, params ) {
+			params = params || { bubbles: false, cancelable: false, detail: undefined };
+			var evt = document.createEvent( 'CustomEvent' );
+			evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+			return evt;
+		}
+
+		CustomEvent.prototype = window.Event.prototype;
+
+		window.CustomEvent = CustomEvent;
+	}
+	
 	var baseElements = {
 		form: {
 			dropdownElement: dropdownElement,
@@ -74,4 +88,12 @@ import collectionTable from "./elements/collection/collection-table.js";
 	utils.register('feedback-token', feedbackToken);
 	utils.register('table-column', tableColumn);
 	utils.register('collection-table', collectionTable);
+
+	window.xBootstrap = utils;
+	window.xBootstrap.baseElements = baseElements;
 })(document);
+
+(function () {
+
+
+})();

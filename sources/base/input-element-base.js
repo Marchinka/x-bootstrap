@@ -27,9 +27,7 @@ var inputElementBase = {
                 return this.getDataAttribute('error') || '';
             },
             set: function(value) {
-                var old = this.xtag.data.error;
                 this.xtag.data.error = value;
-                this.raiseAttributeChanged("error", old, value);
             }
         },
         errorClass: {
@@ -47,9 +45,7 @@ var inputElementBase = {
                 return this.getAttribute('value') || '';
             },
             set: function(data) {
-                var old = this.xtag.data.value;
                 this.xtag.data.value = data;
-                this.raiseAttributeChanged("value", old, data);
             }
         },
         disabled: {

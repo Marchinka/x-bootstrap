@@ -46,6 +46,8 @@
 
 	"use strict";
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	var _utils = __webpack_require__(1);
 
 	var _utils2 = _interopRequireDefault(_utils);
@@ -133,6 +135,19 @@
 	}
 
 	(function (document) {
+		if (!_typeof(window.CustomEvent) === "function") {
+			var CustomEvent = function CustomEvent(event, params) {
+				params = params || { bubbles: false, cancelable: false, detail: undefined };
+				var evt = document.createEvent('CustomEvent');
+				evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+				return evt;
+			};
+
+			CustomEvent.prototype = window.Event.prototype;
+
+			window.CustomEvent = CustomEvent;
+		}
+
 		var baseElements = {
 			form: {
 				dropdownElement: _dropdownOption2.default,
@@ -177,7 +192,12 @@
 		_utils2.default.register('feedback-token', _feedbackToken2.default);
 		_utils2.default.register('table-column', _tableColumn2.default);
 		_utils2.default.register('collection-table', _collectionTable2.default);
+
+		window.xBootstrap = _utils2.default;
+		window.xBootstrap.baseElements = baseElements;
 	})(document);
+
+	(function () {})();
 
 /***/ },
 /* 1 */
@@ -211,6 +231,34 @@
 	    return false;
 	  },
 	  register: function register(elementName, object) {
+	    if (this.isBrowserSupportingMo()) {
+	      return xtag.register(elementName, object);
+	    }
+
+	    object.lifecycle.created = function () {
+	      var original = object.lifecycle.created;
+	      return function () {
+	        if (original) original.apply(this);
+	        this.polyfillAttributeChanged();
+	      };
+	    }();
+
+	    for (var attribute in object.accessors) {
+	      object.accessors[attribute].set = function (newValue) {
+	        var attributeName = attribute;
+	        var originalSet = object.accessors[attributeName].set;
+	        return function (newData) {
+	          var oldValue = this.xtag.data[attributeName];
+	          if (newData != oldValue) this.raiseAttributeChanged.call(this, attributeName, oldValue, newData);
+	          originalSet.call(this, oldValue);
+	        };
+	      }();
+	    };
+
+	    if (!_(object.methods.changeCallback).isFunction()) {
+	      var message = "You should implement a 'changeCallback' method for element " + elementName + ". It's a support for browsers not supporting mutation observers.";
+	      console.warn(message);
+	    }
 	    return xtag.register(elementName, object);
 	  },
 	  createElement: function createElement(tagName, object) {
@@ -238,6 +286,14 @@
 	  },
 	  removeClassFromElement: function removeClassFromElement(className, el) {
 	    if (el.classList) el.classList.remove(className);else el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+	  },
+	  raise: function raise(element, eventName, obj) {
+	    var event = new CustomEvent(eventName);
+	    _(event).extend(obj);
+	    element.dispatchEvent(event);
+	  },
+	  attachListener: function attachListener(element, eventName, callback) {
+	    element.addEventListener(eventName, callback, false);
 	  }
 	};
 
@@ -417,11 +473,21 @@
 			raiseAttributeChanged: function raiseAttributeChanged(attributeName, oldValue, newValue) {
 				if (_utils2.default.isBrowserSupportingMo()) {
 					return;
-				} else if (!this.changeCallback) {
-					var message = "You should implement a 'changeCallback' for element " + this.nodeName + ". It's a support for browsers not supporting mutation observers.";
-					console.log();
 				} else {
-					if (oldValue != newValue) this.changeCallback(attributeName, oldValue, newValue);
+					var changeInfo = {
+						attributeName: attributeName,
+						oldValue: oldValue,
+						newValue: newValue
+					};
+					_utils2.default.raise(this, 'attributeChanged', changeInfo);
+				}
+			},
+			polyfillAttributeChanged: function polyfillAttributeChanged() {
+				var self = this;
+				if (self.changeCallback) {
+					_utils2.default.attachListener(self, 'attributeChanged', function (e) {
+						self.changeCallback(e.attributeName, e.oldValue, e.newValue);
+					});
 				}
 			},
 			getInnerContent: function getInnerContent(selector) {
@@ -842,9 +908,7 @@
 	                return this.getDataAttribute('error') || '';
 	            },
 	            set: function set(value) {
-	                var old = this.xtag.data.error;
 	                this.xtag.data.error = value;
-	                this.raiseAttributeChanged("error", old, value);
 	            }
 	        },
 	        errorClass: {
@@ -862,9 +926,7 @@
 	                return this.getAttribute('value') || '';
 	            },
 	            set: function set(data) {
-	                var old = this.xtag.data.value;
 	                this.xtag.data.value = data;
-	                this.raiseAttributeChanged("value", old, data);
 	            }
 	        },
 	        disabled: {

@@ -16,6 +16,37 @@ export default {
     return false;
   },
   register: function(elementName, object) {
+    if (this.isBrowserSupportingMo()) {
+      return xtag.register(elementName, object);
+    }
+
+    object.lifecycle.created = (function () {
+      var original = object.lifecycle.created;
+      return function() {
+        if(original) original.apply(this);
+        this.polyfillAttributeChanged();
+      };
+    })();
+
+    for (var attribute in object.accessors) {
+      object.accessors[attribute].set = (function (newValue) {
+        var attributeName = attribute;
+        var originalSet = object.accessors[attributeName].set;
+        return function(newData) {
+          var oldValue = this.xtag.data[attributeName];
+          if(newData != oldValue) this.raiseAttributeChanged.call(this, attributeName, oldValue, newData);
+          originalSet.call(this, oldValue);
+        };
+      })();
+    };
+
+    if (!_(object.methods.changeCallback).isFunction()) {
+        var message = 
+          "You should implement a 'changeCallback' method for element " +
+          elementName + 
+          ". It's a support for browsers not supporting mutation observers.";
+        console.warn(message);      
+    }
     return xtag.register(elementName, object);
   },
   createElement: function (tagName, object) {
@@ -49,5 +80,13 @@ export default {
       el.classList.remove(className);
     else
       el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');    
+  },
+  raise: function (element, eventName, obj) {
+    var event = new CustomEvent(eventName);
+    _(event).extend(obj);
+    element.dispatchEvent(event);
+  },
+  attachListener: function (element, eventName, callback) {
+    element.addEventListener(eventName, callback, false);
   }
 };

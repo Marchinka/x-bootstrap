@@ -274,5 +274,13 @@
         }
       });
     </script>
+    <script type="text/javascript">
+      xBootstrap.attachListener(document.body, 'test', function (e) {
+        //alert("evento: " + e.text);
+      })
+
+      xBootstrap.raise(document.body, 'test', { text: "ciao" });
+
+    </script>
     </body>
 </html>

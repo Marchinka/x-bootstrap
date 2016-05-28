@@ -38,6 +38,7 @@ var inputRadioGroup = {
         created: function() {
         	this.innerContent = this.getInnerContent("radio-group-content").innerHTML;
             this.render();
+           
         },
         attributeChanged: function(attributeName) {
         	this.changeCallback(attributeName);
