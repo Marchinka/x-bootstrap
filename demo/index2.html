@@ -2,10 +2,11 @@
 <html>
   <head>
     <title>X-Bootstrap Demo</title>
-    <script type='text/javascript' src="../node_modules/webcomponents.js/webcomponents.js"></script>
     <link rel="stylesheet" type="text/css" href="./../node_modules/bootstrap/dist/css/bootstrap.css">
+
   </head>
   <body>
+
     <style type="text/css">
         a {
             cursor: pointer;
@@ -132,6 +133,12 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form-ajax>
 
+      <hr />
+
+      <h1>A wrapper around Bootstrap modal</h1>
+
+      <button id="modal-button" class="btn btn-default">Open Modal</button>
+
       <hr/>
 
       <h1>
@@ -243,10 +250,11 @@
     </div>
 
     <script type="text/javascript" src="./dummy-ajax-service.js"></script>
-    <script type="text/javascript" src="./../node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="./../node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="./../node_modules/underscore/underscore.js"></script>
     <script type="text/javascript" src="./../node_modules/x-tag/dist/x-tag-core.js"></script>
-    <script type="text/javascript" src="./../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
     <script type="text/javascript" src="./../dist/x-bootstrap.js"></script>
     <script type="text/javascript">
       xtag.register("comicbook-character", {
@@ -276,6 +284,27 @@
           }
         }
       });
+    </script>
+    <script type="text/javascript">
+
+      var onConfirmation = function () {
+        alert("Confirmation");
+      };
+      
+      var onDecline = function () {
+        alert("Decline");
+      };  
+
+      var modalButton = document.querySelector("#modal-button");
+      modalButton.onclick = xBootstrap.confirmationWrapper({
+        title: "Modal Title",
+        message: "Do you want to confirm this operation?",
+        yes: "Oui",
+        no: "Nein",
+        onConfirmation: onConfirmation,
+        onDecline: onDecline
+      });
+
     </script>
     </body>
 </html>

@@ -124,6 +124,10 @@
 
 	var _partialAjax2 = _interopRequireDefault(_partialAjax);
 
+	var _confirmationModal = __webpack_require__(27);
+
+	var _confirmationModal2 = _interopRequireDefault(_confirmationModal);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	if (!window.$) {
@@ -152,6 +156,14 @@
 			window.CustomEvent = CustomEvent;
 		}
 
+		if (!('remove' in Element.prototype)) {
+			Element.prototype.remove = function () {
+				if (this.parentNode) {
+					this.parentNode.removeChild(this);
+				}
+			};
+		}
+
 		var baseElements = {
 			form: {
 				dropdownElement: _dropdownOption2.default,
@@ -175,7 +187,8 @@
 				collectionTable: _collectionTable2.default
 			},
 			misc: {
-				partialAjax: _partialAjax2.default
+				partialAjax: _partialAjax2.default,
+				confirmationModal: _confirmationModal2.default
 			}
 		};
 
@@ -200,8 +213,9 @@
 		_utils2.default.register({ tagName: 'table-column', proto: _tableColumn2.default });
 		_utils2.default.register({ tagName: 'collection-table', proto: _collectionTable2.default });
 
-		// Utilities
+		// Misc
 		_utils2.default.register({ tagName: 'partial-ajax', proto: _partialAjax2.default });
+		_utils2.default.register({ tagName: 'confirmation-modal', proto: _confirmationModal2.default, ensureStateChanges: true });
 
 		window.xBootstrap = _utils2.default;
 		window.xBootstrap.baseElements = baseElements;
@@ -310,6 +324,21 @@
 	  },
 	  attachListener: function attachListener(element, eventName, callback) {
 	    element.addEventListener(eventName, callback, false);
+	  },
+	  confirmationWrapper: function confirmationWrapper(options) {
+	    var wrapperFunction = function wrapperFunction() {
+	      var modal = document.createElement("confirmation-modal");
+	      modal.title = options.title;
+	      modal.message = options.message;
+	      modal.yes = options.yes;
+	      modal.no = options.no;
+	      modal.onConfirmation = options.onConfirmation;
+	      modal.onDecline = options.onDecline;
+	      modal.jQuery = "$";
+	      document.body.appendChild(modal);
+	      modal.open();
+	    };
+	    return wrapperFunction;
 	  }
 	};
 
@@ -492,7 +521,7 @@
 						oldValue: oldValue,
 						newValue: newValue
 					};
-					this.do_attributeChanged(attributeName, oldValue, newValue);
+					if (_(this.do_attributeChanged).isFunction()) this.do_attributeChanged(attributeName, oldValue, newValue);
 				}
 			},
 			getInnerContent: function getInnerContent(selector) {
@@ -2948,6 +2977,149 @@
 	};
 
 	exports.default = _utils2.default.extend(partialAjax).from(_elementBase2.default);
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utils = __webpack_require__(1);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _elementBase = __webpack_require__(4);
+
+	var _elementBase2 = _interopRequireDefault(_elementBase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var template = function template(data) {
+	    return "\n  <div class=\"modal fade custom-modal\">\n    <div class=\"modal-dialog\">\n    \n      <!-- Modal content-->\n      <div class=\"modal-content\">\n        <div class=\"modal-header\">\n          <button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>\n\n          <!-- Modal Title -->\n          <h4 class=\"modal-title\">" + data.title + "</h4>\n\n        </div>\n\n        <!-- Modal Body -->\n        <div class=\"modal-body\">\n          <p>" + data.message + "</p>\n        </div>\n\n        <!-- Modal Footer With Buttons -->\n        <div class=\"modal-footer\">\n          <button id=\"no-button\" type=\"button\" class=\"btn btn-default\">" + data.no + "</button>\n          <button id=\"yes-button\" type=\"button\" class=\"btn btn-default\">" + data.yes + "</button>\n        </div>\n      </div>\n      \n    </div>\n  </div>";
+	};
+
+	var dropdownElement = {
+	    accessors: {
+	        title: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('title') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.title = data;
+	            }
+	        },
+	        message: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('message') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.message = data;
+	            }
+	        },
+	        yes: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('yes') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.yes = data;
+	            }
+	        },
+	        no: {
+	            attribute: {},
+	            get: function get() {
+	                return this.getDataAttribute('no') || '';
+	            },
+	            set: function set(data) {
+	                this.xtag.data.no = data;
+	            }
+	        }
+	    },
+	    lifecycle: {
+	        created: function created() {
+	            this.render();
+	        },
+	        attributeChanged: function attributeChanged() {
+	            this.render();
+	        }
+	    },
+	    methods: {
+	        render: function render() {
+	            var self = this;
+
+	            var data = {
+	                title: self.title,
+	                message: self.message,
+	                no: self.no,
+	                yes: self.yes
+	            };
+
+	            self.getRenderingRoot().innerHTML = template(data);
+
+	            self.selectInRenderingRoot("#no-button").onclick = function () {
+	                self.noCallback();
+	            };
+
+	            self.selectInRenderingRoot("#yes-button").onclick = function () {
+	                self.yesCallback();
+	            };
+
+	            var $ = self.getJquery();
+	            $(this).children(".modal.custom-modal").on('hidden.bs.modal', function () {
+	                try {
+	                    self.declineCallback();
+	                } catch (e) {
+	                    console.log(e);
+	                } finally {
+	                    self.destroy();
+	                }
+	            });
+	        },
+	        destroy: function destroy() {
+	            this.remove();
+	        },
+	        open: function open() {
+	            var $ = this.getJquery();
+	            var modal = $(".modal.custom-modal");
+	            modal.modal("show");
+	        },
+	        close: function close() {
+	            var $ = this.getJquery();
+	            var modal = $(".modal.custom-modal");
+	            modal.modal("hide");
+	        },
+	        yesCallback: function yesCallback() {
+	            this.close();
+	            this.confirmationCallback();
+	        },
+	        noCallback: function noCallback() {
+	            this.close();
+	        },
+	        confirmationCallback: function confirmationCallback() {
+	            this.isConfirmed = true;
+	            if (this.onConfirmation) {
+	                this.onConfirmation();
+	            }
+	        },
+	        declineCallback: function declineCallback() {
+	            if (this.onDecline && !this.isConfirmed) {
+	                this.onDecline();
+	            }
+	            this.isConfirmed = false;
+	        },
+	        getJquery: function getJquery() {
+	            return window.$;
+	        }
+	    }
+	};
+
+	exports.default = _utils2.default.extend(dropdownElement).from(_elementBase2.default);
 
 /***/ }
 /******/ ]);

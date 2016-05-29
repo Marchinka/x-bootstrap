@@ -94,5 +94,20 @@ export default {
   },
   attachListener: function (element, eventName, callback) {
     element.addEventListener(eventName, callback, false);
+  },
+  confirmationWrapper: function (options) {
+    var wrapperFunction = function () {
+      var modal = document.createElement("confirmation-modal");
+      modal.title = options.title;
+      modal.message = options.message;
+      modal.yes = options.yes;
+      modal.no = options.no;
+      modal.onConfirmation = options.onConfirmation;
+      modal.onDecline = options.onDecline;
+      modal.jQuery = "$";
+      document.body.appendChild(modal);
+      modal.open();
+    };
+    return wrapperFunction;
   }
 };

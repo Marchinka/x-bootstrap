@@ -29,6 +29,7 @@ import feedbackToken from "./elements/collection/feedback-token.js";
 import tableColumn from "./elements/collection/table-column.js";
 import collectionTable from "./elements/collection/collection-table.js";
 import partialAjax from "./elements/misc/partial-ajax.js";
+import confirmationModal from "./elements/misc/confirmation-modal.js";
 
 (function(document) {
 	if ( !typeof window.CustomEvent === "function" ) 
@@ -44,6 +45,14 @@ import partialAjax from "./elements/misc/partial-ajax.js";
 
 		window.CustomEvent = CustomEvent;
 	}
+
+	if (!('remove' in Element.prototype)) {
+	    Element.prototype.remove = function() {
+	        if (this.parentNode) {
+	            this.parentNode.removeChild(this);
+	        }
+	    };
+	}	
 
 	var baseElements = {
 		form: {
@@ -68,7 +77,8 @@ import partialAjax from "./elements/misc/partial-ajax.js";
 			collectionTable: collectionTable
 		},
 		misc: {
-			partialAjax: partialAjax
+			partialAjax: partialAjax,
+			confirmationModal: confirmationModal
 		}
 	};
 
@@ -93,8 +103,9 @@ import partialAjax from "./elements/misc/partial-ajax.js";
 	utils.register({ tagName: 'table-column', proto:  tableColumn });
 	utils.register({ tagName: 'collection-table', proto:  collectionTable });
 
-	// Utilities
+	// Misc
 	utils.register({ tagName: 'partial-ajax', proto: partialAjax });
+	utils.register({ tagName: 'confirmation-modal', proto: confirmationModal, ensureStateChanges: true });
 
 	window.xBootstrap = utils;
 	window.xBootstrap.baseElements = baseElements;

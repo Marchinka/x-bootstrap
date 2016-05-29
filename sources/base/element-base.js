@@ -46,7 +46,7 @@ export default {
 					oldValue: oldValue, 
 					newValue: newValue 
 				};
-				this.do_attributeChanged(attributeName, oldValue, newValue);
+				if(_(this.do_attributeChanged).isFunction()) this.do_attributeChanged(attributeName, oldValue, newValue);
 			}
 		},
 		getInnerContent: function (selector) {
